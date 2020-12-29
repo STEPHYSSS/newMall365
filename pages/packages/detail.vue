@@ -1,7 +1,8 @@
 <template>
 	<view class="w-100 h-100" :class="mainStyle">
-		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo"  title="购买券包" :status-bar="true" :shadow="false"></uni-nav-bar>
-		<image :src="BeneInfo.image" class="w-100" style="height: 50vh;"></image>
+		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo"  title="购买权益" :status-bar="true" :shadow="false"></uni-nav-bar>
+		<!-- <image :src="BeneInfo.image" class="w-100" style="height: 50vh;"></image> -->
+		<image :src="imgUrl" class="w-100" style="height: 50vh;"></image>
 		<view style="padding: 30rpx 40rpx; padding-bottom: 100rpx;background-color: #f3f0f0;">
 			<view class="d-flex justify-content-between align-items-center" style="margin-bottom: 20rpx;">
 				<view class="font-size-lg">{{ BeneInfo.Name }}</view>
@@ -113,6 +114,7 @@ export default {
 				start_at: '',
 				end_at: ''
 			},
+			imgUrl:require("@/static/img/quanyi.jpg"),
 			coupon: {
 				detail: {}
 			},
@@ -125,7 +127,6 @@ export default {
 			radioPayType: "1",//默认微卡支付
 			isDisabled:false,
 			isActive :false,//用于控制点击充值按钮，样式置灰
-			BeneNo : this.$route.query.id,
 			mainStyle: getApp().globalData.mainStyle,
 		};
 	},
@@ -138,11 +139,6 @@ export default {
 		this.loading = true;
 		await this.getInfo()
 		this.loading = false;
-		// const packages =this.BeneList;
-		// this.package = packages.filter(item => item.id == option.id)[0];
-		// if(this.CardInfo.Balance <this.BeneInfo.Price){
-		// 	this.radioPayType = "2"
-		// }
 		if (Number(this.CardInfo.Balance) < Number(this.BeneInfo.Price)) {
 			//余额不足默认微信支付
 			this.radioPayType = "2";
@@ -152,10 +148,11 @@ export default {
 	},
 	methods: {
 		async getInfo(){//获取详情
-			let BeneNo = this.$route.query.id;
+			let PlanNo = sessionStorage.getItem('buyPackage');
 			try {
-				let { Data } =  await vipCard({Action:'GetBeneInfo',BeneNo:this.BeneNo}, "UBeneOpera");
-				this.BeneInfo = Data.BeneInfo;
+				let { Data } =  await vipCard({Action:'GetBeneInfo',PlanNo:PlanNo}, "UBeneOpera");
+				this.BeneInfo = Data.PlanInfo;
+				// 判断是否有BenePayMode权益购买方式 如果有两个值代表微卡和微信都可以支付，否则只展示其中一个支付方式
 				if(Data.CardInfo){
 					this.CardInfo = Data.CardInfo
 				}else{
@@ -164,7 +161,7 @@ export default {
 						window.location.href = "http://manage.bak365.cn/WebApp/WXCard/?Type=PayCode&AppNo="+GetAppNo()
 					},200)
 				}
-				console.log(BeneInfo)
+				// console.log(BeneInfo)
 			} catch (e) {
 				this.$toast(e)
 			}

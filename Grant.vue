@@ -15,8 +15,8 @@
 			return {
 				redirect_uri: "",
 				appId: '',
-				// UserMACPhone:Cookies.get("UserMACPhone")	
-				UserMACPhone:'db333836b94e470079cc5f5623400931u'
+				UserMACPhone:Cookies.get("UserMACPhone")	
+				// UserMACPhone:'db333836b94e470079cc5f5623400931u'
 			};
 		},
 		onLoad(option) {

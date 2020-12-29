@@ -219,6 +219,7 @@ export function weChatPayment(that, Data, bool) {
 					// that.$Router.push('/shoppingMall/order/OrderPaySuccess')
 					if(res.route == 'pages/vip/weiFull'){//微卡充值支付
 						that.$Router.push({path:'/pages/home'})
+						console.log('支付成功',res.route)
 					}else if(res.route == 'pages/vip/detail'){//会员权益支付
 						that.$Router.push({path:'/pages/home'})
 					}else{
@@ -228,7 +229,12 @@ export function weChatPayment(that, Data, bool) {
 				} else {
 					//失败
 					that.$toast.fail("支付失败");
-					that.$Router.push({path:'/pages/home'})
+					console.log('支付失败',res.route)
+					if(res.route == 'pages/vip/weiFull'){//微卡充值支付
+						that.$Router.push({path:'/pages/vip/weiFull'})
+					}else{
+						that.$Router.push({path:'/pages/home'})
+					}
 					// that.$Router.push({path:'/pages/vip/allMyOrder'})
 					// setTimeout(() => {
 					// 	if (bool) {

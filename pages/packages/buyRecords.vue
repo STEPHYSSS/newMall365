@@ -6,16 +6,17 @@
 			<div v-if="OrderList.length>0">
 				<div v-for="(item,index) in OrderList" :key="index" class="van-cell">
 					<div class="van-cell__title">
-						<div class="titleHear">
+						<!-- <div class="titleHear">
 							<span>购买明细</span>
 							<div style="float: right" v-if="item.ShopName">{{item.ShopName}}</div>
-						</div>
+						</div> -->
 						<div v-if="item.CardPay>0">
 							<span>消费金额</span>
 							<div class="custom-time" style="float: right">-{{item.CardPay}}</div>
 						</div>
+						<div class="custom-label">名称：{{item.BeneName}}</div>
 						<div>
-							<span class="custom-label">卡号：{{item.CardNo}}</span>
+							<span class="custom-label">会员卡号：{{item.CardNo}}</span>
 						</div>
 						<div class="custom-label">时间：{{item.OptTime}}</div>
 						<div class="custom-label" v-if="item.ExchNo">订单号：{{item.ExchNo}}</div>

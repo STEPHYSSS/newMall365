@@ -210,16 +210,18 @@ const other = [
 			title: '会员权益',
 		}
 	},{
+		path:"/pages/vip/interests/detail"		
+	},{
 		path:"/pages/packages/index",
 		name: 'index',
 		meta: {
-			title: '券包商品',
+			title: '权益列表',
 		}
 	},{
 		path:"/pages/packages/detail",
 		name: 'detail',
 		meta: {
-			title: '购买券包',
+			title: '购买权益',
 		}
 	},{ //购买记录
 		path:"/pages/packages/buyRecords",

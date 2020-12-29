@@ -42,6 +42,7 @@
 			</adCell>
 			<!-- 优惠方案 -->
 			<adCell :text="UserDiscountName" detail="优惠方案" @click="clickUserDiscount" v-if="DiscountList.length>0" />
+			<adCell :text="interestName" detail="会员权益" @click="clickinterestName" v-if="BeneList.length>0" />
 			<div class="setADcell">
 				<adCell text="备注留言" showArrow="false" showBottomLine="false">
 					<input type="text" placeholder="请输入留言" v-model="UserRemarks">
@@ -62,7 +63,7 @@
 				<span>{{freight=='0'?'免运费':'¥'+freight}}</span>
 			</adCell>
 			<adCell showArrow="false" showBottomLine="false" v-if="DiscPrice!=0">
-				方案已优惠：<span class="total-style__color">¥{{DiscPrice}}</span>
+				已优惠：<span class="total-style__color">¥{{DiscPrice}}</span>
 			</adCell>
 			<adCell showArrow="false" showBottomLine="false" v-if="TicketPrice!=0">
 				电子券优惠：<span class="total-style__color">¥{{TicketPrice}}</span>
@@ -198,11 +199,28 @@
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
 					<radio-group @change="setTicketClick">
 						<ad-cell text="暂不使用" @click="ticketClick('undefined')" showArrow="false">
-							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioDiscount" />
+							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioTicket" />
 						</ad-cell>
 						<div v-for="(item,index) in TicketList" :key="index">
 							<adCell :text="item.TicketName" showArrow="false" showBottomLine="false" @click="ticketClick(item,1)">
 								<radio :value="item.TicketNo" :checked="item.TicketNo === radioTicket" />
+							</adCell>
+						</div>
+					</radio-group>
+				</scroll-view>
+			</div>		
+		</uni-popup>
+		<!-- 权益弹窗 radioBene-->
+		<uni-popup ref="interestProgram" type="bottom">
+			<div style="height: 50vh;">
+				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
+					<radio-group @change="setBeneClick">
+						<ad-cell text="暂不使用" @click="beneClick('undefined')" showArrow="false">
+							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioBene" />
+						</ad-cell>
+						<div v-for="(item,index) in BeneList" :key="index">
+							<adCell :text="item.BeneName" showArrow="false" showBottomLine="false" @click="beneClick(item,1)">
+								<radio :value="item.BeneSID" :checked="item.BeneSID === radioBene" />
 							</adCell>
 						</div>
 					</radio-group>
@@ -281,6 +299,7 @@
 				UserDiscount: "",
 				UserDiscountName: "请选择方案",
 				UserTicketName: '请选择电子券', //电子券名称
+				interestName:'请选择权益',
 				// 当前选择的地址
 				currentArea: {},
 				radioModes: 2,
@@ -291,6 +310,7 @@
 				discountProgram: false,
 				ticketProgram: false, //电子券ref
 				payTypePop: false, //微卡支付弹窗
+				interestProgram:false,//权益ref
 				resultArea: "",
 				areaList: [], //弹出窗地址渲染列表
 				DeliveryAreaList: [],
@@ -342,6 +362,9 @@
 				TicketNo: '', //点击电子券编号
 				TicketList: [], //电子券列表
 				radioTicket: "", //选中电子券sid
+				BeneList:[],//权益列表
+				BeneNo:'',//点击权益编号
+				radioBene:"",//选中权益sid
 				isMember: localStorage.getItem('isMember'),
 				password: "", //微卡支付密码
 				IsPass: "",
@@ -409,7 +432,6 @@
 				this.loading = true;
 				uni.showLoading()
 				try {
-					debugger
 					// if (!this.location.longitude) {
 					// 	uni.showToast({
 					// 		title: '地址获取失败',
@@ -469,28 +491,8 @@
 							this.currentItem.forEach(D => {
 								if (D.PartsList) {
 									D.PartsList = JSON.stringify(D.PartsList);
-									// if (typeof D.PartsNo !== "string") {
-									// 	D.PartsNo.forEach((data, index) => {
-									// 		D.arr = [];
-									// 		D.arr.push(data.ProdNo);
-									// 	});
-									// 	D.PartsNo = D.arr ? D.arr.join(",") : "";
-									// 	delete D.arr;
-									// }
 								}
-								// if (typeof D.PartsNo !== "string") {
-								// 	D.PartsNo.forEach((data, index) => {
-								// 		D.arr = [];
-								// 		D.arr.push(data.ProdNo);
-								// 	});
-								// 	D.PartsNo = D.arr ? D.arr.join(",") : "";
-								// 	delete D.arr;
-								// }
-								// if (D.PartsList) {
-								// 	D.PartsList = JSON.stringify(D.PartsList);
-								// }
-							});
-							// this.currentItem = JSON.stringify(this.currentItem);							
+							});						
 							if (Data.hasOwnProperty('CardInfo')) {
 								this.IsPass = Data.CardInfo.IsPass ? Data.CardInfo.IsPass : ''
 							}
@@ -502,6 +504,7 @@
 							this.TicketList = Data.TicketList || []; //电子券列表
 							this.TicketPrice = Data.TicketPrice; //电子券价格
 							this.DiscountList = Data.DiscList || []; //优惠方案列表
+							this.BeneList = Data.BeneList || [];//权益列表
 							if (this.TicketList.length > 0) {
 								this.radioTicket = this.TicketList[0].TicketNo;
 								this.UserTicketName = this.TicketList[0].TicketName;
@@ -510,6 +513,10 @@
 								this.radioDiscount = this.DiscountList[0].PrefNo;
 								// this.UserDiscount = "¥" + (this.DiscountList[0].DiscPrice || 0);
 								this.UserDiscountName = this.DiscountList[0].PrefName;
+							}
+							if(this.BeneList.length>0){//会员权益
+								this.radioBene = this.BeneList[0].BeneSID;
+								this.interestName = this.BeneList[0].BeneName;
 							}
 							this.total = Data.SumTotal;
 							this.ProdTotal = Data.ProdTotal;
@@ -831,6 +838,10 @@
 				this.ticketProgram = true;
 				this.$refs.ticketProgram.open()
 			},
+			clickinterestName(){//选中权益弹窗
+				this.interestProgram = true;
+				this.$refs.interestProgram.open()
+			},
 			clickTime() {},
 			async saveAreaSet() {
 				this.$refs.addEditArea.close()
@@ -913,7 +924,7 @@
 				let PrefNo = item.PrefNo;
 				if (item === "undefined") {
 					PrefNo = "";
-					this.UserDiscountName = "优惠方案"
+					this.UserDiscountName = "暂不使用"
 				} else {
 					this.UserDiscountName = item.PrefName;
 					this.radioDiscount = item.PrefNo
@@ -922,6 +933,49 @@
 				this.Discount(item, 1);
 				this.$refs.discountProgram.close();
 			},
+			
+			// 电子券开始
+			setTicketClick(val) { //电子券
+				this.radioTicket = val.detail.value
+			},
+			ticketClick(item, type) {
+				this.TicketNo = item.TicketNo;
+				this.radioTicket = item.TicketNo;
+				let TicketNo = item.TicketNo;
+				this.TicketPrice = item.TicketPrice;
+				if (item === "undefined") {
+					TicketNo = "";
+					this.UserTicketName = "暂不使用"
+				} else {
+					this.UserTicketName = item.TicketName;
+					this.radioTicket = item.TicketNo;
+				}
+				this.ticketProgram = false;
+				this.Discount(item, 3);
+				this.$refs.ticketProgram.close();
+			},
+			// 电子券结束
+			// 权益开始
+			setBeneClick(val){
+				this.radioBene = val.detail.value
+				console.log(this.radioBene)
+			},
+			beneClick(item, type){
+				// this.radioBeneSID = item.BeneSID;
+				this.radioBene = item.BeneSID;
+				let BeneNo = item.BeneSID;
+				if (item === "undefined") {
+					BeneNo = "";
+					this.interestName = "暂不使用"
+				} else {
+					this.interestName = item.BeneName;
+					this.radioBene = item.BeneSID
+				}
+				this.interestProgram = false;
+				this.Discount(item, 4);
+				this.$refs.interestProgram.close();
+			},
+			// 权益结束
 			// 方案事件
 			async Discount(item, type) {
 				// SelectDisc(优惠方案 type=1) SelectPay(支付方式 type=2) SelectTicket(电子券 type=3)
@@ -930,9 +984,8 @@
 				try {
 					let obj = {
 						Action: "SelectDisc",
-						SelectType: SelectType, //按钮类型
-						ProdList: JSON.stringify(this.currentItem),
-						PrefNo: type === 1 ? item.PrefNo : '',
+						// SelectType: SelectType, //按钮类型
+						ProdList: this.ProdJsonList,
 						PayType: type === 2 ? item : 1,
 						// DeliveryType:this.takeDeliveryTpey,
 						// ShopSID:currentStore.data.SID,
@@ -940,7 +993,9 @@
 						ProdTotal: this.ProdTotal, //商品总价
 						TicketPrice: type != 3 ? this.TicketPrice : '', //type为1和2的时候传，电子券金额
 						DiscPrice: type === 3 ? this.DiscPrice : '', //type 为3的时候传,优惠金额
-						TicketNo: type != 1 ? this.radioTicket : '', //type不为1 的时候传电子券编号
+						BeneSID:this.radioBene,
+						PrefNo: this.radioDiscount,
+						TicketNo: this.radioTicket, //type不为1 的时候传电子券编号
 						ScoreAmt: this.allck === true ? this.ScoreAmt : '' //判断积分抵扣是否选中
 					}
 					let {
@@ -972,27 +1027,6 @@
 					console.log(e)
 				}
 			},
-			// 电子券开始
-			setTicketClick(val) { //电子券
-				this.radioTicket = val.detail.value
-			},
-			ticketClick(item, type) {
-				this.TicketNo = item.TicketNo;
-				this.radioTicket = item.TicketNo;
-				let TicketNo = item.TicketNo;
-				this.TicketPrice = item.TicketPrice;
-				if (item === "undefined") {
-					TicketNo = "";
-					this.UserTicketName = "可用电子券"
-				} else {
-					this.UserTicketName = item.TicketName;
-					this.radioTicket = item.TicketNo;
-				}
-				this.ticketProgram = false;
-				this.Discount(item, 3);
-				this.$refs.ticketProgram.close();
-			},
-			// 电子券结束
 			areaSet() {
 				this.areaInfo = {};
 				this.addEditArea = true;
@@ -1073,7 +1107,7 @@
 					UserName: this.radioModes === 2 ? this.currentArea.Name : this.name_user,
 					Mobile: this.radioModes === 1 ? this.phone_user : this.currentArea.Mobile,
 					Address: this.radioModes === 2 ? this.currentArea.Address : "",
-					ProdList: this.currentItem,
+					ProdList: this.ProdJsonList,
 					Longitude: this.$store.state.orderType === 'takein' ? shopLong : this.currentArea.Longitude,
 					Latitude: this.$store.state.orderType === 'takein' ? shopLat : this.currentArea.Latitude,
 					Province: this.currentArea.Province || "",
@@ -1084,8 +1118,10 @@
 					// PickTime: this.RecordTime.radioTime,
 					PickTime:splitTime[0],
 					CartSID: this.cardSids,
+					BeneSID:this.radioBene,
 					PrefNo: this.radioDiscount,
 					TicketNo: this.radioTicket,
+					SumTotal:this.total,
 					PassWord: this.password ? this.password : '',
 					ScoreDeduction: this.allck === true ? this.ScoreDeduction : ''
 				};

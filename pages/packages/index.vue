@@ -1,11 +1,11 @@
 <template>
 	<view class="container" v-if="!loading">
-		<uni-nav-bar :fixed="true" left-icon="back"  @clickLeft="clickGo" title="券包商品" :status-bar="true" :shadow="false"></uni-nav-bar>
+		<uni-nav-bar :fixed="true" left-icon="back"  @clickLeft="clickGo" title="权益商品" :status-bar="true" :shadow="false"></uni-nav-bar>
 		<view v-if="BeneList.length>0">
 			<view class="">
 				<view class="d-flex boxList"
-					v-for="(item, index) in BeneList" :key="index"  @click="pay(item.BeneNo)">
-					<image :src="item.image" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
+					v-for="(item, index) in BeneList" :key="index"  @click="pay(item.PlanNo)">
+					<image :src="imgUrl" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
 					<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
 						<view class="font-size-lg">{{ item.PlanName }}</view>
 						<view class="d-flex justify-content-between align-items-center">
@@ -32,6 +32,7 @@
 	export default {
 		data() {
 			return {
+				imgUrl:require("@/static/img/quanyi.jpg"),
 				loading: true,
 				packages: {},
 				BeneList:[],//列表
@@ -47,7 +48,7 @@
 			async getPackages() {
 				this.loading = true
 				this.packages = await vipCard({Action:'GetBeneList'}, "UBeneOpera");
-				console.log(this.packages.Data.BeneList)
+				// console.log(this.packages.Data.BeneList)
 				this.BeneList = this.packages.Data.BeneList||[];
 				this.loading = false
 			},
@@ -55,6 +56,7 @@
 				uni.navigateTo({
 					url: '/pages/packages/detail?id=' + id
 				})
+				sessionStorage.setItem('buyPackage',id)
 				// this.$router.push({path:'/pages/packages/detail',query:{id:id}})
 			},
 			toBuyRecords(){//购买记录

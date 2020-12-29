@@ -11,7 +11,7 @@
 						 v-if="currentObj.showAll === '1'">
 							<span class="van-ellipsis">全部</span>
 						</div>
-						<div @click="clickMenu(index + 1,item)" class="van-tab" :class="['van-tab',currentMenuIndex === index?'van-tab--active':'']"
+						<div @click="clickMenu(index,item)" class="van-tab" :class="['van-tab',currentMenuIndex === index?'van-tab--active':'']"
 						 :style="{'flex-basis': basisWidth}" v-for="(item,index) in groupList" :key="index">
 							<span class="van-ellipsis">{{item.Name}}</span>
 						</div>
@@ -26,18 +26,13 @@
 					<div class="van-badge__text">{{item.Name}}</div>
 				</a>
 			</div>
+			<!--  -->
 			<div :class="[currentObj.followBoard === '2'?'cap-tag-list__group':'']">
-				<!-- <div class="cap-tag-list__group-title" v-if="currentObj.followBoard === '2'" style="margin: 0px 15px;">商品组一</div> -->
-				<!-- <ul>
-					<li v-for="(item, index) in Prod_InfoList" :key="index" >
-						{{item.Name}}
-					</li>
-				</ul> -->
 				<ul :class="['cap-goods-layout__container',currentObj.listStyle,currentObj.goodStyle,
 				    currentObj.followBoard === '2'?'list tag-left':'']"
 					 :style="{'padding-left':currentObj.pageSpace +'px','padding-right':currentObj.pageSpace +'px',
 				'margin-left':-(currentObj.goodSpace/2)+'px','margin-right':-(currentObj.goodSpace/2)+'px'}">
-						<li class="cap-goods-layout__wrapper cap-goods-layout__wrapper--0" v-for="(item, index) in Prod_InfoList" :key="index">
+						<li class="cap-goods-layout__wrapper cap-goods-layout__wrapper--0" v-for="(item, index) in prodInfo" :key="index">
 							<a @click="urlGoodClick(item)" log-params="null" class="cap-goods-layout__item" style="margin: 5px;" :class="[currentObj.listStyle,currentObj.goodStyle,currentObj.chamfer,
 				        currentObj.followBoard === '2'?'tag-left':'']"
 							 :style="{'margin':(currentObj.goodSpace/2)+'px'}">
@@ -84,7 +79,6 @@
 				       'font-weight': currentObj.fontWeight}">
 											<span class="sale-price" v-if="currentObj.showContent.indexOf('3')>-1">
 												<div class="cap-theme-view" style="color: rgb(255, 68, 68);">
-													<!-- <span class="price-tag">¥</span>{{item.SalePrice}} -->
 													<span v-if="item.MemberPrice">
 														<span class="price-tag">¥{{item.MemberPrice}}</span>
 														<span style="text-decoration:line-through;color: #969799;font-size:8pt;padding-left: 6px;">¥{{item.SalePrice}}</span>
@@ -115,7 +109,7 @@
 							</a>
 						</li>
 					</ul>
-			</div>
+			</div>			
 		</div>
 	</div>
 </template>
@@ -181,7 +175,7 @@
 				goodList: [],
 				allGoodList: [],
 				Prod_InfoList:[],
-				fristIndex:''
+				prodInfo:[]
 			};
 		},
 		components: {},
@@ -189,28 +183,24 @@
 		created() {},
 		mounted() {
 			this.screenWidth = uni.getSystemInfoSync().screenWidth
-
+			
 			this.currentObj.showContent = this.currentObj.showContent ?
 				this.currentObj.showContent : [];
-
+			
 			this.setMenuWidth();
-
-			// if (this.currentObj._data.length > 0) {
-				
-			// 	this.groupList = this.currentObj._data
-			// }
-			// if (this.currentObj._Prod_Data.length > 0) {
-			// 	if (this.currentObj.showAll === '2') {
-			// 		let currentCate = this.currentObj._Cate_Data[0] //当前分类id
-			// 		filterGood(currentCate, this)
-			// 	} else {
-			// 		this.goodList = this.currentObj._Prod_Data
-			// 	}
-			// 	this.allGoodList = this.currentObj._Prod_Data
-			// }
-			if (this.currentObj.groupList.length > 0) {
-			  this.fristIndex = this.currentObj.groupList[0].groupId;
-			  this.getList(this.fristIndex);
+			
+			if (this.currentObj._Cate_Data.length > 0) {
+				this.groupList = this.currentObj._Cate_Data
+			}
+			if (this.currentObj._Prod_Data.length > 0) {
+				// if (this.currentObj.showAll === '2') {
+				// 	let currentCate = this.currentObj._Cate_Data[0] //当前分类id
+				// 	filterGood(currentCate, this)
+				// } else {
+				// 	this.goodList = this.currentObj._Prod_Data
+				// }
+				this.prodInfo = this.currentObj._Prod_Data;
+				// this.allGoodList = this.currentObj._Prod_Data
 			}
 			this.currentMenuIndex = this.currentObj.followBoard === "2" ? 0 : "0";
 		},
@@ -245,66 +235,19 @@
 			clickMenu(index,item) {
 				this.currentMenuIndex = index;
 				// let Cate_Data = this.currentObj._Cate_Data[index]
-				if (index === "0") {
-					//全部
-					this.translateXline = ((this.menuWidth - this.lineWidth) / 2).toFixed(
-						2
-					);
-					// this.goodList = this.allGoodList
-					if (this.currentObj.groupList.length > 0) {
-					  this.fristIndex = this.currentObj.groupList[0].groupId;
-					  this.getList(this.fristIndex);
-					}
-				} else {
-					// 其他
-					this.translateXline = (
-						Number(index) * Number(this.menuWidth) +
-						this.lineWidth / 2
-					).toFixed(2);
-					if (item.groupId) {
-					  this.getList(item.groupId);
-					}
-					// filterGood(Cate_Data, this)
+				if (index === "0") {//全部
+					this.translateXline = ((this.menuWidth - this.lineWidth) / 2).toFixed(2);
+					this.goodList = this.currentObj._Cate_Data;
+					this.prodInfo = this.currentObj._Prod_Data;
+				} else {// 其他
+					this.translateXline = ( Number(index) * Number(this.menuWidth) + this.lineWidth / 2 ).toFixed(2);
+					this.prodInfo = this.currentObj._Prod_Data.filter(D=>D.CateSID === item.SID);	
 				}
 			},
 			setImgPrex(val) {
 				return GetBaseImgUrl() + val;
-				// if (
-				// 	val &&
-				// 	this.currentObj._Prod_Data &&
-				// 	this.currentObj._Prod_Data.length > 0
-				// ) {
-				// 	return this.$VUE_APP_PREFIX2 + val;
-				// } else {
-				// 	return val;
-				// }
 			},
-			//根据系列SID查询商品并展示商品
-			// "GetProdInfoList"
-			async getList(val) {
 			
-			  this.loading = true;
-			  try {
-			    let data = await vipCard(
-			      {
-			        Action: "GetTreeProdList",
-			        CateSID: val,
-							Name:'',
-							SID:this.$store.state.currentStoreInfo.SID
-			      },
-			      "UProdOpera"
-			    );
-			    this.loading = false;
-			    let cate=[]
-					 cate= data.Data.CateList;
-					 cate.forEach(item=>{
-						 this.Prod_InfoList = item.children
-					 })
-			  } catch (e) {
-			    console.log(e)
-			    this.loading = false;
-			  }
-			},
 			urlGoodClick(item) {
 				this.$Router.push({
 					path: '/pages/shoppingMall/list/infoGood',
@@ -337,28 +280,22 @@
 					!this.currentObj.groupList ||
 					this.currentObj.groupList.length === 0
 				) {
-					this.groupList = [{
-							Name: "商品组一"
-						},
-						{
-							Name: "商品组二"
-						},
-						{
-							Name: "商品组三"
-						},
-						{
-							Name: "商品组四"
-						}
-					];
+					// this.groupList = [{
+					// 		Name: "商品组一"
+					// 	},
+					// 	{
+					// 		Name: "商品组二"
+					// 	},
+					// 	{
+					// 		Name: "商品组三"
+					// 	},
+					// 	{
+					// 		Name: "商品组四"
+					// 	}
+					// ];
+					this.groupList = this.currentObj.groupList
 				} else {
-					// 监听并选择第一个系列的商品sid，去调用系列商品接口并展示在'全部'一栏中
-					if (this.currentMenuIndex === "0") {
-					  if (this.currentObj.groupList.length > 0) {
-					    this.fristIndex = this.currentObj.groupList[0].groupId;
-					    this.getList(this.fristIndex);
-					  }
-					}
-					this.groupList = this.currentObj.groupList;
+					this.groupList = null;
 				}
 				this.setMenuWidth();
 			},

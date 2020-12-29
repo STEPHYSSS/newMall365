@@ -22,11 +22,11 @@
 				</div>
 			</div>
 			<div class="good_card_box" style="margin-bottom:10px" v-if="OrderInfo.OrderType=='2'">
-				<div v-for="(item,index) in prodList" :key="index">
+				<div v-for="(item,index) in prodList" :key="index" @click="toGoodsInfo(item,2)">
 					<a-good-lineBox :itemData="item" :isOrder="true" :isIntegral="OrderInfo.OrderType==4"></a-good-lineBox>
 				</div>
 			</div>
-			<div class="good_card_box" style="margin-bottom:10px" v-if="OrderInfo.OrderType=='3'">
+			<div class="good_card_box" style="margin-bottom:10px" v-if="OrderInfo.OrderType=='3'" @click="toGoodsInfo(OrderInfo,3)">
 				<a-good-lineBox :itemData="OrderInfo" :isOrder="true" :isIntegral="OrderInfo.OrderType==4"></a-good-lineBox>
 			</div>
 			<div style="background-color: #fff;">
@@ -162,9 +162,9 @@
 		},
 		created() {
 			if(this.$route.query.query){
-				console.log(this.$route.query.query)
+				// console.log(this.$route.query.query)
 				let getDecode = decodeURIComponent(this.$route.query.query);
-				console.log(getDecode)
+				// console.log(getDecode)
 				let getDQuery = JSON.parse(getDecode)
 				this.orderId=getDQuery.order_id;
 				this.OrderType = getDQuery.OrderType
@@ -220,6 +220,22 @@
 				} catch (e) {
 					this.loading = false;
 				}
+			},
+			toGoodsInfo(item,type){
+				// if(type === '2'){
+					if(item.PromotionItemSID!=''){
+						this.$Router.push({path:"/pages/shoppingMall/list/infoGood",query:{
+							SID:item.PromotionItemSID,
+							seckill:'true'
+						}})
+					}else{
+						this.$Router.push({path:"/pages/shoppingMall/list/infoGood",query:{
+							SID:item.ProdSID
+						}})
+					}
+				// }else if(type === '3'){
+					
+				// }
 			},
 			setScore(val) {
 				let str = "";

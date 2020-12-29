@@ -203,14 +203,16 @@
         ,{
             "path" : "pages/autoIndex/autoIndex",
             "style" : {}
-        }
-        ,{//权益页面
+        },{//已经购买权益页面
             "path" : "pages/vip/interests/interests",
             "style" : {}
-        },{//购买权益列表
+        },{//详情
+			"path" : "pages/vip/interests/detail",
+			"style" : {}
+		},{//购买权益列表
             "path" : "pages/packages/index",
             "style" : {
-				"navigationBarTitleText": "券包商品",
+				// "navigationBarTitleText": "权益列表",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "enablePullDownRefresh": true
@@ -219,7 +221,7 @@
         ,{//购买权益
             "path" : "pages/packages/detail",
             "style" : {
-				"navigationBarTitleText": "购买劵包",
+				// "navigationBarTitleText": "购买权益",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "enablePullDownRefresh": true
@@ -228,7 +230,7 @@
         ,{
             "path" : "pages/packages/buyRecords",
             "style" : {
-            	"navigationBarTitleText": "购买记录",
+            	// "navigationBarTitleText": "购买记录",
             	"navigationBarTextStyle": "black",
             	"navigationBarBackgroundColor": "#ffffff"
             	// "enablePullDownRefresh": true
