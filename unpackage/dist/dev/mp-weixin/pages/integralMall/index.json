@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "积分商城",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "a-good-box": "/components/a-good-box/a-good-box",
+    "a-node-data": "/components/a-nodeData/a-nodeData"
+  }
+}

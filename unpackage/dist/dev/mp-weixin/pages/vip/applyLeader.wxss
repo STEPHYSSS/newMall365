@@ -1,0 +1,28 @@
+.applyLeader .leaderBox.data-v-73b3d93c {
+  height: 45px;
+}
+.applyLeader .leaderBox ._img.data-v-73b3d93c {
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+  float: right;
+}
+.applyLeader .leaderBox ._span.data-v-73b3d93c {
+  display: inline-block;
+  position: absolute;
+  left: 13px;
+  top: 22px;
+  color: #5e5e5e;
+}
+.applyLeader .leaderBox #allPay.data-v-73b3d93c {
+  width: 270px;
+  padding: 7px 0 7px 5px;
+  margin-left: 5px;
+  display: inline-block;
+  border: 1px solid #f7f7f7;
+}
+.applyLeader .leaderBox button.data-v-73b3d93c {
+  background: #fff;
+  margin-top: 30px;
+}
+

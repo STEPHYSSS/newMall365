@@ -1,0 +1,78 @@
+{
+  "pages": [
+    "pages/shoppingMall/login",
+    "pages/shoppingMall/index",
+    "pages/error/index",
+    "pages/home",
+    "pages/vip/applyLeader",
+    "pages/vip/spreadList",
+    "pages/vip/surplus",
+    "pages/vip/weiFull",
+    "pages/vip/payCode",
+    "pages/vip/allMyOrder",
+    "pages/vip/bind/index",
+    "pages/shoppingMall/order/orderInfo",
+    "pages/shoppingMall/order/refundReason",
+    "pages/shoppingMall/order/confirmCard",
+    "pages/shoppingMall/order/confirmOrder",
+    "pages/shoppingMall/order/paySuccess",
+    "pages/shoppingMall/shoppingCart/index",
+    "pages/shoppingMall/list/couponList",
+    "pages/shoppingMall/list/goodsList",
+    "pages/shoppingMall/list/infoGood",
+    "pages/shoppingMall/list/infoCoupon",
+    "pages/shoppingMall/evaluation/goodEvaluationList",
+    "pages/shoppingMall/seckill/index",
+    "pages/integralMall/index",
+    "Grant",
+    "GrantMiddle",
+    "pages/vip/myFans",
+    "pages/vip/rebate",
+    "pages/vip/SpreadOrder",
+    "pages/vip/myEarnings",
+    "pages/vip/FootPrint",
+    "pages/shoppingMall/menu_naixue/menu/menu",
+    "pages/myAddress/myAddress",
+    "pages/myAddress/add",
+    "pages/shoppingMall/menu_naixue/invite"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "商城",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "backgroundColor": "#fff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/shoppingMall/login"
+      },
+      {
+        "pagePath": "pages/shoppingMall/menu_naixue/menu/menu"
+      },
+      {
+        "pagePath": "pages/home"
+      }
+    ]
+  },
+  "usingComponents": {
+    "shopinfoma": "/components/autoComponents/shopInformation/index",
+    "enter-shops": "/components/autoComponents/enterShops/index",
+    "search-box": "/components/autoComponents/searchBox/index",
+    "notice": "/components/autoComponents/notice/index",
+    "guide": "/components/autoComponents/guide/index",
+    "auxiliary-blank": "/components/autoComponents/auxiliaryBlank/index",
+    "picture-ads": "/components/autoComponents/pictureAds/index",
+    "magic-cube": "/components/autoComponents/magicCube/index",
+    "img-nav": "/components/autoComponents/imgNav/index",
+    "text-box": "/components/autoComponents/textBox/index",
+    "switch-stores": "/components/autoComponents/switchStores/index",
+    "rich-text": "/components/autoComponents/richText/index",
+    "goods": "/components/autoComponents/goods/index",
+    "goods-group": "/components/autoComponents/goodsGroup/index",
+    "title-box": "/components/autoComponents/titleBox/index"
+  }
+}

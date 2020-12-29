@@ -1,0 +1,41 @@
+.refund-reason.data-v-29208632 {
+  background-color: #fff;
+}
+.refund-reason .textView.data-v-29208632 {
+  text-align: left;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #5e5e5e;
+  margin-right: 20px;
+}
+.refund-reason .wait-refund.data-v-29208632 .adBaseView {
+  padding: 15px 0;
+}
+.refund-reason .addBottomline.data-v-29208632 .bottomLine {
+  border-bottom: 1px solid #DDDDDD;
+}
+.custom-title.data-v-29208632 {
+  color: #000;
+  display: inline-block;
+  width: 90px;
+}
+.refund-money.data-v-29208632 {
+  color: #ff5402;
+}
+.action-container.data-v-29208632 {
+  margin: 100px 10px 0;
+}
+.refundTop.data-v-29208632 {
+  padding: 20px;
+  color: #fff;
+}
+.refundTop .refundTop-Time.data-v-29208632 {
+  font-size: 14px;
+  margin-top: 6px;
+}
+.refund-reason-info.data-v-29208632 {
+  margin-bottom: 6px;
+}
+

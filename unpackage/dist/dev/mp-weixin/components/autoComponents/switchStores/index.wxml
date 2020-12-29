@@ -1,0 +1,1 @@
+<view class="switchStores _div data-v-02244e88"><view class="topStyle _div data-v-02244e88"><view class="icon iconfont icon-dianpu _i data-v-02244e88"></view><label class="title _span data-v-02244e88">{{info.Name}}</label><label class="_span data-v-02244e88">[切换]</label></view></view>

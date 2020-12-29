@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "优惠券商城",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-search-bar": "/components/uni-search-bar/uni-search-bar",
+    "a-up-img": "/components/a-up-img/a-up-img"
+  }
+}

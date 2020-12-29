@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///D:/uni/uni_phone/main.js"],"names":["createPage","Page"],"mappings":";;;;;;;;;;kDAAA,wCAAmB;AACnB;AACA,kG;AACAA,UAAU,CAACC,oBAAD,CAAV,C","file":"pages/GrantMiddle.js","sourcesContent":["import 'uni-pages';import '@dcloudio/uni-stat';\nimport Vue from 'vue'\nimport Page from './pages/GrantMiddle.vue'\ncreatePage(Page)"],"sourceRoot":""}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "商品详情",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "a-info-buy-page": "/components/a-info-buyPage/a-info-buyPage"
+  }
+}

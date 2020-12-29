@@ -1,0 +1,77 @@
+.noOder.data-v-3fea6424 {
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  margin-top: 20%;
+}
+.orderBox.data-v-3fea6424 {
+  word-wrap: break-word;
+  word-break: normal;
+  font-size: 12px;
+}
+.orderBox .van-panel.data-v-3fea6424 {
+  padding: 10px 10px 0 10px;
+  font-size: 12px;
+  border-radius: 16px;
+  margin: 10px;
+}
+.orderBox .orderBoxHead.data-v-3fea6424 {
+  padding-bottom: 10px;
+  /*text-align: right;*/
+}
+.orderBox .orderBoxHead .orderBoxState.data-v-3fea6424 {
+  float: right;
+}
+.orderBox .orderBoxCenter.data-v-3fea6424 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  border-top: 1px solid #ebedf0;
+}
+.orderBox .orderBoxCenter .boxImgSize.data-v-3fea6424 {
+  /*min-width: 80px;*/
+  /*min-height: 80px;*/
+  /*max-width: 100px;*/
+  /*max-height: 100px;*/
+  width: 80px;
+  height: 80px;
+  margin: 10px 0 0;
+  margin-right: 5px;
+}
+.orderBox .orderBoxCenter .orderBoxTitle.data-v-3fea6424 {
+  margin: 10px;
+  width: 60%;
+  overflow: hidden;
+  height: 75px;
+  line-height: 18px;
+}
+.orderBox .boxAllNum.data-v-3fea6424 {
+  color: #7d7e80;
+  height: 12px;
+  font-size: 12px;
+  border-bottom: 1px solid #ebedf0;
+}
+.orderBox .boxAllNum ._span.data-v-3fea6424 {
+  position: absolute;
+  right: 15px;
+  bottom: 48px;
+}
+.orderBox .van-panel__footer.data-v-3fea6424 {
+  height: 29px;
+  line-height: 29px;
+  padding: 8px 0;
+}
+.orderBox .btn.data-v-3fea6424 {
+  border-radius: 16px;
+  float: right;
+}
+.van-panel.data-v-3fea6424 {
+  background: #fff;
+}
+.van-hairline--top-bottom.data-v-3fea6424 {
+  position: relative;
+}
+.van-hairline--top.data-v-3fea6424 {
+  position: relative;
+}
+

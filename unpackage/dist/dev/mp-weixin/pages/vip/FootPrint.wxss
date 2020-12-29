@@ -1,0 +1,20 @@
+.leaderBox.data-v-3e296524 {
+  background-color: #f1f3f3;
+  height: 93vh;
+}
+.fansBox.data-v-3e296524 {
+  background: #fff;
+  text-align: center;
+  float: left;
+  margin: 10px 5px 0 8px;
+}
+.fansBox image.data-v-3e296524 {
+  width: 110px;
+  height: 110px;
+  border: 1px solid pink;
+}
+.fansBox ._span.data-v-3e296524 {
+  padding: 5px 0;
+  display: block;
+}
+

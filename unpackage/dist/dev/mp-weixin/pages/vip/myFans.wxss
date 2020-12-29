@@ -1,0 +1,19 @@
+.leaderBox.data-v-f1e80812 {
+  background-color: #f1f3f3;
+  height: 93vh;
+}
+.fansBox.data-v-f1e80812 {
+  width: 78px;
+  text-align: center;
+  float: left;
+  margin: 10px 5px 0 8px;
+}
+.fansBox image.data-v-f1e80812 {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.fansBox ._span.data-v-f1e80812 {
+  display: block;
+}
+

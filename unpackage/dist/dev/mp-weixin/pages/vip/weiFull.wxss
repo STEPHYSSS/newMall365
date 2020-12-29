@@ -1,0 +1,138 @@
+.surplusTop.data-v-60386ea2 {
+  width: 100%;
+  min-height: 160px;
+  color: #fff;
+  box-sizing: border-box;
+  padding-bottom: 15px;
+}
+.surplusTop .surplusTopM.data-v-60386ea2 {
+  font-size: 30px;
+  margin: 0 20px;
+  font-weight: 700;
+}
+.surplusTop .surplusTopM ._span.data-v-60386ea2 {
+  font-size: 16px;
+}
+.surplusTop .surplusD.data-v-60386ea2 {
+  padding: 12px 20px;
+}
+.weiFull.data-v-60386ea2 {
+  margin-bottom: 62px;
+}
+.weiFull .popup-income.data-v-60386ea2 {
+  background-color: #fff;
+  padding-bottom: 10px;
+}
+.weiFull .titleDialog.data-v-60386ea2 {
+  display: inline-block;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  border: 1px solid #eee;
+}
+.weiFull .contentDialog.data-v-60386ea2 {
+  margin: 10px;
+  word-wrap: break-word;
+  word-break: normal;
+  background: #eeeeee;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+.weiFull .contentDialog ._ol.data-v-60386ea2 {
+  list-style-type: none;
+  counter-reset: sectioncounter;
+}
+.weiFull .contentDialog ._ol ._li.data-v-60386ea2:first-child {
+  margin-top: 15px;
+}
+.weiFull .contentDialog ._ol ._li.data-v-60386ea2:before {
+  content: counter(sectioncounter) "、";
+  counter-increment: sectioncounter;
+}
+.weiFull .contentDialog ._span.data-v-60386ea2:first-child {
+  display: inline-block;
+  font-weight: bold;
+}
+.weiFullCenter.data-v-60386ea2 {
+  padding: 10px;
+}
+.weiFullCenter .backColor .moneyInput.data-v-60386ea2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.weiFullCenter .backColor .moneyInput input.data-v-60386ea2 {
+  background: transparent !important;
+}
+.weiFullCenter .row-div:nth-of-type(2n) .weiFullBox.data-v-60386ea2 {
+  margin-left: 20rpx;
+}
+.weiFullCenter .weiFullBox.data-v-60386ea2 {
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px 3px #e0e0e0;
+  border: 1px solid #fff;
+  height: 80px;
+  margin-bottom: 10px;
+  padding: 0 20px;
+}
+.weiFullCenter .weiFullBox .moneyTopCustom.data-v-60386ea2 {
+  font-size: 16px;
+  line-height: 82px;
+  font-weight: bold;
+}
+.weiFullCenter .weiFullBox .moneyInput.data-v-60386ea2 {
+  line-height: 82px;
+}
+.weiFullCenter .weiFullBox .moneyInput input.data-v-60386ea2 {
+  background: #f9f9f9;
+}
+.weiFullCenter .weiFullBox .symbolMark.data-v-60386ea2 {
+  font-size: 14px;
+  margin-right: 5px;
+}
+.weiFullCenter .weiFullBox .customInput.data-v-60386ea2 {
+  width: 78%;
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+}
+.weiFullCenter .weiFullBox .moneyTop.data-v-60386ea2 {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  line-height: 18px;
+}
+.weiFullCenter .weiFullBox .moneyBottom.data-v-60386ea2 {
+  display: inline-block;
+  margin-top: 4px;
+  width: 90%;
+  /*加省略号*/
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: #666666;
+}
+.weiFullCenter .weiFullBox .amountBoxImg.data-v-60386ea2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+.weiFullCenter .van-col:nth-child(2n) .weiFullBox.data-v-60386ea2 {
+  margin-left: 5px;
+}
+.weiFullCenter .van-col:nth-child(2n-1) .weiFullBox.data-v-60386ea2 {
+  margin-right: 5px;
+}
+.weiFullCenter .van-col.data-v-60386ea2 {
+  background: #f9f9f9;
+}
+

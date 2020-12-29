@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "a-up-img": "/components/a-up-img/a-up-img",
+    "uni-countdown": "/components/uni-countdown/uni-countdown",
+    "uni-icons": "/components/uni-icons/uni-icons"
+  }
+}

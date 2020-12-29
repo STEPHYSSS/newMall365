@@ -1,0 +1,62 @@
+.imgPopup .uni-popup {
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 999;
+}
+.imgPopup ._img,
+.imgPopup image {
+  width: auto;
+  height: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+}
+.userEvaList {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+.userEvaList .iconUser {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.userEvaList .userEvaTime {
+  font-size: 12px;
+  color: #999;
+  line-height: 40px;
+}
+.userEvaList .showImgs {
+  width: 85%;
+  /*height: 80vh;*/
+}
+.userEvaList .showImgs ._img,
+.userEvaList .showImgs image {
+  width: 100%;
+  /*vertical-align: middle;*/
+}
+.userEvaList .vanSwipe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+.userEvaList .content-Details {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  word-break: normal;
+}
+.userEvaList .reply-style {
+  background: #fafafa;
+  padding: 5px;
+  font-size: 10px;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+

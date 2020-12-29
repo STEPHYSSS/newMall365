@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "微卡充值",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-popup": "/components/uni-popup/uni-popup"
+  }
+}

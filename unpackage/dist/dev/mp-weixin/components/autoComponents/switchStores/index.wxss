@@ -1,0 +1,20 @@
+.switchStores.data-v-02244e88 {
+  padding: 0 15px;
+  background: #fff;
+  line-height: 30px;
+}
+.switchStores .topStyle.data-v-02244e88 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.switchStores .title.data-v-02244e88 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  margin-left: 8px;
+}
+

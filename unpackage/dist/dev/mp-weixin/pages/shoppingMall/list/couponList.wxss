@@ -1,0 +1,66 @@
+.couponList .goodBox.data-v-f4486d0a {
+  margin: 10px;
+  background: #ffffff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  padding: 10px;
+  border-radius: 8px;
+}
+.couponList .goodBox .leftBox.data-v-f4486d0a {
+  min-width: 150px;
+  margin-right: 10px;
+}
+.couponList .goodBox .rightBox.data-v-f4486d0a {
+  position: relative;
+}
+.couponList .goodBox .rightBox .rightBoxTitle.data-v-f4486d0a {
+  overflow: hidden;
+  height: 40px;
+}
+.couponList .goodBox .rightBox .rightBoxBottom.data-v-f4486d0a {
+  position: absolute;
+  bottom: 0;
+  color: red;
+}
+.couponList .goodBox1.data-v-f4486d0a {
+  padding: 10px;
+}
+.couponList .goodBox1 .goodBox-row.data-v-f4486d0a {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.couponList .goodBox1 .goodBox-row :nth-child(2n).goodBox-col.data-v-f4486d0a {
+  margin-left: 6px;
+}
+.couponList .goodBox1 .oneBoxTitle.data-v-f4486d0a {
+  color: #313131;
+  font-size: 14px;
+  height: 19px;
+  overflow: hidden;
+  margin: 8px;
+}
+.couponList .goodBox1 .goodBoxInfo.data-v-f4486d0a {
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+.couponList .goodBox1 .oneBoxMoney.data-v-f4486d0a {
+  margin: 8px;
+  padding-bottom: 10px;
+}
+.couponList .goodBox1 .oneBoxMoney ._span.data-v-f4486d0a:nth-child(1),
+.couponList .goodBox1 .oneBoxMoney ._span.data-v-f4486d0a:nth-child(2) {
+  color: red;
+}
+.couponList .goodBox1 .oneBoxMoney ._span.data-v-f4486d0a:nth-child(1) {
+  font-size: 12px;
+}
+.couponList .goodBox1 .oneBoxMoney ._span.data-v-f4486d0a:nth-child(3) {
+  float: right;
+  font-size: 10px;
+  color: #999;
+}
+

@@ -1,0 +1,33 @@
+
+.cap-text.data-v-5438c3b2 {
+	display: block;
+	background: #fff;
+}
+.cap-text__content-wrap.data-v-5438c3b2 {
+	position: relative;
+	padding: 10px 0;
+	margin: 0 10px;
+}
+.cap-text__content.data-v-5438c3b2 {
+	line-height: 20px;
+	margin: 0 !important;
+	white-space: pre-line;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+.cap-text--has-line .cap-text__content-wrap.data-v-5438c3b2:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 200%;
+	height: 200%;
+	-webkit-transform: scale(0.5);
+	        transform: scale(0.5);
+	-webkit-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	pointer-events: none;
+	box-sizing: border-box;
+	border-bottom: 1px solid #e5e5e5;
+}
+

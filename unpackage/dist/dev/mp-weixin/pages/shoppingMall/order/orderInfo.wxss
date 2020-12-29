@@ -1,0 +1,73 @@
+.order-info-style .btn-fa-style button {
+  margin-left: 5px;
+}
+.order-info-style .order-area-fa {
+  background: #fff;
+}
+.order-info-style .order-area-fa .order-area-info {
+  vertical-align: middle;
+  font-size: 16px;
+  margin-right: 3px;
+}
+.order-info-style .order-area-fa .order-area-delivery {
+  padding: 8px 8px 0 8px;
+  font-size: 14px;
+}
+.order-info-style .confirm-area-popup-fa .confirm-area-popup {
+  height: 100%;
+  width: 100%;
+}
+.order-info-style .confirm-area-popup-fa .uni-popup__wrapper-box {
+  height: 100%;
+  width: 100%;
+}
+.order-info-style .goodBox {
+  padding: 8px !important;
+}
+.order-info-style .goodsBoxLine {
+  margin: 0;
+}
+.order-info-style .orderData {
+  color: #777;
+  background: #ffffff;
+  margin-top: 8px;
+  padding-bottom: 8px;
+}
+.order-info-style .orderTime {
+  padding: 8px 8px 0px 16px;
+}
+.order-info-style .orderTime .orderTime_label {
+  width: 105px;
+  text-align: left;
+  display: inline-block;
+}
+.order-info-style .copyText {
+  float: right;
+}
+.order-area {
+  background: #ffffff;
+  padding: 14px 6px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 8px;
+}
+.order-area .order-area-icon {
+  margin: auto;
+}
+.order-area .order-area-icon uni-image,
+.order-area .order-area-icon image {
+  margin: 0 10px;
+  width: 40px;
+  height: 40px;
+}
+.order-area .order-area-phone {
+  font-size: 14px;
+  color: #909090;
+  margin-left: 8px;
+}
+.order-area .order-area-location {
+  font-size: 12px;
+  margin-top: 3px;
+}
+

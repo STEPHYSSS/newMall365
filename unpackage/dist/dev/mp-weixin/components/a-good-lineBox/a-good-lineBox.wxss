@@ -1,0 +1,115 @@
+.goodsBoxLine.data-v-20773ee4 {
+  background: #fff;
+  margin-bottom: 6px;
+  padding: 5px;
+}
+.goodsBoxLine .goodsBox-parts.data-v-20773ee4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin: 6px 0;
+}
+.goodsBoxLine .parts-norms-style.data-v-20773ee4 {
+  color: #807e7e;
+  min-width: 50px;
+  font-size: 10pt;
+}
+.goodsBoxLine .parts-norms-info.data-v-20773ee4 {
+  color: #7a7878;
+  font-size: 12px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  /* margin-right: 30px; */
+  margin-top: 1px;
+}
+.goodsBoxLine .parts-buyMoney.data-v-20773ee4 {
+  display: inline-block;
+  margin-left: 2px;
+  margin-right: 15px;
+  color: #7a7878;
+  font-size: 12px;
+}
+.goodsBoxLine .parts-norms-info-one.data-v-20773ee4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  line-height: 18px;
+}
+.goodsBoxLine .parts-norms-one-salePrice.data-v-20773ee4 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.goodsBoxLine .parts-norms-one-prodAmt.data-v-20773ee4 {
+  margin-right: 11px;
+  min-width: 60px;
+  text-align: right;
+  color: #000;
+}
+.boxShadow.data-v-20773ee4 {
+  box-shadow: 1px 1px 3px #e0e0e0;
+}
+.goodBox.data-v-20773ee4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.goodBox .van-image.data-v-20773ee4 {
+  display: block;
+}
+.goodBox .rightBox.data-v-20773ee4 {
+  position: relative;
+  margin: 0 10px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  margin-bottom: 0;
+}
+.goodBox .rightBox .rightBox_tastName.data-v-20773ee4 {
+  font-size: 12px;
+  background: #f7f8fa;
+  color: #909090;
+  display: inline-block;
+  padding: 3px 5px;
+}
+.goodBox .rightBox .rightBox_quota.data-v-20773ee4 {
+  margin-top: 6px;
+  color: red;
+  font-size: 12px;
+}
+.goodBox .rightBox .rightBoxTitle.data-v-20773ee4 {
+  overflow: hidden;
+  height: 38px;
+  line-height: 18px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: #313131;
+  font-size: 12px;
+}
+.goodBox .rightBox .rightBoxBottom.data-v-20773ee4 {
+  /*position: absolute;*/
+  bottom: 3px;
+  color: red;
+  margin-top: 5px;
+}
+.goodBox .rightBox .rightBoxBottomBuyCnt.data-v-20773ee4 {
+  font-size: 12px;
+  color: #707070;
+  margin-top: 10px;
+}
+.goodBox .rightBox .rightBoxBottom-stepper.data-v-20773ee4 {
+  /*float: right;*/
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.goodBox .rightBox .addIcon.data-v-20773ee4 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: red;
+  font-size: 20px;
+  cursor: pointer;
+}
+

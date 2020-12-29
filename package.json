@@ -1,0 +1,23 @@
+{
+  "name": "uni_phone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "adcell": "^1.0.6",
+    "js-base64": "^2.5.2",
+    "jweixin-module": "^1.6.0",
+    "moment": "^2.27.0",
+    "uni-simple-router": "^1.5.3",
+    "vconsole": "^3.3.4"
+  },
+  "devDependencies": {
+    "weixin-js-sdk": "^1.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

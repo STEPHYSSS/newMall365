@@ -1,0 +1,108 @@
+.bindMicro .wu-cell {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 16px;
+  color: #323233;
+  font-size: 14px;
+  line-height: 24px;
+  background-color: #fff;
+  position: relative;
+}
+.bindMicro .wu-cell__label {
+  -webkit-box-flex: 0;
+  -webkit-flex: none;
+          flex: none;
+  box-sizing: border-box;
+  width: 90px;
+  box-flex: 0;
+}
+.bindMicro .wu-cell__body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.bindMicro .wu-cell__value {
+  position: relative;
+  overflow: hidden;
+  color: #969799;
+  vertical-align: middle;
+  word-wrap: break-word;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.bindMicro .wu-cell .wu-field__control {
+  color: #323233;
+  line-height: inherit;
+  text-align: left;
+  background-color: transparent;
+  min-width: 0;
+  margin-right: 75px;
+  font-size: 12px;
+  height: 24px;
+}
+.bindMicro .wu-cell .wu-field__error-message {
+  color: #ee0a24;
+  font-size: 12px;
+  text-align: left;
+}
+.bindMicro .wu-cell uni-input {
+  font-size: 14px;
+}
+.bindMicro .bindMicroTitle {
+  text-align: center;
+  margin: 20px 0;
+}
+.bindMicro .EntityCardShow .van-dialog__header {
+  padding-bottom: 10px;
+}
+.bindMicro .EntityCardShow .EntityCard {
+  width: 94%;
+  height: 90px;
+  /*height: 50px;*/
+  /*line-height: 50px;*/
+  border: 1px solid #eee;
+  margin: 5px 3%;
+  border-radius: 15px 15px 10px 10px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+.bindMicro .EntityCardShow .EntityCard .van-radio__label {
+  color: #fff;
+  width: 100%;
+}
+.bindMicro .EntityCardShow .EntityCard .van-radio__icon {
+  position: absolute;
+  right: 20px;
+}
+.bindMicro .EntityCardShow .EntityCard .EntityCardName {
+  line-height: 40px;
+}
+.bindMicro .EntityCardShow .EntityCard .EntityCardBalance {
+  font-size: 14px;
+}
+.bindMicro .EntityCardShow .van-dialog__content {
+  max-height: 60vh;
+  /*    !*height: 90%;*!*/
+  overflow-y: scroll;
+}
+.bindMicro .btnBottom {
+  margin: 0 10px;
+}
+.bindMicro .phoneStyle {
+  background: #fff;
+  position: relative;
+}
+.bindMicro .phoneStyle button {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+}
+

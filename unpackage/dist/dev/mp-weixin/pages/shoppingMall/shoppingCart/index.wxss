@@ -1,0 +1,94 @@
+.shopping-cart-style.data-v-2d939595 {
+  box-sizing: border-box;
+  height: 100%;
+}
+.shopping-cart-style .uni-popup.data-v-2d939595 {
+  z-index: 1000;
+}
+.shopping-cart-style.data-v-2d939595 uni-checkbox .uni-checkbox-input {
+  border-radius: 50%;
+}
+.shopping-cart-style .uni-popupSku .uni-popupSku-box.data-v-2d939595 {
+  border-radius: 10px 10px 0 0;
+  padding: 10px 20px;
+  background-color: #fff;
+}
+.shopping-cart-style .uni-popupSku .crossIcon.data-v-2d939595 {
+  position: absolute;
+  font-size: 20px;
+  right: 10px;
+  top: 10px;
+}
+.shopping-cart-style .uni-popupSku .partsStyle.data-v-2d939595 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.shopping-cart-style .uni-popupSku .partsStyle .partsStepper.data-v-2d939595 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+}
+.shopping-cart-style .uni-popupSku .partsStyle .skuTopChoiceItem.data-v-2d939595 {
+  display: inline-block;
+  margin: 0 12px 12px 0;
+  overflow: hidden;
+  color: #323233;
+  font-size: 13px;
+  line-height: 16px;
+  vertical-align: middle;
+  border-radius: 4px;
+  padding: 8px;
+  background: #f7f8fa;
+}
+.shopping-cart-style .van-pull-refresh.data-v-2d939595 {
+  min-height: 100%;
+  padding-bottom: 100px;
+}
+.shopping-cart-style .top-cart.data-v-2d939595 {
+  color: #fff;
+  height: 120px;
+  padding: 0 10px;
+}
+.shopping-cart-style .top-cart__title.data-v-2d939595 {
+  line-height: 50px;
+  font-size: 24px;
+}
+.shopping-cart-style .top-cart__num.data-v-2d939595 {
+  font-size: 14px;
+}
+.shopping-cart-style .top-cart__batch.data-v-2d939595 {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+.shopping-cart-style .bottom-cart.data-v-2d939595 {
+  margin: -30px 10px 60px 10px;
+  border-radius: 30px;
+}
+.shopping-cart-style .bottom-cart__box.data-v-2d939595 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px 0 0 10px;
+  min-height: 110px;
+}
+.shopping-cart-style .bottom-cart__cardBox.data-v-2d939595 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.shopping-cart-style .bottom-cart .checkbox-my.data-v-2d939595 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 10px;
+  padding-right: 10px;
+}
+

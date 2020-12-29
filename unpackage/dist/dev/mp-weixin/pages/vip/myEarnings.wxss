@@ -1,0 +1,32 @@
+.Mybox {
+  height: 150px;
+  background-color: #fdfae1;
+}
+.Mybox ._p {
+  font-size: 15px;
+}
+.Mybox .money {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.Mybox .money .left {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  background-color: orange;
+}
+.Mybox .money .right {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  background-color: pink;
+}
+.Mybox .money .right button {
+  width: 120px;
+  border-radius: 25px;
+  border: 0;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+

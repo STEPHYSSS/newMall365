@@ -1,0 +1,46 @@
+.bottom-submit-style.data-v-43197138 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  -webkit-user-select: none;
+          user-select: none;
+}
+.bottom-submit-style__bar.data-v-43197138 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+  height: 50px;
+  font-size: 14px;
+}
+.bottom-submit-style__fare.data-v-43197138 {
+  margin-right: 5px;
+  font-size: 10px;
+  color: #999 !important;
+}
+.bottom-submit-style__text.data-v-43197138 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  padding-right: 12px;
+  color: #323233;
+  font-weight: 500;
+  text-align: right;
+}
+.bottom-submit-style__price.data-v-43197138 {
+  color: #f44;
+  font-size: 18px;
+}
+.bottom-submit-style__button.data-v-43197138 {
+  padding: 0 36px;
+  line-height: 38px;
+}
+

@@ -1,0 +1,20 @@
+
+.nodeData-fa.data-v-ee8b5e78 {
+    text-align: center;
+}
+.nodeData.data-v-ee8b5e78 {
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+}
+.stringVal.data-v-ee8b5e78 {
+    display: inline-block;
+    white-space: nowrap;
+    font-size:15px;
+    margin-top:10px;
+    color:#777;
+}
+

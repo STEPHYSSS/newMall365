@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "订单详情",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "a-good-line-box": "/components/a-good-lineBox/a-good-lineBox",
+    "uni-popup": "/components/uni-popup/uni-popup",
+    "ad-cell": "/node-modules/adcell/ADCell"
+  }
+}

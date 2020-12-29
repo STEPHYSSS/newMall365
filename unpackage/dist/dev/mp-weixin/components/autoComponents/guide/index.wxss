@@ -1,0 +1,24 @@
+
+.rc-design-component-line-preview.data-v-532dd610 {
+	height: 30px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	box-align: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.cap-line-wrap.data-v-532dd610 {
+	width: 100%;
+	box-sizing: border-box;
+}
+.cap-line.data-v-532dd610 {
+	width: 100%;
+}
+._hr.data-v-532dd610 {
+	box-sizing: content-box;
+	height: 0;
+	overflow: visible;
+}
+

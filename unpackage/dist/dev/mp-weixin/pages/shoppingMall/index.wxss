@@ -1,0 +1,10 @@
+.shoppingCart_style.data-v-6e67e158 .uni-navbar__header-btns-left {
+  width: 160rpx;
+}
+.shoppingCart_style .van-popup--top.data-v-6e67e158 {
+  width: 145px !important;
+}
+.shoppingCart_style .van-dropdown-menu.data-v-6e67e158 {
+  height: 54px;
+}
+

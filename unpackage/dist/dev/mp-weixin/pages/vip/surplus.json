@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "微卡交易记录",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "ad-cell": "/node-modules/adcell/ADCell"
+  }
+}

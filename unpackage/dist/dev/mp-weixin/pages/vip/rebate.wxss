@@ -1,0 +1,46 @@
+.Cash-out {
+  background-color: #fff;
+  margin: 10px;
+  border-radius: 10px;
+  padding-bottom: 20px;
+}
+.Cash-out .box {
+  height: 100px;
+  background-color: #cecece;
+  text-align: center;
+}
+.Cash-out .box .money {
+  font-size: 26px;
+  font-weight: 800;
+  padding-top: 22px;
+}
+.Cash-out .box .tips {
+  font-size: 16;
+}
+.Cash-out .IsTix {
+  margin: 10px;
+  font-size: 16px;
+}
+.Cash-out .lineBottom {
+  border-bottom: 1px solid #cfcfcf;
+  margin: 10px;
+}
+.Cash-out .lineBottom .btnAll {
+  border: 0;
+}
+.Cash-out .lineBottom input {
+  width: 240px;
+  display: inline-block;
+  padding-left: 10px;
+}
+.Cash-out .lineBottom ._strong {
+  font-size: 20px;
+}
+.btnBox {
+  width: 352px;
+  margin: 0 auto;
+}
+.btnBox button {
+  background-color: #FFFFFF;
+}
+

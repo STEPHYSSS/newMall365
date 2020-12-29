@@ -1,0 +1,38 @@
+.Spreadorder .main.data-v-4a62daa0 {
+  margin: 10px 10px;
+  background-color: #FFFFFF;
+  font-size: 16px;
+}
+.Spreadorder .main .flexB.data-v-4a62daa0 {
+  padding-top: 10px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  padding-bottom: 20px;
+}
+.Spreadorder .main .flexB ._span.data-v-4a62daa0 {
+  width: 80px;
+  display: inline-block;
+  padding-left: 10px;
+}
+.Spreadorder .main .flexB ._span ._img.data-v-4a62daa0 {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.Spreadorder .main .flexB ._p.data-v-4a62daa0 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  padding-right: 20px;
+}
+.Spreadorder .main .flexB ._p ._span.data-v-4a62daa0 {
+  width: 100%;
+  display: block;
+  margin: 4px 0;
+}
+.Spreadorder .main .tips.data-v-4a62daa0 {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+

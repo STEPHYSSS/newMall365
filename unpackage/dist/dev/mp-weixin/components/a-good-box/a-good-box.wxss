@@ -1,0 +1,90 @@
+.goodBoxTwo.data-v-a668f538 {
+  display: inline-block;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  /*box-shadow: 1px 1px 1px #eee;*/
+  box-shadow: 1px 1px 3px #eee;
+}
+.goodBoxTwo .progress-style.data-v-a668f538 {
+  padding: 0 8px;
+}
+.goodBoxTwo .progress-style.data-v-a668f538 .uni-progress-bar,
+.goodBoxTwo .progress-style.data-v-a668f538 .uni-progress-inner-bar {
+  border-radius: 20px;
+}
+.goodBoxTwo .addIconBtn.data-v-a668f538 {
+  float: right;
+}
+.goodBoxTwo .addIconBtn .van-button--mini.data-v-a668f538 {
+  padding: 0 5px;
+}
+.goodBoxTwo .vanImage-style.data-v-a668f538 {
+  position: relative;
+}
+.goodBoxTwo .timer-style.data-v-a668f538 {
+  position: absolute;
+  height: 62rpx;
+  line-height: 62rpx;
+  width: 100%;
+  background: #fe5252;
+  bottom: 0;
+  color: #fff;
+  font-size: 12px;
+}
+.goodBoxTwo .timer-style .van-count-down.data-v-a668f538 {
+  font-size: 12px;
+  color: #fff;
+  line-height: 30px;
+}
+.goodBoxTwo .timer-style .timer-right.data-v-a668f538 {
+  float: right;
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+}
+.goodBoxTwo .timer-style .timer-right.data-v-a668f538 .uni-countdown__number {
+  width: 15px;
+}
+.goodBoxTwo .timer-style .timer-left.data-v-a668f538 {
+  padding-left: 5px;
+}
+.goodBoxTwo .oneBoxTitle.data-v-a668f538 {
+  color: #313131;
+  font-size: 14px;
+  height: 19px;
+  overflow: hidden;
+  margin: 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.goodBoxTwo .oneBoxTitleSell.data-v-a668f538 {
+  color: #969799;
+  font-size: 12px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  margin: 5px 0;
+  margin-right: -8px;
+  text-align: right;
+  -webkit-transform: scale(0.85);
+          transform: scale(0.85);
+}
+.goodBoxTwo .goodBoxInfo.data-v-a668f538 {
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+.goodBoxTwo .oneBoxMoney.data-v-a668f538 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 5px 8px;
+  color: #fe5252;
+  font-size: 14px;
+}
+.goodBoxTwo .oneBoxMoney .addIcon.data-v-a668f538 {
+  float: right;
+  font-size: 20px !important;
+  cursor: pointer;
+}
+

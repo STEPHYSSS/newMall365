@@ -1,0 +1,7 @@
+.seckill .seckill-goodsBox.data-v-150f5f10 {
+  display: inline-block;
+}
+.seckill .seckill-goodsBox.data-v-150f5f10:nth-child(2n + 1) {
+  margin-right: 6px;
+}
+
