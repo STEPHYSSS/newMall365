@@ -1,173 +1,99 @@
 <template>
-	<view class="">
+	<view>
 		<div class="backgroundFF">
-			<!--        横-->
-			<div v-if="!loading">
+			<div>
+				<!-- 搜索栏 -->
 				<uni-nav-bar :status-bar="true" @clickLeft="clickLeft" :shadow="false" :fixed="true" left-icon="back">
-					<!-- @cancel="cancels" @confirm="serch" v-model="name" -->
 					<uni-search-bar cancelButton="none" clearButton="none" style="width:100%" placeholder="请输入搜索关键词"
-					@confirm="sousuo" v-model="search" :radius="50"></uni-search-bar>
+					@confirm="searchGood" v-model="search" :radius="50"></uni-search-bar>
 					<div slot="right">
 						<div class="headRight"></div>
 					</div>
 				</uni-nav-bar>
+				<!-- 左侧类别 -->
 				<div class="leftNavsidebar" v-if="sidebarList.length>0">
 					<view :class="['homepageLeftFixed']">
-						<view v-for="(item,index) in sidebarList" :key="index" :class="['homepageLeft',index===currentIndex?'activeCanteen':'']"
-						 @click="sidebarChange(index,item)">
-							{{item.Name}}
-						</view>
+						<div @click="clickMenu(index,item)" :class="['homepageLeft',index===currentIndex?'activeCanteen':'']" 
+						v-for="(item,index) in sidebarList" :key="index">
+							<span >{{item.Name}}</span>
+						</div>
 					</view>
-				</div>
-				<div class="goodBox1" v-if="list.length>0">
+				</div>	
+				<!-- 右侧商品 -->
+				<div class="goodBox1">
 					<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
 						<div class="goodBox-row" gutter="5">
-							<div class="goodBox-col" v-for="(item,index) in list" :key="index">
+							<div class="goodBox-col" v-for="(item,index) in rightGoodsList" :key="index">
 								<a-good-box :itemData="item" :imgHeight="imgHeight" @goodBox="goodBox" @addCart="addCart(item)"></a-good-box>
 							</div>
 						</div>
 					</scroll-view>
 				</div>
-				<a-nodeData v-if="(sidebarList.length===0||list.length===0)"></a-nodeData>
 			</div>
-			<a-shopping-showSku :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo"></a-shopping-showSku>		
 		</div>
-		<view v-show="tabShow">
-			<tabBar :pagePath="'/pages/shoppingMall/list/goodsList'"></tabBar>
-		</view>
 	</view>
 </template>
-
 <script>
-	import {
-		vipCard
-	} from "@/api/http.js";
-	import {
-		goodListPublic
-	} from "./public";
-
-	export default {
-		components: {
-			// SkuShow,
-			// nodeData
-		},
-		mixins: [goodListPublic],
-		data() {
-			return {
-				activeKey: "",
+	import { vipCard } from "@/api/http.js";
+	export default{
+		data(){
+			return{
 				show: false,
 				tabShow:true,
-				skuDataInfo: {},
+				loading:true,
 				currentIndex: 0,
 				imgHeight: '',
 				imgHeightLine: '',
-				loading:true,
-				name:this.$route.query.searchName?this.$route.query.searchName:'',
-				only:[],
+				search:'',//搜索名称
 				CateSID:'',
-				search:'',//商品大类搜索
+				searchName:'',//商品大类搜索
 				menuScrollIntoView: '',
-			};
+				sidebarList:[],//分类列表
+				rightGoodsList:[],//右侧商品列表
+			}
 		},
-		async created() {
-			// if(this.$route.query.query){
-			// 	this.CateSID = JSON.parse(this.$route.query.query);
-			// }
+		async created(){
 			if(this.$route.query.query){
 				let getDecode = decodeURIComponent(this.$route.query.query);
-				let getDQuery = JSON.parse(getDecode)
-				this.CateSID= getDQuery.SID
-				// let abc = JSON.parse(this.$route.query.query)
-				// let getDQuery = JSON.parse(getDecode)
-				// let getObj = JSON.parse(getDQuery.query)
-				// let key = Object.keys(getObj)
-				// if(key=="SID"){
-				// 	this.SID = Object.values(getObj)
-				// }
+				let getDQuery = JSON.parse(getDecode);
+				this.CateSID= getDQuery.SID;
 			}
 			this.imgHeight = (uni.getSystemInfoSync().windowWidth- 22 - 85) / 2 + "px";
 			await this.getCouponList();
-			await this.getList();
 			this.$store.commit("SET_HISTORY_URL", {path:'/pages/shoppingMall/list/goodsList'})
 		},
-		mounted() {},
-		methods: {
-			serch (val) {
-		        let result = [] // 查询结果
-		        let temp = []// 存放查询到的商品
-		        for (const i of this.sidebarList) { // 遍历tree
-		          temp = [] // 先置空
-		          for (const y of i.children) {// 匹配到符合条件得商品后  push到temp     
-					   if(y.Name == val.value){
-						   temp.push(y)
-						   this.only.push(y)
-					   }
-		          }
-		          // 该children 下  有符合条件的商品  就将这个节点 push到result
-		          if (temp && temp.length) result.push(i)
-		        }
-				this.sidebarList = result
-				this.list= this.only;
-		    },
-			cancels(){
-				this.name = "";
-				this.getCouponList()				
-			},
-			sousuo(val){
-				this.search = val.value
-				console.log(this.CateSID)
-				this.getCouponList2();
-			},
-			async getCouponList2(){//获取商品树列表
-				try {
-					let { Data } = await vipCard({
-						Action: "GetTreeProdList",
-						SID:this.$store.state.currentStoreInfo.SID,//门店id
-						CateSID:this.CateSID,
-						Name:this.search
-					}, "UProdOpera");
-					this.sidebarList = Data.CateList;
-					console.log(this.sidebarList.length)
-					if(this.sidebarList.Length>0){
-						this.getList(this.sidebarList.children);
-					}else{
-						// this.hideGoods = false
-						// this.list = []
-					}
-					
-				} catch (e) {
-					this.$toast(e)
-				}
-			},
+		methods:{
+			// this.prodInfo = this.currentObj._Prod_Data.filter(D=>D.CateSID === item.SID);	
 			async getCouponList(){//获取商品树列表
+				let Name = "";
+				if(this.$route.query.searchName){
+					Name = this.$route.query.searchName;
+				}else if(this.search!=''){
+					Name = this.search;
+				}else{
+					Name = "";
+				}
 				try {
 					let { Data } = await vipCard({
 						Action: "GetTreeProdList",
 						SID:this.$store.state.currentStoreInfo.SID,//门店id
 						CateSID:this.CateSID,
-						Name:this.name
+						Name:Name
 					}, "UProdOpera");
 					this.sidebarList = Data.CateList;
-				
+					console.log(this.sidebarList,'suos')
+					this.rightGoodsList = this.sidebarList[0].children;
 				} catch (e) {
 					this.$toast(e)
 				}
 			},
-			async getList(val) {
-				try {
-					this.list = val ? val : this.sidebarList[0].children;
-					this.list.forEach(D => {
-						D.ImgList = D.ImgList ? D.ImgList.split(",") : [];
-					});
-					this.loading = false;
-				} catch (e) {
-					this.$toast(e)
-					this.loading = false;
-				}
+			clickMenu(index,item){
+				this.currentIndex = index;
+				this.rightGoodsList = item.children.filter(D=>D.CateSID === item.SID);
 			},
-			sidebarChange(index) {
-				this.currentIndex = index
-				this.getList(this.sidebarList[index].children);
+			searchGood(val){//当前页面搜索
+				this.search = val.value;
+				this.getCouponList()
 			},
 			goodBox(val) {//点击商品跳转到详情页
 				this.$Router.push({
@@ -196,7 +122,7 @@
 							ShopSID:currentStore?currentStore.data.SID:''
 						};
 						Object.assign(obj, item);
-
+			
 						let {
 							Data
 						} = await vipCard(obj, "UProdOpera");
@@ -211,12 +137,9 @@
 				this.tabShow = true;
 				this.show = false;
 			},
-			vanOnSearch() {}
-		},
-		filters: {}
-	};
+		}
+	}
 </script>
-
 <style lang="less">
 	.backgroundFF {
 		background: #ffffff;

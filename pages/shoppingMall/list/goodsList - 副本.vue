@@ -193,7 +193,7 @@
 					try {
 						let obj = {
 							Action: "GetProdInfo",
-							ShopSID:currentStore.data.SID
+							ShopSID:currentStore?currentStore.data.SID:''
 						};
 						Object.assign(obj, item);
 

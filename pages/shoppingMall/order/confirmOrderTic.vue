@@ -142,7 +142,7 @@
 					let data = await vipCard(
 					  {
 						Action: "TicketBuy",
-						ShopSID:currentStore.data.SID,
+						ShopSID:currentStore?currentStore.data.SID:'',
 						ProdList:this.currentItem,
 						PromotionItemSID:currentCard[0].PromotionItemSID
 					  }, "UProdOpera")
@@ -261,7 +261,7 @@
 					let {Data} = await vipCard(
 					  {
 						Action: "TicketPay",
-						ShopSID:currentStore.data.SID,
+						ShopSID:currentStore?currentStore.data.SID:'',
 						// ProdList:JSON.stringify(this.prodList),
 						ProdList:this.currentItem,
 						PayType:this.radioPayType,

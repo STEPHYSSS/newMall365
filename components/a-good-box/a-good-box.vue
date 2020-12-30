@@ -33,7 +33,8 @@
 				<span>¥</span>
 				<span>{{itemData.SalePrice}}</span>
 			</div>
-			<span @click.stop="addCart">
+			<!-- <span @click.stop="addCart"> -->
+			<span @click="addCart">
 				<uni-icons v-if="!isIntegral&&!seckill" style="color:#fe5252" type="plus" class="addIcon"></uni-icons>
 			</span>
 			<div class="addIconBtn" v-if="seckill">

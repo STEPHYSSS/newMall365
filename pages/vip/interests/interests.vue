@@ -11,7 +11,7 @@
 						<div>
 							<span class="custom-label">卡号：{{item.CardNo}}</span>
 						</div>
-						<div class="custom-label">使用时间：{{item.UseTime}}</div>
+						<div class="custom-label">有效期：{{item.UseTime | setTime}}~{{item.ValidTime | setTime}}</div>
 						<div class="custom-label" v-if="item.ExchNo">订单号：{{item.ExchNo}}</div>
 					</div>
 				</div>
@@ -58,15 +58,26 @@
 			},
 			// 获取我的权益信息
 			async getInfo(){
+				this.loading = true;
+				uni.showLoading({
+					title: '加载中'
+				})
 				try {
 					let { Data } =  await vipCard({Action:'GetCardBene'}, "UBeneOpera");
 					this.list = Data.BeneList||[];
+					uni.hideLoading()
+					this.loading = false;
 				} catch (e) {
 					this.$toast(e)
+					this.loading = false;
 				}
 			},
 			toDetail(val){
-				this.$router.push({path:'/pages/vip/interests/detail',query:{SID:val.SID,BeneNo:val.BeneNo}})
+				uni.navigateTo({
+					url: '/pages/vip/interests/detail?id=' + val.SID
+				})
+				sessionStorage.setItem('detailPackage',val.SID)
+				// this.$router.push({path:'/pages/vip/interests/detail',query:{SID:val.SID}})
 			},
 		}
 	}

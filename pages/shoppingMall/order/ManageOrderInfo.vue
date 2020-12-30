@@ -35,7 +35,7 @@
 						<span class="priceSpan">¥{{OrderInfo.ProdAmt}}</span>
 					</div>
 					<div class="orderTime" v-if="Number(OrderInfo.DiscAmt)>0">
-						<div class="orderTime_label">方案优惠</div>
+						<div class="orderTime_label">优惠金额</div>
 						<span class="priceSpan">-¥{{OrderInfo.DiscAmt}}</span>
 					</div>
 					<div class="orderTime" v-if="Number(OrderInfo.TicketAmt)>0">

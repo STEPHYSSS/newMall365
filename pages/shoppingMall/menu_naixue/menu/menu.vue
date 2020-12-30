@@ -569,7 +569,7 @@
 					let { Data } = await vipCard({
 						Action: "GetProdInfo",
 						SID:good.SID,
-						ShopSID:currentStore.data.SID
+						ShopSID:currentStore?currentStore.data.SID:''
 					}, 
 					"UProdOpera");
 					

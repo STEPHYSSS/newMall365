@@ -1,6 +1,6 @@
 <template>
 	<view class="container" v-if="!loading">
-		<uni-nav-bar :fixed="true" left-icon="back"  @clickLeft="clickGo" title="权益商品" :status-bar="true" :shadow="false"></uni-nav-bar>
+		<uni-nav-bar :fixed="true" left-icon="back"  @clickLeft="clickGo" title="权益列表" :status-bar="true" :shadow="false"></uni-nav-bar>
 		<view v-if="BeneList.length>0">
 			<view class="">
 				<view class="d-flex boxList"
@@ -8,6 +8,7 @@
 					<image :src="imgUrl" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
 					<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
 						<view class="font-size-lg">{{ item.PlanName }}</view>
+						<view class="font-size-sm">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view>
 						<view class="d-flex justify-content-between align-items-center">
 							<view class="font-size-sm">￥{{ item.Price }}</view>
 							<button type="primary" size="mini" plain class="pay-btn">去购买</button>
@@ -21,7 +22,7 @@
 				<text>购买记录</text>
 			</view>
 		</view>
-		<a-nodeData stringVal="暂无数据" v-if="!loading&&BeneList.length===0"></a-nodeData>
+		<a-nodeData stringVal="暂无权益" v-if="!loading&&BeneList.length===0"></a-nodeData>
 	</view>
 	<!--  -->
 </template>
@@ -32,7 +33,8 @@
 	export default {
 		data() {
 			return {
-				imgUrl:require("@/static/img/quanyi.jpg"),
+				imgUrl:require("@/static/img/quanyi.jpg"),	
+				// ImgUrl: require("@/assets/img/defaule_back.jpg"),
 				loading: true,
 				packages: {},
 				BeneList:[],//列表
@@ -40,6 +42,7 @@
 		},
 		async onLoad() {
 			await this.getPackages()
+			console.log(this.imgUrl)
 		},
 		async onPullDownRefresh() {
 			await this.getPackages()
@@ -48,7 +51,6 @@
 			async getPackages() {
 				this.loading = true
 				this.packages = await vipCard({Action:'GetBeneList'}, "UBeneOpera");
-				// console.log(this.packages.Data.BeneList)
 				this.BeneList = this.packages.Data.BeneList||[];
 				this.loading = false
 			},
@@ -57,7 +59,6 @@
 					url: '/pages/packages/detail?id=' + id
 				})
 				sessionStorage.setItem('buyPackage',id)
-				// this.$router.push({path:'/pages/packages/detail',query:{id:id}})
 			},
 			toBuyRecords(){//购买记录
 				this.$router.push({path:'/pages/packages/buyRecords'})

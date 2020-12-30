@@ -151,3 +151,10 @@ Vue.filter('setBuyTime', (val) => {
 	}
 	return str
 })
+Vue.filter('setTime',(val)=>{
+	let str = val
+	if (val) {
+		str = val.split(" ");
+	}
+	return str[0]
+})

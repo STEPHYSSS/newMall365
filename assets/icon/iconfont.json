@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7177171",
+      "name": "权益管理",
+      "font_class": "quanyiguanli-",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "889418",
+      "name": "客服",
+      "font_class": "kefu",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
       "icon_id": "12739540",
       "name": "支付码",
       "font_class": "zhifuma",

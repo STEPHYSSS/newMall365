@@ -164,7 +164,7 @@
 							</uni-grid-item>
 							<uni-grid-item :index="7">
 							    <view class="grid-item-box" @tap="packages">
-							    	<div class="iconfont icon-youhuiquan1" style="font-size: 18px;"></div>
+							    	<div class="iconfont icon-quanyiguanli-" style="font-size: 18px;"></div>
 							    	<div>更多权益</div>
 							    </view>
 							</uni-grid-item>
@@ -175,7 +175,7 @@
 						<!-- // ismenber:0 未绑定会员卡，1 绑定了会员卡  CardType :0 未绑定会员卡,net:微卡 ，mang||shop 实体卡 -->
 						<!-- 当cardType等于微卡的时候，就要展示实体卡按钮，如果绑定的是实体卡，那么两个按钮都不展示 -->
 						<div>
-							<adCell v-if="CardType=='0' || CardType=='Net'" text="绑定实体会员卡"@click="bindEntity(1)"/>						
+							<adCell v-if="CardType=='0' || CardType=='Net'" text="绑定实体会员卡" @click="bindEntity(1)"/>						
 						</div>
 						<div>
 							<adCell v-if="CardType=='0'" text="申请会员卡" @click="bindEntity(2)"/>
