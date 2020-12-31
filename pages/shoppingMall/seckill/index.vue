@@ -57,6 +57,15 @@
 				} catch (e) {}
 			},
 			goodBox(val) {
+				// if(Number(val.SurplusQty) != 0){
+				// 	this.$Router.push({
+				// 		path: "/pages/shoppingMall/list/infoGood",
+				// 		query: {
+				// 			SID: val.SID,
+				// 			seckill: "true"
+				// 		}
+				// 	});
+				// }
 				this.$Router.push({
 					path: "/pages/shoppingMall/list/infoGood",
 					query: {

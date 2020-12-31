@@ -47,7 +47,7 @@
 		<view class="pay-box d-flex just-content-center align-items-center position-fixed fixed-bottom bg-white">
 			<button type="primary" class="pay-btn font-size-base text-color-white rounded-pill" @tap="openBuyModal(BeneInfo)"
 				style="width: 90%;height: 80rpx; line-height: 80rpx;">
-				￥{{ BeneInfo.Price }}购买
+				￥{{ BeneInfo.Price }} 购买
 			</button>
 		</view>
 		<uni-popup ref="BuyModalShow" type="bottom">
@@ -324,7 +324,7 @@ export default {
 		background-color: #f9f9f9;
 		width: 30rpx;
 		height: 30rpx;
-		bottom: 46rpx;
+		bottom: 54rpx;
 		left: -15rpx;
 		border-radius: 100%;
 	}
@@ -335,7 +335,7 @@ export default {
 		background-color: #f9f9f9;
 		width: 30rpx;
 		height: 30rpx;
-		bottom: 46rpx;
+		bottom: 54rpx;
 		right: -15rpx;
 		border-radius: 100%;
 	}

@@ -127,13 +127,37 @@
 			// 	this.showTips = "活动还未开始~请稍后再来~"
 			// 	this.hideTips = true;
 			// }else 
-			if(this.skuDataInfo.StockType != '0'&& this.skuDataInfo.StoreQty <= '0'|| this.skuDataInfo.TotalSurplusQty<='0'){
-				this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
-				this.hideTips = true;
-			}else if(this.IsSeckillTime == false){
+			/*
+				Stocktype==1代表是无限库存，
+				立即抢购的时候要根据TotalSurplusQty<0或者
+				StockType ==1并且StoreQty==0的时候，立即购买按钮置灰并提示库存不足
+				
+				问:
+				先判断库存类型，0就判断活动库存 1 和2先判断商品库存
+				
+				问:
+				然后在判断活动库存，
+				
+				问:
+				只要一个不满足都是已售罄
+			
+			*/ 
+		   if(this.skuDataInfo.ProdInfo.StockType === '0'){//不限库存
+				if(Number(this.skuDataInfo.TotalSurplusQty)<=0){
+					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
+					this.hideTips = true;
+				}
+		   }else{
+		   	// 如果商品库存小于限购数量，输入框中就展示商品数量
+				if(Number(this.skuDataInfo.ProdInfo.StoreQty)<=0 || Number(this.skuDataInfo.TotalSurplusQty)<=0){
+					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
+					this.hideTips = true;
+				}
+		   }
+		   if(this.IsSeckillTime == false){
 				this.showTips = "不在活动时间范围内~"
 				this.hideTips = true;
-			}else if(this.skuDataInfo.State !='1'){
+			}else if(this.skuDataInfo.ProdInfo.State !='1'){
 				this.showTips = "此商品已下架~要不要瞧瞧别的~"
 				this.hideTips = true;
 			}

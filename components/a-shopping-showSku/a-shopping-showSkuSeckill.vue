@@ -175,7 +175,7 @@
 			isActiveName() {
 				return function(name) {
 					for (let i of this.checkStatic) {
-						if (name === i.Value.Name) {
+						if (name === i.Value.Name && i.Name === value.Name) {
 							return 'isActive'
 						}
 					}
@@ -202,7 +202,7 @@
 				}else{//电子券商品秒杀
 					this.SpecResultPrice = 0;
 					let num = Number(this.goodsInfo.SalePrice)
-					console.log(num)
+					// console.log(num)
 					if (this.goodsInfo.MemberPrice || this.goodsInfo.MemberPrice == 0) {
 						num = Number(this.goodsInfo.MemberPrice)
 					}

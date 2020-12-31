@@ -231,6 +231,11 @@
 			addresses() {},
 			// 返回
 			clickLeft() {
+				if(this.$Route.query.flag == 'AutoWaimai'){
+					if(localStorage.getItem('addressInfo') == null){
+						this.$store.commit("SET_ORDER_TYPE", 'takein');
+					}
+				}
 				window.history.back(-1)
 				// if (this.$Route.query.flag == 'login') {
 				// 	this.$Router.push('/pages/shoppingMall/login')

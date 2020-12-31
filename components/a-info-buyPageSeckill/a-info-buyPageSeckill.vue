@@ -86,9 +86,10 @@
 				</view>
 			</view>
 		</div>
+		<!-- 底部占位 -->
 		<div class="goods-action">
 			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo.ProdInfo" :isStartIS="startIS" v-show="isBuyShow"></navSeckill> -->
-			<navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo.ProdInfo" 
+			<navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" 
 			:isStartIS="startIS" :IsSeckillTime="IsSeckillTime" :IsGoodBuyTime="IsGoodBuyTime" @buttonClick="addCart" @click="jumpCart"></navSeckill>
 		</div>
 		<!-- 商品弹窗 -->

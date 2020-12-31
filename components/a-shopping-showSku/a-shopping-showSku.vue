@@ -86,7 +86,7 @@
 											</view>
 											<view style="display: inline-block;" v-for="(value, index2) in item.Value" :key="value.Name"
 											 @click="clickStatic(item, value,index2)">
-												<view class="skuTopChoiceItem"  :class="isActiveName(value.Name)">
+												<view class="skuTopChoiceItem"  :class="isActiveName(value.Name, item)">
 													{{value.Name}}
 													<text v-if="value.Price !='0'" style="color: red;">￥{{value.Price}}</text>
 												</view>
@@ -216,9 +216,9 @@
 		},
 		computed: {
 			isActiveName() {
-				return function(name) {
+				return function(name, value) {
 					for (let i of this.checkStatic) {
-						if (name === i.Value.Name) {
+						if (name === i.Value.Name && i.Name === value.Name) {
 							return 'isActive'
 						}
 					}

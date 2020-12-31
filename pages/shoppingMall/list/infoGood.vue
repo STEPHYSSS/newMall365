@@ -42,7 +42,7 @@
 					SID: this.$Route.query.SID
 				}
 			})
-			console.log(this.$Route.query.SID,'sid')
+			// console.log(this.$Route.query.SID,'sid')
 		},
 		methods: {
 			async getInfo() {

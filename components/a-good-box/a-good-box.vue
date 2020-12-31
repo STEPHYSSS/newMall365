@@ -38,7 +38,9 @@
 				<uni-icons v-if="!isIntegral&&!seckill" style="color:#fe5252" type="plus" class="addIcon"></uni-icons>
 			</span>
 			<div class="addIconBtn" v-if="seckill">
-				<button style="background: #fe5252;bottom: 0;color: #fff;" size="mini">{{btnTitle}}</button>
+				<!-- itemData.SurplusQty)===0 -->
+				<button style="background: #cac7cb;bottom: 0;color: #fff;" size="mini" v-if="Number(itemData.SurplusQty)===0">{{btnTitle}}</button>
+				<button style="background: #fe5252;bottom: 0;color: #fff;" size="mini" v-else>{{btnTitle}}</button>
 			</div>
 		</div>
 	</div>
@@ -100,7 +102,10 @@
 					this.btnTitle = " 活动未开始";
 				} else if (this.startIS === 'end') {
 					this.btnTitle = "活动结束";
-				} else {
+				} else if(Number(this.itemData.SurplusQty)===0){
+					// this.btnTitle = " 立即抢购";
+					this.btnTitle = '商品不足'
+				}else{
 					this.btnTitle = " 立即抢购";
 				}
 			},
