@@ -16,7 +16,7 @@
 				</div> -->
 				<div v-if="isOrder"> 
 					<p>
-						<span class="priceSty">优惠 ¥ {{sumPrice}}</span>
+						<span class="priceSty" v-if="sumPrice!=0">优惠 ¥ {{sumPrice}}</span>
 						<span class="sumPriceSty">合计</span><span class="bottom-submit-style__price">¥ {{objPrice.total}}</span>
 					</p>
 				</div>

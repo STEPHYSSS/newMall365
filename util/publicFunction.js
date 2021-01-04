@@ -195,6 +195,8 @@ export function weChatPayment(that, Data, bool) {
 	}
 
 	function onBridgeReady() {
+		let historyUrl=Cookies.get('historyUrl') || {}
+		console.log(historyUrl.path)
 		WeixinJSBridge.invoke(
 			"getBrandWCPayRequest", {
 				appId: Data.appId,
@@ -217,11 +219,10 @@ export function weChatPayment(that, Data, bool) {
 					// 	});
 					// }
 					// that.$Router.push('/shoppingMall/order/OrderPaySuccess')
-					if(res.route == 'pages/vip/weiFull'){//微卡充值支付
+					if(historyUrl == '/pages/vip/weiFull'){//微卡充值支付
 						that.$Router.push({path:'/pages/home'})
-						console.log('支付成功',res.route)
-					}else if(res.route == 'pages/vip/detail'){//会员权益支付
-						that.$Router.push({path:'/pages/home'})
+					}else if(historyUrl == '/pages/packages/detail'){//会员权益支付
+						that.$Router.push({path:'/pages/vip/interests/interests'})												
 					}else{
 						that.$Router.push({path:'/pages/shoppingMall/order/paySuccess'})
 					}
@@ -229,9 +230,10 @@ export function weChatPayment(that, Data, bool) {
 				} else {
 					//失败
 					that.$toast.fail("支付失败");
-					console.log('支付失败',res.route)
-					if(res.route == 'pages/vip/weiFull'){//微卡充值支付
+					if(historyUrl == '/pages/vip/weiFull'){//微卡充值支付
 						that.$Router.push({path:'/pages/vip/weiFull'})
+					}else if(historyUrl == '/pages/packages/detail'){
+						that.$Router.push({path:'/pages/packages/detail'})
 					}else{
 						that.$Router.push({path:'/pages/home'})
 					}

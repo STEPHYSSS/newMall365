@@ -133,7 +133,10 @@
 			}
 		},
 		async created() {
-			await this.getList();			 
+			await this.getList();		
+			this.$store.commit("SET_HISTORY_URL", {
+				path: '/pages/vip/weiFull'
+			})
 		},
 		mounted() {
 			this.$refs.popup.close();

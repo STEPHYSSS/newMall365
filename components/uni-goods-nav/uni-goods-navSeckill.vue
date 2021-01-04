@@ -146,20 +146,24 @@
 				if(Number(this.skuDataInfo.TotalSurplusQty)<=0){
 					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
 					this.hideTips = true;
+					return false
 				}
 		   }else{
 		   	// 如果商品库存小于限购数量，输入框中就展示商品数量
 				if(Number(this.skuDataInfo.ProdInfo.StoreQty)<=0 || Number(this.skuDataInfo.TotalSurplusQty)<=0){
 					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
 					this.hideTips = true;
+					return false
 				}
 		   }
 		   if(this.IsSeckillTime == false){
 				this.showTips = "不在活动时间范围内~"
 				this.hideTips = true;
+				return false
 			}else if(this.skuDataInfo.ProdInfo.State !='1'){
 				this.showTips = "此商品已下架~要不要瞧瞧别的~"
 				this.hideTips = true;
+				return false
 			}
 			
 		},

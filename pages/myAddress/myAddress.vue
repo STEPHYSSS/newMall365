@@ -59,6 +59,24 @@
 				<button type="primary" size="default" @tap="add">新增地址</button>
 			</view>
 		</view>		
+		<!-- <uni-popup ref="chooesAddress" type="center">
+			<view style="width: 300px;background-color: #FFFFFF;height: auto;border-radius: 5x;">
+				
+			</view>
+		</uni-popup> -->
+		<modal custom :show="couponDetailModalShow" @cancel="closeCouponDetailModal">
+			<view class="d-flex flex-column">
+				<view class="text-center" style="margin-bottom: 30rpx;text-align: center;font-size: 14px;">
+					<h3>该地址暂无法配送</h3>
+				</view>
+				<view class="text-center font-size-sm text-color-assist" style="margin-bottom: 40rpx;font-size: 15px;color: #5A5B5C;text-align: center;">
+					抱歉，目前该地址附近没有可配送的门店，暂无法配送。
+				</view>
+				<view class="text-color-assist font-size-sm pre-line" style="text-align: center;font-size: 15px;" @click="closeCouponDetailModal">
+					<div>朕知道了</div>
+				</view>
+			</view>
+		</modal>
 	</view>
 </template>
 
@@ -66,8 +84,10 @@
 	import Cookies from '@/config/cookie-my/index.js';
 	import { vipCard } from "@/api/http.js";
 	import Mixins from "@/pages/shoppingMall/mixins.js";
+	import modal from '@/components/modal/modal'
 	export default {
 		mixins: [Mixins],
+		name:'myAddress',
 		data() {
 			return {
 				title: '',
@@ -79,6 +99,7 @@
 						backgroundColor: '#D12E32'
 					}
 				}],
+				couponDetailModalShow: false,//超出范围提示弹窗
 				showAreaList: false,
 				radioModes: 2,
 				addEditArea: false,
@@ -91,6 +112,9 @@
 				location: JSON.parse(sessionStorage.getItem('location')),
 				ShopRadio:localStorage.getItem("ShopRadio")
 			}
+		},
+		components:{
+			modal
 		},
 		created() {
 			this.getWxConfig(); // 获取授权地址
@@ -155,7 +179,14 @@
 				}
 			},
 			// 
-			async chooseAddress(item) {
+			// openCouponDetailModal(coupon) {
+			// 	this.coupon = coupon
+			// 	this.couponDetailModalShow = true
+			// },
+			closeCouponDetailModal() {
+				this.couponDetailModalShow = false
+			},
+			async chooseAddress(item) {				
 				if (this.$Route.query.flag == 'towaimai' || this.$Route.query.flag == 'login' || this.$Route.query.flag == 'AutoWaimai'|| this.$Route.query.flag == 'homeD') {
 					let currentStoreOut = {
 						Name: item.Name,
@@ -166,24 +197,38 @@
 						Longitude: item.Longitude,
 						Latitude: item.Latitude
 					}
-					let { Data } = await vipCard({ Action: "GetShopRecently", Latitude:item.Latitude,Longitude:item.Longitude },"UShopOpera");
-					let currentStoreInfo = {
-						Address: Data.ShopInfo.Address,
-						Latitude: Data.ShopInfo.Latitude,
-						Longitude:Data.ShopInfo.Longitude,
-						Name: Data.ShopInfo.Name,
-						SID: Data.ShopInfo.SID,
-						Length:  Data.ShopInfo.Length
+					try{
+						let { Data } = await vipCard({ Action: "GetShopRecently", Latitude:item.Latitude,Longitude:item.Longitude },"UShopOpera");
+						let currentStoreInfo = {
+							Address: Data.ShopInfo.Address,
+							Latitude: Data.ShopInfo.Latitude,
+							Longitude:Data.ShopInfo.Longitude,
+							Name: Data.ShopInfo.Name,
+							SID: Data.ShopInfo.SID,
+							Length:  Data.ShopInfo.Length
+						}
+						// if(Data.Message.indexOf('距离超长')>-1){
+						// 	this.chooesAddress = true;
+						// 	this.$refs.chooesAddress.open();
+						// }else{
+							this.$store.commit("SET_CURRENT_ADDRESS",currentStoreOut)
+							this.$store.commit("SET_CURRENT_STORE",currentStoreInfo)
+							sessionStorage.setItem('takeOutAddress', JSON.stringify(currentStoreOut));
+							this.$store.commit("SET_ORDER_TYPE", 'takeout');
+							if(this.$Route.query.flag == 'AutoWaimai'|| this.ShopRadio ==='2'){
+								return this.$Router.push('/pages/shoppingMall/index')
+							}
+							this.$Router.push({path:'/pages/shoppingMall/menu_naixue/menu/menu'})
+						// }
+					}catch(e){
+						if(e.indexOf('距离超长')>-1){
+							setTimeout(()=>{
+								this.couponDetailModalShow = true
+							},1500)
+							
+						}
+						//TODO handle the exception
 					}
-					// console.log(currentStoreInfo,'距离外卖最近的店')
-					this.$store.commit("SET_CURRENT_ADDRESS",currentStoreOut)
-					this.$store.commit("SET_CURRENT_STORE",currentStoreInfo)
-					sessionStorage.setItem('takeOutAddress', JSON.stringify(currentStoreOut));
-					this.$store.commit("SET_ORDER_TYPE", 'takeout');
-					if(this.$Route.query.flag == 'AutoWaimai'|| this.ShopRadio ==='2'){
-						return this.$Router.push('/pages/shoppingMall/index')
-					}
-					this.$Router.push({path:'/pages/shoppingMall/menu_naixue/menu/menu'})
 					
 				} else {
 					console.log('555')

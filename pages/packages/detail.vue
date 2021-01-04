@@ -54,7 +54,7 @@
 			<view style="width: 86%; margin: 0 auto;" class="deepSty">
 				<p style="text-align: center;margin: 15px 0;">￥<span style="font-size: 28px;">{{ BeneInfo.Price }}</span></p>
 				<view class="payStyle">支付方式</view>
-				<radio-group @change="radioPayChange" v-if="BeneInfo.LimitPay ==''|| (BeneInfo.LimitPay.indexOf(',')>-1)">
+				<radio-group @change="radioPayChange" v-if="BeneInfo.LimitPay ==''">
 					<div>
 						<div class="radio-group-item" @click="PayTypeClick('1')">
 							<div>
@@ -77,7 +77,7 @@
 				</radio-group>
 				<radio-group @change="radioPayChange" v-else>
 					<div>
-						<div class="radio-group-item" @click="PayTypeClick('1')" v-if="BeneInfo.LimitPay==='1'">
+						<div class="radio-group-item" @click="PayTypeClick('1')" v-if="BenePayMode.indexOf('1')>-1">
 							<div>
 								<img class="wechat" src="@/static/assets/img/moneyPay.png" slot="right-icon" />
 								<span class="custom-title">卡支付（余额:{{CardInfo.Balance}}）</span>
@@ -87,7 +87,7 @@
 								<span class="summaryNum" style="color:#777" v-else>余额不足</span>
 							</div>
 						</div>
-						<div @click="PayTypeClick('2')" class="radio-group-item" v-if="BeneInfo.LimitPay==='9902'">
+						<div @click="PayTypeClick('2')" class="radio-group-item" v-if="BenePayMode.indexOf('9902')>-1">
 							<div>
 								<img class="wechat" src="@/static/assets/img/weixinPay.png">
 								<span class="custom-title">微信支付</span>
@@ -108,7 +108,7 @@
 <script>
 import modal from '@/components/modal/modal'
 import { vipCard } from "@/api/http.js";
-import { GetAppNo } from "@/util/publicFunction";
+import { GetAppNo,weChatPayment } from "@/util/publicFunction";
 export default {
 	components: {
 		modal
@@ -142,12 +142,25 @@ export default {
 		this.loading = true;
 		await this.getInfo()
 		this.loading = false;
-		if (Number(this.CardInfo.Balance) < Number(this.BeneInfo.Price)) {
-			//余额不足默认微信支付
+		// if (Number(this.CardInfo.Balance) < Number(this.BeneInfo.Price)) {
+		// 	//余额不足默认微信支付
+		// 	this.radioPayType = "2";
+		// }else {
+		// 	this.radioPayType = "1";
+		// }
+		if(this.BenePayMode.indexOf('1')>-1){
+			if (Number(this.CardInfo.Balance) < Number(this.BeneInfo.Price)) {
+				//余额不足默认微信支付
+				this.radioPayType = "2";
+			}else {
+				this.radioPayType = "1";
+			}
+		}else if(this.BenePayMode.indexOf('9902')>-1){
 			this.radioPayType = "2";
-		}else {
-			this.radioPayType = "1";
 		}
+		this.$store.commit("SET_HISTORY_URL", {
+			path: '/pages/packages/detail'
+		})
 	},
 	methods: {
 		async getInfo(){//获取详情
@@ -158,6 +171,7 @@ export default {
 				// 判断是否有BenePayMode权益购买方式 如果有两个值代表微卡和微信都可以支付，否则只展示其中一个支付方式
 				// this.BeneInfo.LimitPay = '9902,1'
 				this.BeneTypeItem = Data.BeneTypeItem;
+				this.BenePayMode = Data.PlanInfo.LimitPay;
 				if(Data.CardInfo){
 					this.CardInfo = Data.CardInfo
 				}else{

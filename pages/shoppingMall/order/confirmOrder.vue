@@ -533,13 +533,13 @@
 							}
 							this.total = Data.SumTotal;
 							this.ProdTotal = Data.ProdTotal;
-							// this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2));
+							this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2));
 							this.objPrice={
 								total:this.total,								
 								TicketPrice:this.TicketPrice,
 								DiscPrice:this.DiscPrice
 							}
-							console.log(this.objPrice)
+							// console.log(this.objPrice)
 							this.CardInfo = Data.hasOwnProperty("CardInfo") ?
 								Data.CardInfo : {};
 							if (JSON.stringify(this.CardInfo) !== "{}") {
@@ -1337,6 +1337,7 @@
 			/deep/.headView {
 				flex: none;
 				width: 90px;
+				padding-right: 8px;
 			}
 		}
 		.radio-group-play {

@@ -24,10 +24,9 @@
 			<div class="wu-cell" style="display: block;">
 				<div class="goodCoupon-title">{{ goods.Name }}</div>
 				<div class="goodCoupon-express" style="padding:0" v-if="skuDataInfo.IsBuy === '0'">
-					商品可购买时间：
-					<span style="color:#ee0a24;font-size:14px" v-if="goods.BuyTime">{{goods.BuyTime|setBuyTime}}</span><br/>
-					活动可购买时间：
-					<span style="color:#ee0a24;font-size:14px;" v-if="goods.StartTime">{{goods.StartTime}}至{{goods.EndTime}}</span>
+					<span v-if="goods.BuyTime">商品可购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span><br/>					
+					<span v-if="goods.StartTime">活动可购买时间：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
+					
 				</div>
 				<div class="goodCoupon-price ">
 					<div>
@@ -175,8 +174,10 @@
 		},
 		created() {
 			// $.base64.atob(this.goods.Features, "utf8")
-			this.goods.ImgList = this.goods.ImgList ? this.goods.ImgList.split(",") : [];
-			this.goods.ImgList.unshift(this.goods.Img)
+			if(this.goods.ImgList.length>0){
+				this.goods.ImgList = this.goods.ImgList ? this.goods.ImgList.split(",") : [];
+				this.goods.ImgList.unshift(this.goods.Img)
+			}
 			this.goods.Features = this.goods.Features ?
 				Base64.decode(this.goods.Features) : "";
 			this.goods.ImportantNotes = this.goods.ImportantNotes ?
@@ -447,7 +448,7 @@
 				padding-left: 16px;
 			}
 		}
-
+		
 		.goodCouponSwipe {
 			width: 100%;
 			text-align: center;
@@ -587,6 +588,10 @@
 			font-size: 16px;
 			letter-spacing: 2px;
 			opacity:0.7;
+		}
+		.timeSty{
+			color:#ee0a24;
+			font-size:14px
 		}
 	}
 </style>

@@ -3,7 +3,7 @@ import store from '../store/store.js'
 import router from '../router/index.js'
 import dataConfig from '@/config/index'
 import Vue from 'vue' 
-
+import {GetBaseUrl} from '../util/publicFunction'    
 export const vipCard = (data, ViewKay, AppNo) => {
 	return new Promise((resolve, reject) => {
 		uni.getProvider({
@@ -123,9 +123,8 @@ function NOMAC() {
 	// Cookies.set('currentUrl', currentUrl)
 
 	// let headUrl = window.location.protocol + "//" + window.location.host + '/#/GrantMiddle?AppNo=' + Cookies.get('AppNo')
-	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +
-		'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
-
+	// let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
+	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
 	store.dispatch('get_user', {
 		AppNo: sessionStorage.getItem('AppNo')
 	}).then(appId => {
