@@ -28,6 +28,7 @@ import richText from "@/components/autoComponents/richText/"
 import goods from "@/components/autoComponents/goods/"
 import goodsGroup from "@/components/autoComponents/goodsGroup/"
 import titleBox from "@/components/autoComponents/titleBox/"
+import seckillGoods from "@/components/autoComponents/seckillGoods"
 import vconsole from 'vconsole' // 引入vconsole
 
 
@@ -50,6 +51,7 @@ Vue.component('richText', richText)
 Vue.component('goods', goods)
 Vue.component('goodsGroup', goodsGroup)
 Vue.component('titleBox', titleBox)
+Vue.component('seckillGoods',seckillGoods)
 //挂载公用组件结束
 
 Vue.config.productionTip = false

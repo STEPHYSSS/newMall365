@@ -11,6 +11,7 @@ import pictureAds from "@/components/autoComponents/pictureAds/"
 import magicCube from "@/components/autoComponents/magicCube/"
 import imgNav from "@/components/autoComponents/imgNav/"
 import textBox from "@/components/autoComponents/textBox/"
+import seckillGoods from "@/components/autoComponents/seckillGoods/"
 // import linkedLinks from "./linkedLinks/"
 // import integralMall from "./integralMall/"
 // const ComponentsAuto = {

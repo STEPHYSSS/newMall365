@@ -81,7 +81,6 @@
 						Name:Name
 					}, "UProdOpera");
 					this.sidebarList = Data.CateList;
-					console.log(this.sidebarList,'suos')
 					this.rightGoodsList = this.sidebarList[0].children;
 				} catch (e) {
 					this.$toast(e)

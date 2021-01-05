@@ -57,6 +57,7 @@
 						<goods v-if="item.viewComponets === 'goods'" :propsObj="item.props"></goods>
 						<goodsGroup v-if="item.viewComponets === 'goodGroup'" :propsObj="item.props"></goodsGroup>
 						<titleBox v-if="item.viewComponets === 'titleBox'" :propsObj="item.props"></titleBox>
+						<seckillGoods v-if="item.viewComponets === 'seckill'" :propsObj="item.props"></seckillGoods>
 						<!-- <component :is="item.viewComponets" ref="setModeRef" :propsObj="item.props"></component> -->
 					</div>
 				</div>
@@ -82,6 +83,7 @@
 	import msDropdownMenu from "@/components/ms-dropdown/dropdown-menu.vue"
 	import msDropdownItem from "@/components/ms-dropdown/dropdown-item.vue"
 	import ticketPop from "@/components/ticketPopup/ticketPopup.vue"
+	
 	import {
 		GetQueryString
 	} from "@/util/publicFunction";

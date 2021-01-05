@@ -75,20 +75,7 @@
 				this.$router.push({path:'/pages/shoppingMall/list/goodsList',query:{
 					searchName:this.value
 				}})
-			},
-			// async clickInputBox(){//获取商品树列表
-			// 	try {
-			// 		let { Data } = await vipCard({
-			// 			Action: "GetTreeProdList",
-			// 			SID:this.currentStoreInfo.SID,//门店id
-			// 			Name:this.value
-			// 		}, "UProdOpera");
-			// 		this.$router.push({path:'/pages/shoppingMall/list/goodsList'})
-			// 		this.sidebarList = Data.CateList;
-			// 	} catch (e) {
-			// 		console.log(e);
-			// 	}
-			// },
+			}
 		}
 	};
 </script>
