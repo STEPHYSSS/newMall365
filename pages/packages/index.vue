@@ -5,10 +5,10 @@
 			<view class="">
 				<view class="d-flex boxList"
 					v-for="(item, index) in BeneList" :key="index"  @click="pay(item.PlanNo)">
-					<image :src="imgUrl" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
+					<image src="@/static/img/quanyi.jpg" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
 					<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
 						<view class="font-size-lg">{{ item.PlanName }}</view>
-						<view class="font-size-sm">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view>
+						<!-- <view class="font-size-sm">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view> -->
 						<view class="d-flex justify-content-between align-items-center">
 							<view class="font-size-sm">￥{{ item.Price }}</view>
 							<button type="primary" size="mini" plain class="pay-btn">去购买</button>
@@ -19,7 +19,7 @@
 			<view class="d-flex align-items-center just-content-center"
 				style="height: 150rpx;" @click="toBuyRecords">
 				<!-- pages/packages/buyRecords -->
-				<text>购买记录</text>
+				<text class="buyText">购买记录</text>
 			</view>
 		</view>
 		<a-nodeData stringVal="暂无权益" v-if="!loading&&BeneList.length===0"></a-nodeData>
@@ -33,18 +33,13 @@
 	export default {
 		data() {
 			return {
-				imgUrl:require("@/static/img/quanyi.jpg"),	
-				// ImgUrl: require("@/assets/img/defaule_back.jpg"),
+				// imgUrl:require("@/static/img/quanyi.jpg"),	
 				loading: true,
 				packages: {},
 				BeneList:[],//列表
 			}
 		},
 		async onLoad() {
-			await this.getPackages()
-			console.log(this.imgUrl)
-		},
-		async onPullDownRefresh() {
 			await this.getPackages()
 		},
 		methods: {			
@@ -76,12 +71,13 @@
 	@import '@/assets/css/packages.css';
 	.container {
 		padding-bottom: -150rpx;
+		background-color: #f1f4f5;
 	}
 	.boxList{
 		padding: 15px;
 		height: 80px;
 		border-radius: 4px;
-		background-color: rgb(222, 213, 213);
+		background-color: #ffffff;
 		width: 84%;
 		margin: 17px auto;
 	}
@@ -101,5 +97,9 @@
 			color: #ADB838;
 			border: 1px solid #ADB838;
 		}
+	}
+	.buyText{
+		font-size: 14px;
+		color: #ADB838;
 	}
 </style>

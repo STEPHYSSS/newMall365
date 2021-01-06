@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "a-up-img": "/components/a-up-img/a-up-img"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "defaultTitle": "充值",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-grid": "/components/uni-grid/uni-grid",
+    "uni-grid-item": "/components/uni-grid-item/uni-grid-item",
+    "uni-popup": "/components/uni-popup/uni-popup"
+  }
+}

@@ -1,0 +1,1 @@
+<view class="_div"><cover-image class="eeeeeee" style="{{'width:'+(width)+';'+('height:'+(height)+';')}}" src="{{dataIMg}}"></cover-image></view>

@@ -1,6 +1,6 @@
 <template>
 	<div class="bottom-submit-style">
-		<div class="bottom-submit-style__bar" style="display: flex;">
+		<div class="bottom-submit-style__bar" style="display: flex;" :class="{ active: isActive }">
 			<!-- v-model="result"  -->
 			<checkbox-group @change="checkAll">
 				<checkbox :color="mainColor" v-if="!isOrder" style="margin-left:10px" value="true" :checked="result">全选</checkbox>
@@ -16,7 +16,7 @@
 				</div> -->
 				<div v-if="isOrder"> 
 					<p>
-						<span class="priceSty" v-if="sumPrice!=0">优惠 ¥ {{sumPrice}}</span>
+						<span class="priceSty" v-if="sumPrice!=0" @click="changeTips">优惠 ¥ {{sumPrice}}</span>
 						<span class="sumPriceSty">合计</span><span class="bottom-submit-style__price">¥ {{objPrice.total}}</span>
 					</p>
 				</div>
@@ -34,10 +34,12 @@
 				<button v-if="batchState" size="small" type="red" @click="delButton">删除</button>
 			</div>
 		</div>
+		
 	</div>
 </template>
 
 <script>
+	import modal from '@/components/modal/modal'
 	export default {
 		name: "index",
 		props: {
@@ -56,14 +58,18 @@
 			},
 			isIntegral: [String],
 			cardInfo: [Object],
-			objPrice:[Object]//优惠价格，电子券优惠价格 总价格
+			objPrice:[Object],//优惠价格，电子券优惠价格 总价格
+			FloatList:[Array] //优惠明细
 		},
 		data() {
 			return {
 				result: this.allResult,
 				disabledIntegral: false,
 				mainColor: getApp().globalData.mainColor,
-				money:0
+				money:0,
+				couponDetailModalShow: false,//明细
+				priceTips:'',
+				isActive:false
 			};
 		},
 		computed:{
@@ -72,8 +78,7 @@
 				return this.money
 			}
 		},
-		created() {
-			console.log(this.objPrice,'jiage')
+		created() {			
 			if (this.isIntegral && this.cardInfo) {
 				// 积分不足
 				this.disabledIntegral =
@@ -81,6 +86,9 @@
 			}
 		},
 		methods: {
+			changeTips(){
+				this.isActive = !this.isActive;
+			},
 			checkAll(val) {
 				let bool = val.detail.value.length > 0 ? true : false
 				this.$emit("checkAll", !bool);
@@ -105,6 +113,9 @@
 </script>
 
 <style scoped lang="less">
+	.active{
+		height:80px !important;
+	}
 	.priceSty{
 		color: #635555;font-size: 13px;padding-right: 10px;display: inline-block;
 	}

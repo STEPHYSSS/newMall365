@@ -1,0 +1,10 @@
+{
+  "defaultTitle": "点餐",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "modal": "/components/modal/modal",
+    "uni-number-box": "/components/uni-number-box/uni-number-box",
+    "popup-layer": "/components/popup-layer/popup-layer",
+    "tab-bar": "/components/AutoTabBar"
+  }
+}

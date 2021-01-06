@@ -1,0 +1,8 @@
+{
+  "defaultTitle": "商品列表",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-search-bar": "/components/uni-search-bar/uni-search-bar",
+    "a-good-box": "/components/a-good-box/a-good-box"
+  }
+}

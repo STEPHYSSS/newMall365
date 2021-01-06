@@ -26,7 +26,7 @@
 			<div style="display: inline-block;" v-if="itemData.MemberPrice>0">				
 				<span>¥</span>
 				<span>{{itemData.MemberPrice}}</span>
-				<div style="text-decoration:line-through;color: #969799;font-size:8pt">
+				<div style="text-decoration:line-through;color: #969799;font-size:8pt;display: inline-block;padding-left: 10px;">
 				<span>¥</span>{{itemData.SalePrice}}</div>
 			</div>
 			<div style="display: inline-block;" v-else>

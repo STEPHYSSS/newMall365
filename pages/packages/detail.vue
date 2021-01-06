@@ -1,48 +1,50 @@
 <template>
 	<view class="w-100 h-100">
 		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo"  title="购买权益" :status-bar="true" :shadow="false"></uni-nav-bar>
-		<image :src="imgUrl" class="w-100" style="height: 50vh;"></image>
-		<view style="padding: 30rpx 40rpx; padding-bottom: 100rpx;">
-			<view class="d-flex justify-content-between align-items-center" style="margin-bottom: 20rpx;">
-				<view class="font-size-lg">{{ BeneInfo.Name  }}</view>
-				<view class="text-color-primary font-size-sm" @click="toBuyRecords">购买记录</view>
-			</view>
-			<view class="text-color-assist font-size-sm" style="margin-bottom: 20rpx;">
-				<!-- 共{{couponNum}}张优惠券 -->
-			</view>
+		<div class="imgWidth">
+			<image src="@/static/img/bgQuanyi.jpg" ></image>
+		</div>
+		<view class="infoBox">
+			<div class="PlanName">
+				<text class="CenterName">{{BeneInfo.PlanName}}</text>
+				<text @click="toBuyRecords" class="buyRecord">购买记录</text>
+			</div>
 			<!-- 优惠券列表 begin -->
 			<view class="d-flex flex-column w-100">
-				<view class="coupon d-flex flex-column bg-white" v-for="(coupon, index) in BeneTypeItem" :key="index" @tap="openCouponDetailModal(coupon)">
+				<!-- <view class="coupon d-flex flex-column bg-white" v-for="(coupon, index) in BeneTypeItem" :key="index" @tap="openCouponDetailModal(coupon)">
 					<view class="d-flex flex-fill overflow-hidden" style="margin-bottom: 20rpx;">
-						<!-- <image :src="coupon.detail.image" style="margin-right: 40rpx;width: 150rpx; height: 150rpx;"></image> -->
+						<span class="iconfont icon-quanyi1"></span>						
 						<view class="flex-fill flex-column justify-content-start overflow-hidden" style="width: 50%;">
 							<view class="text-right text-color-assist" v-if="coupon.FrequType!='5'">x{{ coupon.FrequNum }}</view>
 							<view class="text-right text-color-assist" v-else>无限</view>
 							<span class="tips">{{coupon.BeneDesc}}</span>
-							<!-- <view class="text-truncate font-size-extra-lg text-color-base w-80 tip" >
-								{{coupon.BeneDesc}}
-							</view> -->
-							<!-- <view class="font-size-sm text-color-assist">{{ coupon.detail.expire }}</view> -->
 						</view>
 					</view>
-					<!-- <view class="bottom d-flex font-size-sm justify-content-between align-items-center">
-						<view class="text-color-assist">
-							使用时段：{{ coupon.detail && coupon.detail.coupon_use_time[0].use_time_start}}-{{coupon.detail && coupon.detail.coupon_use_time[0].use_time_end}}
-						</view>
-					</view> -->
+				</view> -->
+				<view class="bg-white">
+					<div style="text-align: center;padding-bottom: 20px;">
+						<uni-grid :column="3" :show-border="false"  :square="false">
+						    <uni-grid-item v-for="(coupon, index) in BeneTypeItem" :key="index">
+						        <span class="iconfont icon-quanyi1 iconStyle"></span>
+								<span class="couponName">{{coupon.BeneDesc}}</span>
+								<span v-if="coupon.FrequType!='5'">x{{ coupon.FrequNum }}</span>
+								<span v-else>不限</span>
+						    </uni-grid-item>
+						</uni-grid>
+					</div>
 				</view>
 			</view>
 			<!-- 优惠券列表 end -->
-			<view class="font-size-extra-lg" style="margin-bottom: 40rpx;">购买须知</view>
-			<view class="font-size-base text-color-base">
+			<view class="buyNotice">购买须知</view>
+			<view class="font-size-base text-color-base saleTime">
 				售卖时间：{{ BeneInfo.StartTime | setTime}}~{{ BeneInfo.EndTime | setTime}}
 			</view>
-			<view class="font-size-base text-color-base" style="margin: 30rpx 0;padding-bottom: 30rpx;">
+			<!-- <view class="font-size-base text-color-base" style="margin: 30rpx 0;padding-bottom: 30rpx;">
 				购买限制：无限制
-			</view>
-			<!-- <view class="font-size-sm text-color-assist pre-line">
-				{{ package.content }}
 			</view> -->
+			<view class="font-size-sm text-color-assist pre-line">
+				{{ BeneInfo.PlanNote }}
+			</view>
 		</view>
 		<view class="pay-box d-flex just-content-center align-items-center position-fixed fixed-bottom bg-white">
 			<button type="primary" class="pay-btn font-size-base text-color-white rounded-pill" @tap="openBuyModal(BeneInfo)"
@@ -264,6 +266,71 @@ export default {
 @import '@/assets/css/packages.css';
 .w-100 {
 	width: 100% !important;
+	.imgWidth{
+		width: 90%;
+		margin: 15px auto 0 !important;
+		display: block;
+		height: 170px;
+		image{
+			width: 100%;
+			height: 100%;
+		}
+	}
+	.infoBox{
+		padding: 30rpx 40rpx; 
+		padding-bottom: 100rpx;
+		.PlanName{
+			height: 30px;
+			text-align: center;
+			line-height: 30px;
+			font-size: 15px;
+			position: relative;
+			margin-bottom: 15px;
+			.CenterName{
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+				width: 130px;
+				display: inline-block;
+			}
+			.buyRecord{
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				font-size: 13px;
+				color: #ADB838;
+			}
+		}
+	}
+}
+.iconStyle{
+	font-size: 26px;
+	color: rgb(254,197,78);
+	padding: 10px;
+}
+.couponName{
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 100%;
+	display: inline-block;
+}
+.buyNotice{
+	margin: 10px 0;
+	color: #5A5B5C;
+	font-size: 15px;
+	font-weight: 600;
+	font-family: monospace;
+}
+.saleTime{
+	font-size: 14px;
+	padding-bottom: 30rpx;
+}
+.pre-line {
+    white-space: pre-line;
+	text-align: justify;
+	letter-spacing: 1px;
+	font-size: 13px;
 }
 .font-size-lg {
     font-size: 16px;

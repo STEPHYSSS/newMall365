@@ -58,6 +58,7 @@
 						<goodsGroup v-if="item.viewComponets === 'goodGroup'" :propsObj="item.props"></goodsGroup>
 						<titleBox v-if="item.viewComponets === 'titleBox'" :propsObj="item.props"></titleBox>
 						<seckillGoods v-if="item.viewComponets === 'seckill'" :propsObj="item.props"></seckillGoods>
+						<interests v-if="item.viewComponets === 'interests'" :propsObj="item.props"></interests>
 						<!-- <component :is="item.viewComponets" ref="setModeRef" :propsObj="item.props"></component> -->
 					</div>
 				</div>

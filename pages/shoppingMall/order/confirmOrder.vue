@@ -127,7 +127,7 @@
 			</div>
 			<!-- <a-bottomSubmit :isOrder="true" :allMoney="totalCurrent" :isType="radioModes" :ziquSumMoney="total" :scoreTatal="totalCurrentScore"
 			 :cardInfo="allData.CardInfo" @submitMoney="submitMoney" :isIntegral="$Route.query.isIntegral"></a-bottomSubmit> -->
-			<a-bottomSubmit :isOrder="true" :objPrice = "objPrice" :isType="radioModes" :scoreTatal="totalCurrentScore"
+			<a-bottomSubmit :isOrder="true" :objPrice = "objPrice" :FloatList="FloatList" :isType="radioModes" :scoreTatal="totalCurrentScore"
 			 :cardInfo="allData.CardInfo" @submitMoney="submitMoney" :isIntegral="$Route.query.isIntegral"></a-bottomSubmit>
 		</div>
 
@@ -388,6 +388,7 @@
 				BeneNo:'',//点击权益编号
 				radioBene:"",//选中权益sid
 				objPrice:{},//用于传递数据
+				FloatList:[],//用于展示优惠明细
 				
 			};
 		},
@@ -539,7 +540,7 @@
 								TicketPrice:this.TicketPrice,
 								DiscPrice:this.DiscPrice
 							}
-							// console.log(this.objPrice)
+							this.FloatList = Data.FloatList;
 							this.CardInfo = Data.hasOwnProperty("CardInfo") ?
 								Data.CardInfo : {};
 							if (JSON.stringify(this.CardInfo) !== "{}") {
@@ -1028,6 +1029,7 @@
 						TicketPrice:this.TicketPrice,
 						DiscPrice:this.DiscPrice
 					}
+					this.FloatList = Data.FloatList;
 					// this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2)); //合计和小计	
 					if (JSON.stringify(this.CardInfo) !== "{}") {
 						if (Number(this.CardInfo.Balance) < Number(Data.SumTotal)) {

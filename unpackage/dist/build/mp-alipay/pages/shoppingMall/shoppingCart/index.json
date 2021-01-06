@@ -1,0 +1,14 @@
+{
+  "defaultTitle": "购物车",
+  "pullRefresh": true,
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "a-good-line-box": "/components/a-good-lineBox/a-good-lineBox",
+    "a-bottom-submit": "/components/a-bottomSubmit/a-bottomSubmit",
+    "uni-popup": "/components/uni-popup/uni-popup",
+    "uni-icons": "/components/uni-icons/uni-icons",
+    "uni-number-box": "/components/uni-number-box/uni-number-box",
+    "a-node-data": "/components/a-nodeData/a-nodeData",
+    "tab-bar": "/components/AutoTabBar"
+  }
+}

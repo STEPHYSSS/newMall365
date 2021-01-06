@@ -1,0 +1,1 @@
+<view class="makeUpGroup data-v-ec139dae"><view class="data-v-ec139dae"><uni-nav-bar vue-id="0af6cea3-1" fixed="{{true}}" left-icon="back" title="拼团活动" status-bar="{{true}}" shadow="{{false}}" data-event-opts="{{[['^clickLeft',[['clickLeft']]]]}}" onClickLeft="__e" class="data-v-ec139dae" onVueInit="__l"></uni-nav-bar><view class="Mkpadd data-v-ec139dae"></view></view></view>

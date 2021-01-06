@@ -1,0 +1,6 @@
+{
+  "defaultTitle": "错误页面",
+  "usingComponents": {
+    "error": "/components/error/error"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "titleBarColor": "#ffffff",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "a-node-data": "/components/a-nodeData/a-nodeData"
+  }
+}

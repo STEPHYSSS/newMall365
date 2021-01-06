@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "首页",
+  "usingComponents": {
+    "tab-bar": "/components/AutoTabBar",
+    "ticket-pop": "/components/ticketPopup/ticketPopup"
+  }
+}

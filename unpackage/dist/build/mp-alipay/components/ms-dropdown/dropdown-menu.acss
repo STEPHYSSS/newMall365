@@ -1,0 +1,1 @@
+.dropdown-menu{display:-webkit-box;display:-webkit-flex;display:flex;overflow:auto;white-space:nowrap}dropdown-item{-webkit-box-flex:1;-webkit-flex:1;flex:1}

@@ -1,0 +1,12 @@
+{
+  "defaultTitle": "会员中心",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-grid": "/components/uni-grid/uni-grid",
+    "uni-grid-item": "/components/uni-grid-item/uni-grid-item",
+    "uni-icons": "/components/uni-icons/uni-icons",
+    "tab-bar": "/components/AutoTabBar",
+    "ad-cell": "/node-modules/adcell/ADCell",
+    "ad-cell2": "/node-modules/adcell/ADCell2"
+  }
+}

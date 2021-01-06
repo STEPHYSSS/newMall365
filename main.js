@@ -29,6 +29,7 @@ import goods from "@/components/autoComponents/goods/"
 import goodsGroup from "@/components/autoComponents/goodsGroup/"
 import titleBox from "@/components/autoComponents/titleBox/"
 import seckillGoods from "@/components/autoComponents/seckillGoods"
+import interests from "@/components/autoComponents/interests"
 import vconsole from 'vconsole' // 引入vconsole
 
 
@@ -52,6 +53,7 @@ Vue.component('goods', goods)
 Vue.component('goodsGroup', goodsGroup)
 Vue.component('titleBox', titleBox)
 Vue.component('seckillGoods',seckillGoods)
+Vue.component('interests',interests)
 //挂载公用组件结束
 
 Vue.config.productionTip = false

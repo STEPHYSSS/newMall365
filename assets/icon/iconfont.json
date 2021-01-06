@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1481033",
+      "name": "卡券",
+      "font_class": "qiaquan",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "3619529",
+      "name": "卡券",
+      "font_class": "qiaquan1",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "12493510",
+      "name": "权益",
+      "font_class": "quanyi",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "14018365",
+      "name": "卡券",
+      "font_class": "kaquan",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "14125167",
+      "name": "卡券",
+      "font_class": "kaquan1",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "14456144",
+      "name": "权益",
+      "font_class": "quanyi1",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
       "icon_id": "7177171",
       "name": "权益管理",
       "font_class": "quanyiguanli-",

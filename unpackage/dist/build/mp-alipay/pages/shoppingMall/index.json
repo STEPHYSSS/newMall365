@@ -1,0 +1,25 @@
+{
+  "defaultTitle": "商城",
+  "usingComponents": {
+    "enter-shops": "/components/autoComponents/enterShops/index",
+    "search-box": "/components/autoComponents/searchBox/index",
+    "notice": "/components/autoComponents/notice/index",
+    "guide": "/components/autoComponents/guide/index",
+    "auxiliary-blank": "/components/autoComponents/auxiliaryBlank/index",
+    "picture-ads": "/components/autoComponents/pictureAds/index",
+    "magic-cube": "/components/autoComponents/magicCube/index",
+    "img-nav": "/components/autoComponents/imgNav/index",
+    "text-box": "/components/autoComponents/textBox/index",
+    "switch-stores": "/components/autoComponents/switchStores/index",
+    "rich-text": "/components/autoComponents/richText/index",
+    "goods": "/components/autoComponents/goods/index",
+    "goods-group": "/components/autoComponents/goodsGroup/index",
+    "title-box": "/components/autoComponents/titleBox/index",
+    "seckill-goods": "/components/autoComponents/seckillGoods/index",
+    "interests": "/components/autoComponents/interests/index",
+    "tab-bar": "/components/AutoTabBar",
+    "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu",
+    "ms-dropdown-item": "/components/ms-dropdown/dropdown-item",
+    "ticket-pop": "/components/ticketPopup/ticketPopup"
+  }
+}

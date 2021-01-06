@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-countdown": "/components/uni-countdown/uni-countdown",
+    "wuc-tab": "/components/wuc-tab/wuc-tab",
+    "ad-cell": "/node-modules/adcell/ADCell",
+    "show-sku-seckill": "/components/a-shopping-showSku/a-shopping-showSkuSeckill",
+    "nav-seckill": "/components/uni-goods-nav/uni-goods-navSeckill"
+  }
+}

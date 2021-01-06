@@ -1,0 +1,6 @@
+{
+  "defaultTitle": "会员申请提现",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar"
+  }
+}
