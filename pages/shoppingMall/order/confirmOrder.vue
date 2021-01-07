@@ -67,16 +67,42 @@
 			<adCell v-if="radioModes === 2" text="运费" showArrow="false" showBottomLine="false">
 				<span>{{freight=='0'?'免运费':'¥'+freight}}</span>
 			</adCell>
-			<adCell text="商品总价格" showArrow="false" showBottomLine="false">
-				<span>¥{{ProdTotal}}</span>
-			</adCell>
+			<view class="FloatListInfo" v-if="FloatList.length>0">
+				<view v-for="(item,index) in FloatList" :key="index">
+					<view v-show="DiscPrice>='0'" class="onlySty Discount">
+						<view style="flex: 1;">
+							<span v-show="item.Type === '2'">卡优惠</span>
+							<span v-show="item.Type === '3'">{{UserTicketName}}</span>
+							<span v-show="item.Type === '4'">{{UserDiscountName}}</span>
+							<span v-show="item.Type === '5'">{{interestName}}</span>
+						</view>
+						<view style="width: 100px;text-align: center;">
+							<span class="" style="padding-left: 5px;">- ¥ {{item.Float}}</span>
+							
+						</view>
+					</view>					
+				</view>
+				<view class="">
+					<view  v-show="TicketPrice>0" class="onlySty Discount">
+						<view style="flex: 1;">
+							<span style="">{{UserTicketName}}</span>
+						</view>
+						<view style="width: 100px;text-align: center;">
+							<span class="" style="padding-left: 5px;" >- ¥ {{TicketPrice}}</span>
+							
+						</view>
+					</view>	
+				</view>
+			</view>
+			<view v-if="total>0" class="onlySty onlyPrice">
+				<view style="flex: 1;">
+					<span>总计 ¥ {{ProdTotal}}</span> <span style="display: inline-block;margin-left: 10px;" v-if="sumPrice>0">优惠 ¥ {{sumPrice}}</span>
+				</view>
+				<view style="width: 110px;text-align: center;">
+					实付<span style="padding-left: 5px;color: #ff8917;">¥ {{total}}</span>
+				</view>
+			</view>
 			
-			<!-- <adCell showArrow="false" showBottomLine="false" v-if="DiscPrice!=0">
-				已优惠：<span class="total-style__color">-¥{{DiscPrice}}</span>
-			</adCell>
-			<adCell showArrow="false" showBottomLine="false" v-if="TicketPrice!=0">
-				券优惠：<span class="total-style__color">-¥{{TicketPrice}}</span>
-			</adCell> -->
 			<!-- <div class="total-style">
 				<span>
 					小计：
@@ -127,7 +153,7 @@
 			</div>
 			<!-- <a-bottomSubmit :isOrder="true" :allMoney="totalCurrent" :isType="radioModes" :ziquSumMoney="total" :scoreTatal="totalCurrentScore"
 			 :cardInfo="allData.CardInfo" @submitMoney="submitMoney" :isIntegral="$Route.query.isIntegral"></a-bottomSubmit> -->
-			<a-bottomSubmit :isOrder="true" :objPrice = "objPrice" :FloatList="FloatList" :isType="radioModes" :scoreTatal="totalCurrentScore"
+			<a-bottomSubmit :isOrder="true" :objPrice = "objPrice" :isType="radioModes" :scoreTatal="totalCurrentScore"
 			 :cardInfo="allData.CardInfo" @submitMoney="submitMoney" :isIntegral="$Route.query.isIntegral"></a-bottomSubmit>
 		</div>
 
@@ -296,6 +322,10 @@
 		computed:{
 			computedSumTotal(){
 				return this.total
+			},
+			sumPrice(){
+				this.money = Number(this.objPrice.DiscPrice)+Number(this.objPrice.TicketPrice);
+				return this.money
 			}
 		},
 		data() {
@@ -304,6 +334,9 @@
 				mainColor: getApp().globalData.mainColor,
 				isDisabled:false,
 				loading: true,
+				money:0,
+				isActive:false,
+				hideFloat:false,
 				ProdJsonList:[],//用来存储商品数据
 				currentItem: [],//用来接收商品信息的ProdList
 				UserRemarks: "",
@@ -680,6 +713,12 @@
 					this.total = parseFloat((Number(this.total) + Number(this.ScoreAmt)).toFixed(2))
 				}
 			},
+			// changeTips(){//点击优惠修改样式
+			// 	if(this.FloatList.length>0){
+			// 		this.isActive = !this.isActive;
+			// 		this.hideFloat = !this.hideFloat;
+			// 	}
+			// },
 			orderArea() {},
 			async getWxConfig() {
 				try {
@@ -1221,6 +1260,17 @@
 				} else if (val == 1) {
 					return '女士'
 				}
+			},
+			priceFilter(val){
+				if(val === '2'){
+					return '卡优惠'
+				}else if(val === '3'){
+					return '电子券优惠'
+				}else if(val === '4'){
+					return '方案优惠'
+				}else if(val === '5'){
+					return '权益优惠'
+				}
 			}
 		},
 	};
@@ -1326,6 +1376,30 @@
 	@import "../../../assets/css/radioModes";
 	.setADcell {
 		margin: 5px 0;
+	}
+	.onlySty{
+		background-color: rgb(255, 255, 255);
+		width: 100%;
+		display: inline-block;
+		align-items: center;
+		padding-top: 13px;
+		padding-bottom: 13px;
+		// text-align: right;
+		color: rgb(94, 94, 94);
+		font-size: 14px;
+		
+	}
+	.FloatListInfo{
+		margin-top: 5px;
+	}
+	.onlyPrice{
+		padding: 0 12px;display: inline-block;height: 40px;line-height: 40px;display: flex;
+	}
+	.Discount{
+		padding: 0 12px;display: inline-block;height: 34px;line-height: 34px;display: flex;color: #ff8917;
+	}
+	.activePrice{
+		padding-bottom: 50px !important;
 	}
 	.confirm-order-style {
 		margin-bottom: 80px;

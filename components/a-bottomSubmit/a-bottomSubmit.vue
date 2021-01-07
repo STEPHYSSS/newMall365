@@ -16,7 +16,7 @@
 				</div> -->
 				<div v-if="isOrder"> 
 					<p>
-						<span class="priceSty" v-if="sumPrice!=0" @click="changeTips">优惠 ¥ {{sumPrice}}</span>
+						<!-- <span class="priceSty" v-if="sumPrice!=0">优惠 ¥ {{sumPrice}}</span> -->
 						<span class="sumPriceSty">合计</span><span class="bottom-submit-style__price">¥ {{objPrice.total}}</span>
 					</p>
 				</div>
@@ -59,7 +59,7 @@
 			isIntegral: [String],
 			cardInfo: [Object],
 			objPrice:[Object],//优惠价格，电子券优惠价格 总价格
-			FloatList:[Array] //优惠明细
+			// FloatList:[Array] //优惠明细
 		},
 		data() {
 			return {

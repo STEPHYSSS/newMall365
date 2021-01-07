@@ -11,16 +11,6 @@
 			</div>
 			<!-- 优惠券列表 begin -->
 			<view class="d-flex flex-column w-100">
-				<!-- <view class="coupon d-flex flex-column bg-white" v-for="(coupon, index) in BeneTypeItem" :key="index" @tap="openCouponDetailModal(coupon)">
-					<view class="d-flex flex-fill overflow-hidden" style="margin-bottom: 20rpx;">
-						<span class="iconfont icon-quanyi1"></span>						
-						<view class="flex-fill flex-column justify-content-start overflow-hidden" style="width: 50%;">
-							<view class="text-right text-color-assist" v-if="coupon.FrequType!='5'">x{{ coupon.FrequNum }}</view>
-							<view class="text-right text-color-assist" v-else>无限</view>
-							<span class="tips">{{coupon.BeneDesc}}</span>
-						</view>
-					</view>
-				</view> -->
 				<view class="bg-white">
 					<div style="text-align: center;padding-bottom: 20px;">
 						<uni-grid :column="3" :show-border="false"  :square="false">

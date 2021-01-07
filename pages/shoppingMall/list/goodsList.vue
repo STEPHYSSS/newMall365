@@ -88,7 +88,7 @@
 			},
 			clickMenu(index,item){
 				this.currentIndex = index;
-				this.rightGoodsList = item.children.filter(D=>D.CateSID === item.SID);
+				this.rightGoodsList = item.children.filter(D=>D.CateSID.indexOf(item.SID)!== -1);
 			},
 			searchGood(val){//当前页面搜索
 				this.search = val.value;

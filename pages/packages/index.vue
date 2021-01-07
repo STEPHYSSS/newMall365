@@ -8,7 +8,7 @@
 					<image src="@/static/img/quanyi.jpg" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
 					<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
 						<view class="font-size-lg">{{ item.PlanName }}</view>
-						<!-- <view class="font-size-sm">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view> -->
+						<view class="font-size-sm fontColor">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view>
 						<view class="d-flex justify-content-between align-items-center">
 							<view class="font-size-sm">￥{{ item.Price }}</view>
 							<button type="primary" size="mini" plain class="pay-btn">去购买</button>
@@ -80,6 +80,9 @@
 		background-color: #ffffff;
 		width: 84%;
 		margin: 17px auto;
+		.fontColor{
+			color: #ccc;
+		}
 	}
 	.pay-btn {
 		margin: 0 !important;

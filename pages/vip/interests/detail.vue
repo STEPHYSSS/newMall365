@@ -2,7 +2,7 @@
 	<view>
 		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo" title="权益详情" :status-bar="true" :shadow="false"></uni-nav-bar>
 		<view class="interests">
-			<div v-if="NumList.length>0" class="leaderBox" style="">
+			<!-- <div v-if="NumList.length>0" class="leaderBox" style="">
 				<div v-for="(item,index) in NumList" :key="index" class="numList">
 					<p>{{item.BeneDesc}}</p>
 					<div class="useList">
@@ -11,7 +11,34 @@
 						<span v-else>无限制</span>
 					</div>
 				</div>
-			</div>
+			</div> -->
+			<view class="d-flex flex-column w-100">				
+				<view class="bg-white" v-if="NumList.length>0">
+					<view class="topBgc">
+						<image src="@/static/img/quanyiTop.png"></image>
+					</view>
+					<div style="text-align: center;padding-bottom: 20px;">
+						<uni-grid :column="3" :show-border="false"  :square="false">
+						    <uni-grid-item v-for="(coupon, index) in NumList" :key="index">
+						        <span class="iconfont icon-quanyi1 iconStyle">
+								</span>
+								<span class="couponName">{{coupon.BeneDesc}}</span>
+								<text v-if="coupon.FrequType!='5'">总次数 x{{ coupon.FrequNum }}</text>
+								<span v-if="coupon.FrequType!='5'">剩余次数 x{{ coupon.ResidueNum }}</span>
+								<span v-else>不限</span>
+						    </uni-grid-item>
+						</uni-grid>						
+					</div>
+					<view class="boxInfo">
+						<fieldset style="border: solid 1px #71cbee;border-radius: 8px;">
+							<legend class="buyNotice">权益描述</legend>
+						<view class="font-size-sm text-color-assist pre-line">
+							{{ BeneInfo.BeneNote }}
+						</view>
+						</fieldset>
+					</view>
+				</view>
+			</view>
 			<a-nodeData stringVal="暂无数据" v-if="!loading&&NumList.length===0"></a-nodeData>
 		</view>
 		<view class="interests">
@@ -41,7 +68,9 @@
 				loading:true,
 				NumList:[],//剩余数量
 				UseList:[],//使用次数
+				BeneInfo:{},
 				SID:sessionStorage.getItem("detailPackage"),
+				BeneNo:sessionStorage.getItem("detailBeneNo"),
 			}
 		},
 		created() {
@@ -60,9 +89,10 @@
 					title: '加载中'
 				})
 				try {
-					let { Data } =  await vipCard({Action:'GetCardBeneInfo',SID:this.SID}, "UBeneOpera");
+					let { Data } =  await vipCard({Action:'GetCardBeneInfo',SID:this.SID,BeneNo:this.BeneNo}, "UBeneOpera");
 					this.NumList = Data.NumList||[];
 					this.UseList = Data.UseList||[];
+					this.BeneInfo = Data.BeneInfo||{};
 					this.loading = false;
 					uni.hideLoading()
 				} catch (e) {
@@ -75,12 +105,54 @@
 </script>
 
 <style lang="less">
-	.interests{
-		width: 94%;
-		height: 100%;
-		margin: 0 auto;		
-	}
+	@import '@/assets/css/packages.css';
 	.interests {
+	.boxInfo{
+		width: 86%;
+		margin: 10px auto;
+		.pre-line {
+		    white-space: pre-line;
+			text-align: justify;
+			letter-spacing: 1px;
+			font-size: 13px;
+		}
+		.buyNotice{
+			// margin: 15px 0 0;
+			margin-bottom: 10px;
+			color: #5A5B5C;
+			font-size: 15px;
+			font-weight: 600;
+			text-align: left;
+			font-family: monospace;
+		}
+	}
+	
+	.topBgc{
+		width: 100%;
+		height: 144px;
+		image{
+			width: 100%;
+			height: 100%;
+		}
+	}
+		.iconStyle{
+			font-size: 26px;
+			color: rgb(254,197,78);
+			padding: 10px;
+			position: relative;
+			span{
+				position: absolute;
+				top: 10rpx;
+				right: 5px;
+			}
+		}
+		.couponName{
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			width: 100%;
+			display: inline-block;
+		}
 			margin: 10px;
 			.van-cell{
 				display: inline-block;
@@ -89,7 +161,6 @@
 				background-color: transparent;
 			}
 			.leaderBox{
-				// background-color: #fff;
 				.numList{
 					position: relative;
 					background-color: #ffffff;
@@ -134,6 +205,7 @@
 					transform: scaleY(0.5);
 				}
 			}
+			
 			.useList{
 				width: 95%;
 				margin: 0 auto;

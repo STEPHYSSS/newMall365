@@ -2,35 +2,31 @@
 	<view>
 		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo" title="会员权益" :status-bar="true" :shadow="false"></uni-nav-bar>
 		<view class="interests">
-			<div v-if="list.length>0">
-				<div v-for="(item,index) in list" :key="index" class="van-cell">
-					<div class="van-cell__title" @click="toDetail(item)">						
-						<div>
-							<span>{{item.BeneName}}</span>
-						</div>
-						<div>
-							<span class="custom-label">卡号：{{item.CardNo}}</span>
-						</div>
-						<div class="custom-label">有效期：{{item.UseTime | setTime}}~{{item.ValidTime | setTime}}</div>
-						<div class="custom-label" v-if="item.ExchNo">订单号：{{item.ExchNo}}</div>
-					</div>
-				</div>
-			</div>
-			<a-nodeData stringVal="暂无数据" v-if="!loading&&list.length===0"></a-nodeData>
-		</view>
-		<!-- <modal custom :show="couponDetailModalShow" @cancel="closeCouponDetailModal">
-			<view class="d-flex flex-column">
-				<view class="text-center font-size-extra-lg text-color-base" style="margin-bottom: 30rpx;">
-					{{ coupon.Name}}
+			<view class="boxList" v-if="list.length>0">
+				<view class="topBgc">
+					<image src="@/static/img/quanyiTop.png"></image>
 				</view>
-				<view class="text-center font-size-sm text-color-assist" style="margin-bottom: 40rpx;">
-					{{ coupon.expire }}
+				<view class="d-flex justify-content-between align-items-center">
+					<h3>我的权益卡</h3>
+					<view class="font-size-sm">全部</view>
 				</view>
-				<view class="text-color-assist font-size-sm pre-line">
-					{{ coupon.desc }}
+				<view v-for="(item,index) in list" :key="index" class="van-cell">
+					<view class="flexBox">
+						<view class="leftB"></view>
+						<view class="flexTitle">
+							<view class="">
+								<text class="BeneTitle">{{item.BeneName}}</text>
+								<text class="BeneBorder">{{item.CardNo}}</text>
+							</view>
+							<text class="validTime">有效期：{{item.UseTime | setTime}}~{{item.ValidTime | setTime}}</text><br/>
+							<text class="validTime">订单号：{{item.ExchNo}}</text>
+						</view>
+						<view class="flexBtn" @click="toDetail(item)">详情<text class="iconfont icon-jiantou"></text></view>
+					</view>
 				</view>
 			</view>
-		</modal> -->
+			<a-nodeData stringVal="暂无数据" v-if="!loading&&list.length===0"></a-nodeData>
+		</view>
 	</view>
 </template>
 
@@ -73,85 +69,140 @@
 				}
 			},
 			toDetail(val){
-				uni.navigateTo({
-					url: '/pages/vip/interests/detail?id=' + val.SID
-				})
+				// uni.navigateTo({
+				// 	url: '/pages/vip/interests/detail?id=' + val.SID
+				// })				
+				this.$router.push({path:'/pages/vip/interests/detail',query:{SID:val.SID,BeneNo:val.BeneNo}})
 				sessionStorage.setItem('detailPackage',val.SID)
-				// this.$router.push({path:'/pages/vip/interests/detail',query:{SID:val.SID}})
+				sessionStorage.setItem('detailBeneNo',val.BeneNo)
 			},
 		}
 	}
 </script>
 
 <style lang="less">
+	@import '@/assets/css/packages.css';
 	.interests{
-		width: 94%;
-		margin: 0 auto;		
-	}
-	.interests {
-			margin: 10px;
-	
-			.van-cell-group {
-				background-color: transparent;
-			}
-	
-			.titleHear {
-				padding-bottom: 16px;
-				position: relative;
-	
-				&:after {
-					position: absolute;
-					box-sizing: border-box;
-					content: " ";
-					pointer-events: none;
-					right: -15px;
-					left: 0;
-					bottom: 6px;
-					border-bottom: 1px solid #ebedf0;
-					transform: scaleY(0.5);
+		background-color: #f3f9ff;
+		.boxList{
+			.topBgc{
+				width: 100%;
+				height: 144px;
+				image{
+					width: 100%;
+					height: 100%;
 				}
 			}
-	
-			.custom-time {
-				margin-top: 3px;
-				color: #969799;
-				font-size: 14px;
-				line-height: 18px;
+			.d-flex{
+				width: 87%;
+				margin: 15px auto;
+				padding: 10px 0;
+				h3{
+					font-size: 16px;
+					// font-weight: normal;
+					font-stretch: normal;
+					line-height: 19px;
+					letter-spacing: 1px;
+					color: #333333;
+				}
+				.font-size-sm{
+					font-size: 14px;
+					font-weight: normal;
+					font-stretch: normal;
+					line-height: 19px;
+					letter-spacing: 0px;
+					color: #333333;
+				}
 			}
-	
-			.custom-label {
-				margin-top: 3px;
-				color: #969799;
-				font-size: 12px;
-				line-height: 18px;
-			}
-	
-			.noneData {
-				text-align: center;
+		}
+			.van-cell{
+				width: 87%;
+				margin: 10px auto;
+				box-sizing: border-box;
+				height: 100px;
+				background-color: #ffffff;
+				border-radius: 6px;
 				position: relative;
-				left: 50%;
-				top: 50%;
-				transform: translate(-50%, -50%);
-				margin: 40px 0;
-				padding-bottom: 20px;
+				&::before {
+					content: " ";
+					position: absolute;
+					background-color: #f3f9ff;
+					width: 25px;
+					height: 25px;
+					border-radius: 100%;
+					bottom: -10px;
+					right: 76px;
+				}
+				&::after {
+					content: " ";
+					position: absolute;
+					background-color: #f3f9ff;
+					width: 25px;
+					height: 25px;
+					border-radius: 100%;
+					top: -10px;
+					right: 76px;
+				}
+				.flexBox{
+					display: flex;
+					.leftB{
+						position: absolute;
+						width: 6px;
+						height: 50px;
+						background-color: #7ee0fa;
+						bottom: 70rpx;
+						left: 0rpx;
+						top: 25px;
+						border-radius: 0 25px 25px 0px;
+					}
+					.flexTitle{
+						flex: 1;
+						padding-left: 5%;
+						.BeneTitle{
+							font-size: 15px;
+							font-weight: normal;
+							font-stretch: normal;
+							line-height: 19px;
+							letter-spacing: 0px;
+							color: #333333;
+							margin: 15px 20px 15px 0;
+							display: inline-block;
+						}
+						.BeneBorder{
+							border-radius: 5px;
+							border: solid 1px #71cbee;
+							padding: 0 10px;
+							line-height: 19px;
+							letter-spacing: 0px;
+							color: #333333;
+						}
+						.validTime{
+							margin-bottom: 3px;
+							font-size: 13px;
+							font-weight: normal;
+							font-stretch: normal;
+							line-height: 19px;
+							letter-spacing: 0px;
+							color: #999999;
+						}
+					}
+					.flexBtn{
+						width: 80px;
+						text-align: center;
+						font-size: 17px;
+						font-weight: normal;
+						font-stretch: normal;
+						line-height: 101px;
+						letter-spacing: 0px;
+						color: #71cbee;
+						.jiantou{
+							width: 6px;
+							height: 12px;
+							background-color: #71cbee;
+						}
+					}
+				}
 			}
-		}
-	
-		.van-cell {
-			margin-bottom: 10px;
-			position: relative;
-			display: flex;
-			box-sizing: border-box;
-			width: 100%;
-			padding: 10px 16px;
-			overflow: hidden;
-			color: #323233;
-			font-size: 14px;
-			line-height: 24px;
-			background-color: #fff;
-		}
-	
-		.van-cell__title {
-			flex: 1;
-		}
+	}
+
 </style>
