@@ -10,13 +10,18 @@
 						<div class="cap-goods__image-wrap" :style="{'padding-top':currentObj.imgScale+ '%'}">
 							<div data-lazy-log="1" :class="['cap-goods__img--'+currentObj.contain]" class="cap-goods__img" lazy="loaded"
 							 :style="{'background-image':`url(${setImgPrex(item.Img)})`}"></div>
-						</div>						
+						</div>
+						<div class="timer-style">
+							<span class="timer-left">{{startIS?'距结束':'距开始'}}</span>
+							<span class="timer-right">
+								<uni-countdown color="#FFFFFF" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
+								 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
+							</span>
+						</div>
 						<div>
 							<div class="bgcopacity" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></div>
 							<image :class="classObject" src="@/static/img/yishouqin.png" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></image>
 						</div>
-						
-						<!-- <image :class="classObject" src="@/static/img/shouqin.png" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></image>						 -->
 						<div v-if="currentObj.showContent.indexOf('5')>-1">
 							<i v-if="currentObj.typeSign!=='4'" class="van-icon cap-goods-layout__corner-mark" :class="['type-'+currentObj.typeSign,currentObj.typeSign==='0'?'van-icon-new-arrival ':
                 currentObj.typeSign==='1'?'van-icon-hot-sale':currentObj.typeSign==='2'?'van-icon-new':
@@ -36,7 +41,6 @@
 						 :style="{'text-align': currentObj.textCenter,'margin-top':'0'}">
 							<h3 class="title" :style="{'font-weight': currentObj.fontWeight,'margin-top':'10px'}" v-if="currentObj.showContent.indexOf('1')>-1">{{item.Name}}</h3>
 							<p v-if="currentObj.showContent.indexOf('2')>-1&&item.Describe" class="sub-title" style="margin-top:10px;">{{item.Describe}}</p>
-							<!-- <p v-if="currentObj.showContent.indexOf('2')>-1&&item.Describe" class="sub-title" style="margin-top:-16px;">{{item.Describe}}</p> -->
 						</div>
 						<div v-if="currentObj.showContent&&currentObj.showContent.length!==0
               &&(currentObj.showContent.indexOf('4')>-1||currentObj.showContent.indexOf('3')>-1)"
@@ -88,7 +92,9 @@
 
 <script>
 	import Mixins from "../public";
-	import {GetBaseImgUrl} from "@/util/publicFunction";
+	import {
+		GetBaseImgUrl
+	} from "@/util/publicFunction";
 	export default {
 		mixins: [Mixins],
 		name: "",
@@ -126,7 +132,7 @@
 						typeSign: "4",
 						// 商品角标 === 4时，自定义的图片
 						typeSignImg: "",
-						
+
 					};
 				}
 			}
@@ -134,6 +140,9 @@
 		data() {
 			return {
 				currentGoodList: [],
+				startIS:false,
+				activeTimeMy: {},
+				btnTitle: "马上抢",
 				fakeData: [{
 						Img: "https://img.yzcdn.cn/public_files/2018/01/30/585dae8447d80013ef9344adc973c6ee.png",
 						Name: "这里显示商品名称，最多显示1行",
@@ -177,15 +186,52 @@
 					this.currentObj._Prod_Data = this.currentObj._Prod_Data.splice(0, goodsMaxNum)
 				}
 				this.currentGoodList = this.currentObj._Prod_Data;
+				
 			} else {
 				this.currentGoodList = this.fakeData;
 			}
 		},
-		created(){
+		created() {
+			this.getTimeout()
 			// console.log(this.propsObj,'商品',GetBaseUrl())
-			
+
 		},
 		methods: {
+			finishTimer() {
+				setTimeout(() => {
+					this.getTimeout()
+				}, 1000)
+			},
+			getTimeout(current) {
+				let currentT = new Date().getTime()
+				console.log()
+				let End = new Date(this.itemData.EndDate.replace(/-/g, '/')).getTime()
+				let Start = new Date(this.itemData.StartDate.replace(/-/g, '/')).getTime()
+				// let Start = new Date('2020-05-18 13:34:00').getTime()
+				// let End = new Date('2020-05-18 13:34:50').getTime()
+				// false 活动未开始 true 活动开始了 end为活动结束
+				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
+				let activeTimeMy = this.startIS ? End - currentT : Start - currentT
+				let myTime = activeTimeMy
+				this.activeTimeMy = {
+					day: parseInt(myTime / (1000 * 60 * 60 * 24)),
+					hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
+					minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
+					second: parseInt((myTime % (1000 * 60)) / 1000)
+				}
+			
+				if (!this.startIS) {
+					//表示活动已经结束
+					this.btnTitle = " 活动未开始";
+				} else if (this.startIS === 'end') {
+					this.btnTitle = "活动结束";
+				} else if(Number(this.itemData.SurplusQty)===0){
+					// this.btnTitle = " 立即抢购";
+					this.btnTitle = '商品不足'
+				}else{
+					this.btnTitle = " 立即抢购";
+				}
+			},
 			setImgPrex(val) {
 				if (
 					val &&
@@ -207,14 +253,14 @@
 
 				return !!_dataString ? '请选择商品' : '';
 			},
-			urlGoodClick(item) {				
+			urlGoodClick(item) {
 				this.$Router.push({
 					path: '/pages/shoppingMall/list/infoGood',
 					query: {
 						SID: item.SID,
 						admin: true,
-						title:item.Name
-					}					
+						title: item.Name
+					}
 				})
 			}
 		},
@@ -234,25 +280,60 @@
 			}
 		},
 		computed: {
-		  classObject: function () {
-				if(this.currentObj.listStyle=='small'){
+			classObject: function() {
+				if (this.currentObj.listStyle == 'small') {
 					return 'isActive2'
-				}else if(this.currentObj.listStyle=='big'||this.currentObj.listStyle == 'hybrid'){
+				} else if (this.currentObj.listStyle == 'big' || this.currentObj.listStyle == 'hybrid') {
 					return 'isActiveBig'
-				}else if(this.currentObj.listStyle=='three'||this.currentObj.listStyle=='swipe'){
+				} else if (this.currentObj.listStyle == 'three' || this.currentObj.listStyle == 'swipe') {
 					return 'isActivethree'
-				}else if(this.currentObj.listStyle=='list'){
+				} else if (this.currentObj.listStyle == 'list') {
 					return 'isActivelist'
 				}
-		    
-		  }
+
+			}
 		}
 	};
 </script>
 
 <style lang="less" scoped>
 	@import "../../../assets/css/autoComponents/goods.css";
-	.bgcopacity{
+	// 倒计时样式
+	.timer-style {
+		position: absolute;
+		height: 62rpx;
+		line-height: 62rpx;
+		width: 100%;
+		background: #fe5252;
+		bottom: 0;
+		color: #fff;
+		font-size: 12px;
+	
+		.van-count-down {
+			font-size: 12px;
+			color: #fff;
+			line-height: 30px;
+		}
+	
+		.timer-right {
+			float: right;
+			transform: scale(0.9);
+	
+			/deep/.uni-countdown__number {
+				width: 15px;
+			}
+	
+			/deep/.uni-countdown {
+				// padding:3px 0;
+			}
+		}
+	
+		.timer-left {
+			padding-left: 5px;
+		}
+	}
+	
+	.bgcopacity {
 		position: absolute;
 		top: 0px;
 		width: 100%;
@@ -260,34 +341,39 @@
 		background-color: #5d5a5a;
 		opacity: 0.6;
 	}
-	.isActive2{
+
+	.isActive2 {
 		position: absolute;
 		top: 26%;
 		width: 100px;
 		height: 88px;
 		left: 23%;
 	}
-	.isActiveBig{
+
+	.isActiveBig {
 		position: absolute;
 		top: 21%;
 		left: 21%;
-		width:60%;
+		width: 60%;
 		height: 54%;
 	}
-	.isActivethree{
+
+	.isActivethree {
 		position: absolute;
 		top: 14%;
 		width: 100px;
 		height: 88px;
 		left: 10%;
 	}
-	.isActivelist{
+
+	.isActivelist {
 		position: absolute;
 		top: 19%;
 		width: 100px;
 		height: 88px;
 		left: 17%;
 	}
+
 	.cap-goods-layout {
 		.el-form-item__content {
 			line-height: 0;
