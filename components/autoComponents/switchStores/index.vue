@@ -4,7 +4,7 @@
 		<div class="topStyle">
 			<i class="icon iconfont icon-dianpu"></i>
 			<span class="title">{{info.Name}}</span>
-			<span>[切换]</span>
+			<span @click="switchStores">[切换]</span>
 		</div>
 	</div>
 </template>
@@ -23,7 +23,16 @@
 		},
 		components: {},
 		mounted() {},
-		methods: {}
+		methods: {
+			switchStores(){
+				this.$Router.push({
+					path: '/pages/myAddress/myAddress',
+					query: {
+						flag: 'shopAuto'
+					}
+				})
+			}
+		}
 	};
 </script>
 

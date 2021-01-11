@@ -35,6 +35,9 @@
 							</div>
 							<img v-if="currentObj.typeSign==='4'&&currentObj.typeSignImg" :src="currentObj.typeSignImg |setImgPrex" class="cap-goods-layout__corner-mark cap-goods-layout__corner-mark--custom" />
 						</div>
+						<div class="cap-goods-layout__tag small">
+						  <countDown :examInfo="item" :nowTime3 = curTime v-if="item" @autoSubmit="autoHandInExaminationPaper" ref="countDown" class="exam-interval fr"></countDown>    
+						</div>
 					</div>
 					<div class="cap-goods-layout__info" v-if="currentObj.textCenter&&currentObj.showContent">
 						<div class="has-title-1 has-subtitle-1 cap-goods-layout__info-title" :class="[currentObj.listStyle]" goods-index="0"
@@ -92,6 +95,7 @@
 
 <script>
 	import Mixins from "../public";
+	import countDown from "./countDown.vue"
 	import {
 		GetBaseImgUrl
 	} from "@/util/publicFunction";
@@ -143,6 +147,9 @@
 				startIS:false,
 				activeTimeMy: {},
 				btnTitle: "马上抢",
+				countDownInfo: null, // 定时器所需信息
+				curTime: new Date().getTime(), // 当前服务器时间
+				startIS:false,
 				fakeData: [{
 						Img: "https://img.yzcdn.cn/public_files/2018/01/30/585dae8447d80013ef9344adc973c6ee.png",
 						Name: "这里显示商品名称，最多显示1行",
@@ -171,7 +178,7 @@
 				// reportErrorsFun:true
 			};
 		},
-		components: {},
+		components: {countDown},
 		mounted() {
 			this.currentObj.showContent = this.currentObj.showContent ?
 				this.currentObj.showContent : [];
@@ -192,7 +199,7 @@
 			}
 		},
 		created() {
-			this.getTimeout()
+			// this.getTimeout()
 			// console.log(this.propsObj,'商品',GetBaseUrl())
 
 		},
