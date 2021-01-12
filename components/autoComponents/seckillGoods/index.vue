@@ -211,7 +211,6 @@
 			},
 			getTimeout(current) {
 				let currentT = new Date().getTime()
-				console.log()
 				let End = new Date(this.itemData.EndDate.replace(/-/g, '/')).getTime()
 				let Start = new Date(this.itemData.StartDate.replace(/-/g, '/')).getTime()
 				// let Start = new Date('2020-05-18 13:34:00').getTime()
@@ -265,8 +264,7 @@
 					path: '/pages/shoppingMall/list/infoGood',
 					query: {
 						SID: item.SID,
-						admin: true,
-						title: item.Name
+						seckill: "true"
 					}
 				})
 			}
