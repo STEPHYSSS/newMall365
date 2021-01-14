@@ -791,13 +791,22 @@
 			},
 			overlimitParts(e) {},
 			clickStatic(item, value,key){//属性
+				// for (let i of this.checkStatic) {
+				// 	if (item.Name === i.Name) {
+				// 		if(i.Value.Name === value.Name){
+				// 			i.Value = {}
+				// 		}else {
+				// 			i.Value = value;
+				// 		}	
+				// 	}
+				// }
 				for (let i of this.checkStatic) {
 					if (item.Name === i.Name) {
-						if(i.Value.Name === value.Name){
+						if (i.Value.Name === value.Name && item.Radio == '0') {
 							i.Value = {}
-						}else {
+						} else {
 							i.Value = value;
-						}	
+						}
 					}
 				}
 				if (this.checkStatic.length > 0) {

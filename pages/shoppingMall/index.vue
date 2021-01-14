@@ -79,7 +79,7 @@
 	import {
 		vipCard
 	} from '@/api/http.js';
-	import Mixins from "./mixins.js";
+	import Mixins from "@/pages/mixins.js";
 	import Cookie from '@/config/cookie-my/index.js';
 	import msDropdownMenu from "@/components/ms-dropdown/dropdown-menu.vue"
 	import msDropdownItem from "@/components/ms-dropdown/dropdown-item.vue"
@@ -102,6 +102,7 @@
 				valueSearch: "",
 				value1: 0,
 				getCoupon:[],
+				activeColor:getApp().globalData.mainColor,
 				list: [{
 						text: '全部门店',
 						value: 0
@@ -193,49 +194,49 @@
 				this.getAutoMode();
 			},
 			// 进入首页就获取微信地址
-			async getWxConfig(){
-				try {
-					let {
-						Data
-					} = await vipCard({
-						Action: "GetJSSDK",
-						Url: window.location.href
-					}, "UProdOpera");
+			// async getWxConfig(){
+			// 	try {
+			// 		let {
+			// 			Data
+			// 		} = await vipCard({
+			// 			Action: "GetJSSDK",
+			// 			Url: window.location.href
+			// 		}, "UProdOpera");
 					
-					wx.config({
-						debug: false,
-						appId: Data.SDK.appId,
-						timestamp: Data.SDK.timestamp,
-						nonceStr: Data.SDK.noncestr,
-						signature: Data.SDK.signature,
-						jsApiList: ["getLocation","openAddress","scanQRCode"]
-					});
-					wx.ready(res => {
-						let _this = this;
-					    wx.getLocation({
-					       type: 'gcj02',  // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-					      success: function(res) {
-							_this.location = {
-								longitude: res.longitude,
-								latitude: res.latitude
-							}
-							_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
-							sessionStorage.setItem('location',JSON.stringify(_this.location))	
-							console.log(JSON.stringify(_this.location),'经纬度')
-					      },
-						  cancel: function(res) {
-							this.$toast.fail(res);
-						  }
-					    });
-					  wx.error(function(res) {
-					     this.$toast.fail('获取当前位置失败');
-					    console.log("调用微信接口获取当前位置失败", res);
-					  });
-					})
-				} catch (e) {
+			// 		wx.config({
+			// 			debug: false,
+			// 			appId: Data.SDK.appId,
+			// 			timestamp: Data.SDK.timestamp,
+			// 			nonceStr: Data.SDK.noncestr,
+			// 			signature: Data.SDK.signature,
+			// 			jsApiList: ["getLocation","openAddress","scanQRCode"]
+			// 		});
+			// 		wx.ready(res => {
+			// 			let _this = this;
+			// 		    wx.getLocation({
+			// 		       type: 'gcj02',  // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+			// 		      success: function(res) {
+			// 				_this.location = {
+			// 					longitude: res.longitude,
+			// 					latitude: res.latitude
+			// 				}
+			// 				_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
+			// 				sessionStorage.setItem('location',JSON.stringify(_this.location))	
+			// 				console.log(JSON.stringify(_this.location),'经纬度')
+			// 		      },
+			// 			  cancel: function(res) {
+			// 				this.$toast.fail(res);
+			// 			  }
+			// 		    });
+			// 		  wx.error(function(res) {
+			// 		     this.$toast.fail('获取当前位置失败');
+			// 		    console.log("调用微信接口获取当前位置失败", res);
+			// 		  });
+			// 		})
+			// 	} catch (e) {
 					
-				}
-			},
+			// 	}
+			// },
 			async getShopList() {//获取门店
 				let {
 					Data
@@ -407,6 +408,7 @@
 </script>
 
 <style scoped lang="less" scoped>
+	@import "@/assets/css/theme.less";
 	@import '@/assets/css/cgwl_online.css';
 	.shoppingCart_style {
 		padding-bottom: 50px;

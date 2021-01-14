@@ -10,6 +10,8 @@
 			let mainStyle = getApp().globalData.mainStyle
 			if (mainStyle === 'theme2') {
 				let mainColor = 'rgb(173,184,56)'
+				// let mainColor = Cookie.get('mallColor')
+				// window.document.documentElement.setAttribute( "theme", mainColor );
 				// uni.setNavigationBarColor({
 				// 	frontColor: '#ffffff',
 				// 	backgroundColor: '#8d8bdb'
@@ -117,6 +119,7 @@
 	.theme2 {
 		// .theme(rgb(141, 139, 219), pink, #eee, rgba(141, 139, 219, 0.5));
 		.theme(rgb(173,184,56), pink, #eee, rgba(173,184,56, 0.5));
+		// .theme();
 	}
 
 	.theme3 {

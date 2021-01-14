@@ -57,7 +57,6 @@ const store = new Vuex.Store({
 			return new Promise(async (resolve, reject) => {
 				try {
 					let response = await vipCard(obj, 'UserSign')
-					// console.log(response,'查看Mac')
 					if (response.Data.hasOwnProperty('UserMAC')) {
 						
 						// let seconds = 7200000 //两小时 秒
@@ -90,11 +89,10 @@ const store = new Vuex.Store({
 					}
 					//主题模板
 					if(response.Data.hasOwnProperty('ShopStyle')){
-						Cookies.set('ShopStyle', 'ShopStyle')
+						Cookies.set('mallColor',response.Data.ShopStyle)//后台传过来的颜色 例：#cccccc
 					}
-					
-					// getApp().globalData.mainStyle = 'theme2'
-					// Cookies.set('mainStyle', 'theme2')
+					getApp().globalData.mainStyle = 'theme2'//自己定义的主题名称
+					Cookies.set('mainStyle', 'theme2')
 
 					resolve(response.Data.hasOwnProperty('AppId') ? response.Data.AppId : response.Data.hasOwnProperty('UserBind') ?
 						response.Data.UserBind : '')

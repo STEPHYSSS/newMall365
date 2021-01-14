@@ -1,15 +1,15 @@
 {
 	"pages": [
-		{
-            "path" : "pages/homePage/homePage",
-            "style" : {}
-        },
+		
 	  {
 		"path": "pages/shoppingMall/index",
 		"style": {
 			"navigationBarTitleText": "商城"
 		}
-	  },
+	  },{
+            "path" : "pages/homePage/homePage",
+            "style" : {}
+        },
 		{
 		"path": "pages/shoppingMall/login",
 		"style": {
