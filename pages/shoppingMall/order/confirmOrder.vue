@@ -422,6 +422,7 @@
 				radioBene:"",//选中权益sid
 				objPrice:{},//用于传递数据
 				FloatList:[],//用于展示优惠明细
+				ShopBase:{},//商城基础信息
 			};
 		},
 		async created() {
@@ -543,6 +544,7 @@
 							if (Data.hasOwnProperty('CardInfo')) {
 								this.IsPass = Data.CardInfo.IsPass ? Data.CardInfo.IsPass : ''
 							}
+							this.ShopBase = Data.ShopBase,//商城基础信息
 							this.ScoreDeduction = Data.ScoreDeduction; //可用积分
 							this.ScoreAmt = Data.ScoreAmt; //抵扣金额
 							this.CardInfo = Data.CardInfo; //卡信息
@@ -611,36 +613,25 @@
 							let num = Number(Data.ShopBase.ScopeDay);//获取商城的提货期限 后台默认7天
 							let dayAdvance = 0;//提前天数
 							let tAdvance = 0;//提前时间
-							let advanceTime = 0;//日期 当FinType==1&&FinHour>0就代表这有提前日期
-							//提前的时间+当前的时间>下班时间 的情况下就延迟到第二天
-							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
+							let advanceTime = 0;//日期 当FinType==1&&FinHour>0就代表这有提前日期  //提前的时间+当前的时间>下班时间 的情况下就延迟到第二天							
 							let startTime = countDown(Data.ShopBase.StartTime);//商城开始时间秒数
+							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
 							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间
-							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时
-							if(FinTypeCun==='2'){//类型等于小时的时候
-								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间
-								let mallTime = (acTime-(endTime - cutTime));
-								let time = Number(FinTypeHour)/dayTime;
-								let time2 = Number(FinTypeHour)%dayTime;
-								let splitTime = parseInt(time);
-								if ((acTime + cutTime).toFixed(2) > endTime) {//如果提前的小时+当前时间> 商城结束时间
-									FinTypeDay = Number(FinTypeDay) + splitTime;//就从第二天开始
-									
+							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
+							// jka
+							if(FinTypeCun==='2'){
+								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间		
+								if((acTime + cutTime).toFixed(2) > endTime){//提前小时+当前时间>商城结束时间	
+									let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
+									let mallTime = (acTime-(endTime - cutTime))/60/60;
+									dayAdvance+=Number(mallTime)/dayTime//然后算出提前时间减去结束时间-当前时间的是否大于一天
+									FinTypeDay=parseInt(dayAdvance)+parseInt(time);
 									tAdvance = Number(FinTypeHour);//提前小时
-								} else {
-									tAdvance = Number(FinTypeHour);
-									FinTypeDay = 0;
+								}else {
+									if(cutTime>endTime){
+										FinTypeDay = Number(dayAdvance)+1
+									}
 								}
-							}else {
-								if(cutTime>endTime){
-									FinTypeDay = Number(FinTypeDay)+1
-								}
-							}
-							if(FinTypeCun==='2'){//类型等于小时的时候
-								/*
-									
-								*/ 
-							   let mallTime = (acTime-(endTime - cutTime));
 							}
 							// 拿到天数之后调用setChangeData方法算出列表
 							this.sidebarList = setChangeData(num, FinTypeDay); //左侧的天数
@@ -957,9 +948,19 @@
 					this.radioTime = "";
 				}
 				let arrTime = [];
+				let arrTime2 = [];
+				let dayM = 60 * 60; //秒值
+				let a = 60 * Number(this.ShopBase.IntervalMinute); //求秒值 间隔时长
+				let startTime = Number(countDown(this.ShopBase.StartTime));
+				let endTime = countDown(this.ShopBase.EndTime);
+				while (startTime <= endTime) {
+					arrTime2.push(changeCountDown(startTime));
+					startTime += a;
+				}
+				let allTimeSlotStart = arrTime2;
 				if (index !== 0) {
-					for (let i = 0; i < this.allTimeSlot.length - 1; i++) {
-						arrTime.push(this.allTimeSlot[i] + '-' + this.allTimeSlot[i + 1])
+					for (let i = 0; i < allTimeSlotStart.length - 1; i++) {
+						arrTime.push(allTimeSlotStart[i] + '-' + allTimeSlotStart[i + 1])
 					}
 					this.rightTimeList = arrTime;
 				} else {
@@ -967,6 +968,7 @@
 				}
 			},
 			rightTimeClick(item) {//右侧时间选择
+			// console.log(item,'00')
 				this.RecordTime = {
 					radioTime: item,
 					index: this.activeKey
@@ -1273,6 +1275,7 @@
 		},
 	};
 	function setChangeData(num, FinTypeDay) {//商城提货天数，传进来的天数
+	// console.log(num, FinTypeDay,'这里是左侧天数')
 		let arrData = []; //日期
 		let toDay = "";
 		num = Number(num);
@@ -1285,6 +1288,7 @@
 		return arrData;
 	}
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
+	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')
 		let arr = [];
 		let arrToday = [];//今天一天的时间段数组
 		let dayM = 60 * 60; //秒值
@@ -1293,25 +1297,21 @@
 		let startTime = Number(countDown(ShopBase.StartTime));
 		let endTime = countDown(ShopBase.EndTime);
 		let cutTime = countDown(getTime(false, false, true));//当前时间
+		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间	
+
 		if((acTime + cutTime).toFixed(2) > endTime){//提前小时+当前时间>商城结束时间	
-			let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间			
+					
 			/*
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
-				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算
-			
+				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算			
 			*/
 			let mallTime = (acTime-(endTime - cutTime));
-			console.log(mallTime,'算从十点开始生几个小时')
-			dayAdvance+=Number(tAdvance)/dayTime
-			console.log(dayAdvance)
-		    // let time = Number(tAdvance)/dayTime;//算出超出营业时间 天
-		    // let shenTime = Number(cutTime)-Number(tAdvance);//当前时间减去提前时间
-			// let time2 = Number(tAdvance)%dayTime;//剩下的小时
+			// console.log(mallTime,'zheli')
 			while (Number(startTime)+Number(mallTime) <= endTime) {
-					arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
-					startTime += a;
-				}
-				arrToday = arr;
+				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
+				startTime += a;
+			}
+			arrToday = arr;			
 			
 		}else{
 			while (startTime <= endTime) {
@@ -1329,7 +1329,6 @@
 					}
 				});
 			} else {
-				tAdvance+=1;
 				arrToday = arr;
 			}
 		}
