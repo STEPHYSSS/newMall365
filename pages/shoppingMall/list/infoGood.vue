@@ -13,6 +13,7 @@
 		vipCard
 	} from "@/api/http.js";
 	import Mixins from '@/pages/shoppingMall/mixins.js'
+	import {GetBaseImgUrl} from "@/util/publicFunction";
 	export default {
 		name: "goodsPage",
 		mixins: [Mixins],
@@ -42,7 +43,7 @@
 					SID: this.$Route.query.SID
 				}
 			})
-			// console.log(this.$Route.query.SID,'sid')
+			this.wxRegister();
 		},
 		methods: {
 			async getInfo() {
@@ -117,6 +118,63 @@
 				else {
 					this.$Router.back(1)
 				}
+			},
+			// 微信分享
+			async wxRegister() { //data是微信配置信息，option是分享的配置内容
+				try{
+					let {
+						Data
+					} = await vipCard({
+						Action: "GetJSSDK",
+						Url: window.location.href
+					}, "UProdOpera");
+					wx.config({
+						debug: false, // 开启调试模式
+						appId: data.appId, // 必填，公众号的唯一标识
+						timestamp: data.timestamp, // 必填，生成签名的时间戳
+						nonceStr: data.nonceStr, // 必填，生成签名的随机串
+						signature: data.signature, // 必填，签名，见附录1
+						jsApiList: [
+							'checkJsApi',
+							'updateTimelineShareData',
+							'updateAppMessageShareData',
+							'onMenuShareQQ'
+						] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+					})
+					wx.ready(function(){
+						wx.updateTimelineShareData({
+							title: this.title, // 分享标题
+							link: option.link, // 分享链接
+							imgUrl: GetBaseImgUrl()+this.goodList.Img, // 分享图标
+							desc: '测试分享的文字秒杀', // 分享描述
+							success() {
+								// 用户成功分享后执行的回调函数
+								option.success()
+							},
+							cancel() {
+								// 用户取消分享后执行的回调函数
+								option.error()
+							}
+						});
+						wx.updateAppMessageShareData({//分享到朋友
+							title: this.title, // 分享标题
+							desc: option.desc, // 分享描述
+							link: option.link, // 分享链接
+							imgUrl: GetBaseImgUrl()+this.goodList.Img, // 分享图标
+							success() {
+								// 用户成功分享后执行的回调函数
+								console.log(GetBaseImgUrl()+this.goodList.Img,'image')
+								option.success()
+							},
+							cancel() {
+								// 用户取消分享后执行的回调函数
+								option.error()
+							}
+						})
+					})
+				}catch(e){
+					
+				}				
 			}
 		}
 	};

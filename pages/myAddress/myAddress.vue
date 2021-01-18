@@ -83,7 +83,8 @@
 <script>
 	import Cookies from '@/config/cookie-my/index.js';
 	import { vipCard } from "@/api/http.js";
-	import Mixins from "@/pages/shoppingMall/mixins.js";
+	// import Mixins from "@/pages/shoppingMall/mixins.js";
+	import Mixins from "@/pages/mixins.js";
 	import modal from '@/components/modal/modal'
 	export default {
 		mixins: [Mixins],
