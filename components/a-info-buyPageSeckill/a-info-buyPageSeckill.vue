@@ -107,7 +107,9 @@
 		Base64
 	} from 'js-base64';
 	import adCell from '@/node_modules/adcell/ADCell.vue';
-
+	import {
+		GetBaseImgUrl
+	} from "@/util/publicFunction";
 	export default {
 		name: "couponPage",
 		components: {
@@ -188,10 +190,14 @@
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
 
 			this.tradeList()
+			console.log(this.goods,'44')
 			if(this.goods.BuyTime!='' || this.goods.StartTime!=''||this.goods.EndTime!=''){
 				let BuyTime = this.goods.BuyTime.split(',')
 				this.IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
 				this.IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)
+			}else{
+				this.IsGoodBuyTime = true;
+				this.IsSeckillTime = true
 			}
 			if (this.seckill) {
 				this.buttonGroup.push({
@@ -347,12 +353,27 @@
 		}
 	};
 
+	// function setfix(val, _this) {
+	// 	let str = "";
+	// 	if (!val) {
+	// 		return ''
+	// 	}
+	// 	str = val.replace(/src="/g, `src="${_this.$VUE_APP_PREFIX}`);
+	// 	return str;
+	// }
 	function setfix(val, _this) {
+		//console.log(val,'url地址')
 		let str = "";
+		let strWidth=""
 		if (!val) {
 			return ''
 		}
-		str = val.replace(/src="/g, `src="${_this.$VUE_APP_PREFIX}`);
+		let abc = GetBaseImgUrl();
+		strWidth = val.replace(/<img/g, "<img style='max-width:100%;height:auto;'");
+		// console.log(strWidth)
+		str = strWidth.replace(/src="Files/g, `src="${abc}../Files`)
+		// console.log(str)
+		//str = val.replace(/src="/g, `src="${_this.$VUE_APP_PREFIX}`);
 		return str;
 	}
 </script>

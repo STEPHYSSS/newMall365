@@ -94,7 +94,7 @@
 					</view>	
 				</view>
 			</view>
-			<view v-if="total>0" class="onlySty onlyPrice">
+			<view v-if="total>=0" class="onlySty onlyPrice">
 				<view style="flex: 1;">
 					<span>总计 ¥ {{ProdTotal}}</span> <span style="display: inline-block;margin-left: 10px;" v-if="sumPrice>0">优惠 ¥ {{sumPrice}}</span>
 				</view>
@@ -329,6 +329,15 @@
 				return this.money
 			}
 		},
+		// watch:{
+		// 	objPrice:{
+		// 		deep:true,
+		// 		handler(val){
+		// 			this.money = Number(val.DiscPrice)+Number(val.TicketPrice);
+		// 		}
+		// 	}
+				
+		// },
 		data() {
 			return {
 				mainStyle: getApp().globalData.mainStyle,
@@ -570,12 +579,16 @@
 							this.total = Data.SumTotal;
 							this.ProdTotal = Data.ProdTotal;
 							this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2));
+							console.log(this.total,this.ProdTotal,'5555')
 							this.objPrice={
 								total:this.total,								
 								TicketPrice:this.TicketPrice,
 								DiscPrice:this.DiscPrice
 							}
-							this.FloatList = Data.FloatList;
+							console.log(this.objPrice,'666')
+							if(Data.FloatLis){
+								this.FloatList = Data.FloatList;
+							}
 							this.CardInfo = Data.hasOwnProperty("CardInfo") ?
 								Data.CardInfo : {};
 							if (JSON.stringify(this.CardInfo) !== "{}") {
@@ -587,8 +600,7 @@
 								this.radioPayType = "2";
 							}
 							this.DeliveryAreaList = Data.ShopInfoList;
-							//提前预约时间
-							
+							// 提前预约时间
 							let FinTypeDay = '';//时间 当FinType==2&&FinHour>0就代表这有提前时间
 							let FinTypeHour = '';//时间 当FinType==2&&FinHour>0就代表这有提前时间 FinHour小时或者天数
 							let FinTypeCun =""
@@ -756,7 +768,7 @@
 			// 	}
 			// },
 			getAddress() { //获取共享地址
-			debugger
+			// debugger
 				let _this = this;
 				wx.openAddress({
 					success: function(res) {

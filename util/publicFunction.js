@@ -55,7 +55,12 @@ export function GetBaseImgUrl() {//获取当前图片url
 		  return 'http://'+window.location.hostname+'/WebApp/';
 	 }
 }
-
+export function getQueryString2(name, query){
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	    var r = query.substr(1).match(reg);
+	    if (r != null) return unescape(r[2]);
+	    return null;
+}
 
 function decodeA(a) {
 	// console.log(a,'5555')

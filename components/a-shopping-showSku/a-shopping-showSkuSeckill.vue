@@ -282,6 +282,7 @@
 								}
 							}else{
 								if (currentItem.length > 0) {
+									console.log(currentItem)
 									this.$store.commit("SET_CURRENT_CARD", currentItem);
 									this.$Router.push("/pages/shoppingMall/order/confirmOrder");
 								}

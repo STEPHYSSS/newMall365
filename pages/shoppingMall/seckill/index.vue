@@ -16,6 +16,7 @@
 	import {
 		vipCard
 	} from "@/api/http.js";
+	import {getQueryString2} from '@/util/publicFunction.js'
 	export default {
 		name: "",
 		components: {},
@@ -27,9 +28,15 @@
 			};
 		},
 		created() {
-			if(this.$route.query.SID){
-				this.seckillSID = this.$route.query.SID
-			}		
+			let url = window.location.href;
+		    let index = url.lastIndexOf("?");
+	        url = url.slice(index);
+	        this.seckillSID = getQueryString2("SID", url);
+				// if(getsecikll("SID")){
+				// 	this.seckillSID = getsecikll("SID")		
+				// 	console.log(this.seckillSID,'是否有seckillSID')
+				// }	
+			
 		},
 		mounted() {
 			this.$store.commit("SET_HISTORY_URL", {path:'/pages/shoppingMall/seckill/index'})
@@ -48,7 +55,7 @@
 							Action: "GetPromotionList",
 							Type: 1,
 							ShopSID:currentStore?currentStore.data.SID:'',
-							SID:this.$route.query.SID
+							SID:this.seckillSID?this.seckillSID:this.$route.query.SID
 						}, "UPromotionOpera")
 					]);
 					this.list = res[0].Data.ProdList;
