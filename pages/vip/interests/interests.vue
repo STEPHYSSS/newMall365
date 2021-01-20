@@ -61,6 +61,9 @@
 				try {
 					let { Data } =  await vipCard({Action:'GetCardBene'}, "UBeneOpera");
 					this.list = Data.BeneList||[];
+					if(Data.BeneList.length===0){//如果长度为0，则跳转到购买权益页面
+						uni.navigateTo({ url: '/pages/packages/index'})
+					}
 					uni.hideLoading()
 					this.loading = false;
 				} catch (e) {

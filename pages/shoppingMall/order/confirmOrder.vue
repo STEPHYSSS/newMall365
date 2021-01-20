@@ -131,7 +131,7 @@
 				<view class="payStyle">支付方式</view>
 				<radio-group @change="radioPayChange">
 					<div v-if="(allData.SalePriceTotal&&$Route.query.isIntegral)||!$Route.query.isIntegral">
-						<div v-if="allData.hasOwnProperty('CardInfo')" class="radio-group-item" @click="PayTypeClick('1')">
+						<div v-if="allData.hasOwnProperty('CardInfo')&&NewPayType.indexOf('1')>-1" class="radio-group-item" @click="PayTypeClick('1')">
 							<div>
 								<img class="wechat" src="@/static/assets/img/moneyPay.png" slot="right-icon" />
 								<span class="custom-title">卡支付（余额:{{CardInfo.Balance}}）</span>
@@ -141,7 +141,7 @@
 								<span class="summaryNum" style="color:#777" v-else>余额不足</span>
 							</div>
 						</div>
-						<div @click="PayTypeClick('2')" class="radio-group-item" v-if="$Route.query.isIntegral?allData.CardInfo?true:false:true">
+						<div @click="PayTypeClick('2')" class="radio-group-item" v-if="($Route.query.isIntegral?allData.CardInfo?true:false:true)&& NewPayType.indexOf('2')>-1">
 							<div>
 								<img class="wechat" src="@/static/assets/img/weixinPay.png">
 								<span class="custom-title">微信支付</span>
@@ -329,15 +329,6 @@
 				return this.money
 			}
 		},
-		// watch:{
-		// 	objPrice:{
-		// 		deep:true,
-		// 		handler(val){
-		// 			this.money = Number(val.DiscPrice)+Number(val.TicketPrice);
-		// 		}
-		// 	}
-				
-		// },
 		data() {
 			return {
 				mainStyle: getApp().globalData.mainStyle,
@@ -382,6 +373,7 @@
 				rightTimeList: [],//右侧时间段
 				radioTime: "",
 				radioPayType: "1",
+				NewPayType:'',//支付方式
 				// 卡信息
 				CardInfo: {},
 				// 自取时候用户电话
@@ -535,7 +527,9 @@
 							this.allData = Data;
 							this.prodList = Data.ProdList;
 							this.currentItem = JSON.parse(JSON.stringify(this.prodList));
+							
 							this.currentDeliveryType = Data.ProdList[0].DeliveryType; //选择第一个商品的配送方式
+							this.NewPayType = Data.ProdList[0].PayType;
 							if (this.radioModes === 1) {
 								this.areaList = Data.ShopInfoList;
 							} else {
@@ -579,13 +573,11 @@
 							this.total = Data.SumTotal;
 							this.ProdTotal = Data.ProdTotal;
 							this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2));
-							console.log(this.total,this.ProdTotal,'5555')
 							this.objPrice={
 								total:this.total,								
 								TicketPrice:this.TicketPrice,
 								DiscPrice:this.DiscPrice
 							}
-							console.log(this.objPrice,'666')
 							if(Data.FloatLis){
 								this.FloatList = Data.FloatList;
 							}

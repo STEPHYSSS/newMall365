@@ -193,7 +193,7 @@ const other = [
 		}
 	},{ //login页面 买茶送包 
 		path: '/pages/autoIndex/autoIndex',
-		name: 'invite',
+		name: 'autoIndex',
 		meta: {
 			title: '活动助力',
 		}

@@ -84,7 +84,7 @@
 	import msDropdownMenu from "@/components/ms-dropdown/dropdown-menu.vue"
 	import msDropdownItem from "@/components/ms-dropdown/dropdown-item.vue"
 	import ticketPop from "@/components/ticketPopup/ticketPopup.vue"
-	
+	import {getQueryString2,UrlSearch} from '@/util/publicFunction.js'
 	import {
 		GetQueryString
 	} from "@/util/publicFunction";
