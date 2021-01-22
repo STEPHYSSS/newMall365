@@ -12,7 +12,8 @@
 							<div class="skuTopInfo">
 								<div class="skuTopInfoMoney">
 									¥
-									<span class="skuTopInfoMoneyNum">{{sumPrice}}</span>
+									<span v-if="goodsInfo.MemberPrice">{{sumPrice}}</span>
+									<span  v-else class="skuTopInfoMoneyNum">{{sumPrice}}</span>
 								</div>
 								<div>
 									<span class="skuTopInfoSurplus" v-if="goodsInfo.StockType!=0&&goodsInfo.StoreQty>0&&skuDataInfo.TotalSurplusQty>0">剩余 {{skuDataInfo.TotalSurplusQty}} 件</span>
@@ -52,7 +53,7 @@
 
 							<!-- 商品属性 -->
 							<div v-if="attributeList.length >0 ">
-								<view class="property" v-for="(item, index) in attributeList" :key="index">
+								<!-- <view class="property" v-for="(item, index) in attributeList" :key="index">
 									<view class="skuTopChoiceTitle">
 										<text class="name">{{ item.Name }}</text>
 									</view>
@@ -61,6 +62,19 @@
 										<view class="skuTopChoiceItem"  :class="isActiveName(value.Name)">
 											{{value.Name}}
 											<text v-if="value.Price !='0'">￥{{value.Price}}</text>
+										</view>
+									</view>
+								</view> -->
+								<view class="property" v-for="(item, index) in attributeList" :key="index">
+									<view class="skuTopChoiceTitle">
+										<text class="name">{{ item.Name }}</text>
+										<text v-if="item.Radio == '1'">(必选)</text>
+									</view>
+									<view style="display: inline-block;" v-for="(value, index2) in item.Value" :key="value.Name"
+									 @click="clickStatic(item, value,index2)">
+										<view class="skuTopChoiceItem"  :class="isActiveName(value.Name, item)">
+											{{value.Name}}
+											<text v-if="value.Price !='0'" style="color: red;">￥{{value.Price}}</text>
 										</view>
 									</view>
 								</view>
@@ -172,8 +186,18 @@
 			}
 		},
 		computed: {
+			// isActiveName() {
+			// 	return function(name) {
+			// 		for (let i of this.checkStatic) {
+			// 			if (name === i.Value.Name && i.Name === value.Name) {
+			// 				return 'isActive'
+			// 			}
+			// 		}
+			// 		return ''
+			// 	}
+			// },
 			isActiveName() {
-				return function(name) {
+				return function(name, value) {
 					for (let i of this.checkStatic) {
 						if (name === i.Value.Name && i.Name === value.Name) {
 							return 'isActive'
@@ -198,7 +222,23 @@
 					}
 					this.resultPrice=(this.resultPrice + num)*this.valueStepper
 					this.resultPrice = parseFloat(this.resultPrice.toFixed(2))
-					return this.resultPrice
+					return this.resultPrice					
+				}else if(this.goodsInfo.SpecType==='2'){
+					this.resultPrice = 0
+					let num = Number(this.goodsInfo.SalePrice)
+					if (this.goodsInfo.MemberPrice || this.goodsInfo.MemberPrice == 0) {
+						num = Number(this.goodsInfo.MemberPrice)
+					}
+					if(this.skuDataInfo.AttributeList&&this.checkStatic.length>0){
+						this.checkStatic.forEach(item => {
+							if (item.Value.Name) {
+								this.resultPrice += isNaN(Number(item.Value.Price)) ? 0 : Number(item.Value.Price)
+							}
+						});
+					}
+					this.resultPrice=(this.resultPrice + num)*this.valueStepper
+					this.resultPrice = parseFloat(this.resultPrice.toFixed(2))
+					return this.resultPrice					
 				}else{//电子券商品秒杀
 					this.SpecResultPrice = 0;
 					let num = Number(this.goodsInfo.SalePrice)
@@ -213,8 +253,7 @@
 							}
 						});
 					}
-					this.SpecResultPrice=(this.SpecResultPrice + num)*this.valueStepper
-					console.log(typeof this.SpecResultPrice)
+					this.SpecResultPrice=(this.SpecResultPrice + num)*this.valueStepper;
 					this.SpecResultPrice = parseFloat(this.SpecResultPrice.toFixed(2))
 					return this.SpecResultPrice
 				}
@@ -312,7 +351,7 @@
 			clickStatic(item, value, key) { //选择属性
 				for (let i of this.checkStatic) {
 					if (item.Name === i.Name) {
-						if (i.Value.Name === value.Name) {
+						if (i.Value.Name === value.Name && item.Radio == '0') {
 							i.Value = {}
 						} else {
 							i.Value = value;
@@ -323,14 +362,12 @@
 					this.currentTastArr = "";
 					let sumPrice = 0 // 合计金额
 					this.checkStatic.forEach(item => {
-						sumPrice = Number(item.Value.Price)
+						sumPrice = Number(item.Value.Price)						
 						if (item.Value.Name) {
 							this.currentTastArr  += item.Value.Name + (sumPrice===0?'': `￥${sumPrice}`)+",";
-							// arr += item.Value.Name + `￥${sumPrice}`;
 						}
 					});
-					this.currentTastArr = this.currentTastArr.substring(0, this.currentTastArr.length - 1)
-					//this.currentTastArr = sumPrice===0?this.currentTastArr: this.currentTastArr + `￥${sumPrice}`
+					this.currentTastArr = this.currentTastArr.substring(0, this.currentTastArr.length - 1);
 				}
 			},
 			skuTopChoiceParts(e, i) {//选择配件
@@ -429,6 +466,7 @@
 					let skuDataInfo = this.skuDataInfo;
 					this.TotalSurplusQty = skuDataInfo.TotalSurplusQty//活动剩余数量
 					this.goodsInfo = skuDataInfo.ProdInfo; //商品详情
+					console.log(this.goodsInfo,'watch')
 					this.normsList = []; //规格
 					this.PartsList = []; //配件
 					this.attributeList = []; //属性
@@ -437,13 +475,35 @@
 					}
 					if (skuDataInfo.AttributeList) {
 						this.attributeList = skuDataInfo.AttributeList || [];
+						
+						// this.$nextTick(function(){
+						// 	this.checkStatic = []
+						// 	this.skuDataInfo.AttributeList.forEach((item, index) => {
+						// 		item.Value.forEach((item1, index1) => {
+						// 			if (item1.IsDefault == '1') {
+						// 				this.checkStatic.push(item)
+						// 			}
+						// 		})
+						// 	})
+						// 	console.log(this.checkStatic,1111)
+						// })
 						this.checkStatic = this.attributeList.map(item => {
+							let obj = item.Value.find(item => item.IsDefault == '1')
+							// 是否必选是radio，默认是的default
+							let Radio = 0
+							if (item.Radio == 1) {
+								Radio = 1
+							}
+							let IsDefault = 1
+							if (!obj) {
+								obj = { Name: "", Price: "" }
+								IsDefault = 0
+							}
 							return {
 								Name: item.Name,
-								Value: {
-									Name: "",
-									Price: ""
-								}
+								IsDefault,
+								Radio,
+								Value: obj
 							}
 						})
 					}

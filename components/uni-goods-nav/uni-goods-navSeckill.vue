@@ -19,7 +19,7 @@
 			</view>
 			
 			<!-- 这一块是用来判断活动不能够购买的 isStartIS IsSeckillTime 到时候再传一个下架的状态来控制按钮不能点击-->
-			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right " v-if="isStartIS==false || IsSeckillTime == false  || (skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0')">
+			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right " v-if="isStartIS==false || IsSeckillTime == false  || (skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0'||skuDataInfo.IsBuy==='0')">
 				<view v-for="(item,index) in buttonGroup" :key="index" style="opacity: .3;" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right2">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>

@@ -38,8 +38,8 @@
 				  <i class="cgwl-icon"></i>
 				  <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a>
 				</div> -->
-				<!-- <button type="default" size="mini" @click="autoIndex">测试</button> -->
-				<!-- <button type="default" size="mini" @click="makeUpGroup">拼团</button> -->
+				
+				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<div>
 					<div v-for="(item,index) in listMode" :key="index">
 						<!-- <shopinfoma v-if="item.viewComponets === 'shopinfoma'" :propsObj="item.props"></shopinfoma> -->
@@ -127,7 +127,7 @@
 				location:{}
 			};
 		},
-		created() {
+		created() {			
 			this.init()
 		},
 		computed:{
@@ -160,14 +160,13 @@
 				uni.showLoading({
 					title: '加载中'
 				});
-				if(this.$route.query.query){
-					let abc = JSON.parse(this.$route.query.query)
-					let key = Object.keys(abc)
-					if(key=="SID"){
-						this.SID = Object.values(abc)
-					}
-				}
-				
+				// if(this.$route.query.query){
+				// 	let abc = JSON.parse(this.$route.query.query)
+				// 	let key = Object.keys(abc)
+				// 	if(key=="SID"){
+				// 		this.SID = Object.values(abc)
+				// 	}
+				// }				
 				// if(this.$Route.query.flag =='Deflocation'){
 				// 	let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))
 				// 	this.currentStoreInfo = {
@@ -191,52 +190,13 @@
 				}else{
 					this.getShopList();
 				}
+				// console.log(sessionStorage.getItem('searchUrl'),'homeo')
+				let url = sessionStorage.getItem('searchUrl');
+				let index = url.lastIndexOf("?");
+		        url = url.slice(index);
+		        this.SID = getQueryString2("SID", url);
 				this.getAutoMode();
 			},
-			// 进入首页就获取微信地址
-			// async getWxConfig(){
-			// 	try {
-			// 		let {
-			// 			Data
-			// 		} = await vipCard({
-			// 			Action: "GetJSSDK",
-			// 			Url: window.location.href
-			// 		}, "UProdOpera");
-					
-			// 		wx.config({
-			// 			debug: false,
-			// 			appId: Data.SDK.appId,
-			// 			timestamp: Data.SDK.timestamp,
-			// 			nonceStr: Data.SDK.noncestr,
-			// 			signature: Data.SDK.signature,
-			// 			jsApiList: ["getLocation","openAddress","scanQRCode"]
-			// 		});
-			// 		wx.ready(res => {
-			// 			let _this = this;
-			// 		    wx.getLocation({
-			// 		       type: 'gcj02',  // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-			// 		      success: function(res) {
-			// 				_this.location = {
-			// 					longitude: res.longitude,
-			// 					latitude: res.latitude
-			// 				}
-			// 				_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
-			// 				sessionStorage.setItem('location',JSON.stringify(_this.location))	
-			// 				console.log(JSON.stringify(_this.location),'经纬度')
-			// 		      },
-			// 			  cancel: function(res) {
-			// 				this.$toast.fail(res);
-			// 			  }
-			// 		    });
-			// 		  wx.error(function(res) {
-			// 		     this.$toast.fail('获取当前位置失败');
-			// 		    console.log("调用微信接口获取当前位置失败", res);
-			// 		  });
-			// 		})
-			// 	} catch (e) {
-					
-			// 	}
-			// },
 			async getShopList() {//获取门店
 				let {
 					Data
@@ -269,9 +229,6 @@
 					console.log(e);
 				}
 			},
-			// autoIndex(){
-			// 	this.$router.push("/pages/autoIndex/autoIndex");
-			// },
 			clickClear() {
 				Cookie.remove("UserMACPhone");
 			},
@@ -338,7 +295,7 @@
 					} = await vipCard({
 							Action: "GetDecorate",
 							Type:'0',//
-							SID:this.SID[0] ? this.SID[0] : '',//通过手机二维码扫描的时候需要的SID
+							SID:this.SID ? this.SID : '',//通过手机二维码扫描的时候需要的SID
 							ShopSID:currentStore?currentStore.data.SID:''
 						},
 						"UShopOpera"
@@ -371,6 +328,7 @@
 					// }
 					// uni.setStorageSync('arrVoice', arrVoice);
 				} catch (e) {
+					this.$toast(e)
 					console.log(e);
 				}
 			},

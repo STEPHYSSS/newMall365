@@ -29,7 +29,7 @@
 			};
 		},
 		created() {
-			let url = window.location.href;
+			let url = sessionStorage.getItem('searchUrl');
 		    let index = url.lastIndexOf("?");
 	        url = url.slice(index);
 	        this.seckillSID = getQueryString2("SID", url);				

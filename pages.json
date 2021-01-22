@@ -198,10 +198,6 @@
         ,{
             "path" : "pages/vip/myCoupon/myCoupon",
             "style" : {}
-        }
-        ,{
-            "path" : "pages/autoIndex/autoIndex",
-            "style" : {}
         },{//已经购买权益页面
             "path" : "pages/vip/interests/interests",
             "style" : {}

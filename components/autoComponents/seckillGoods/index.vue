@@ -195,7 +195,7 @@
 				this.currentGoodList = this.currentObj._Prod_Data;
 				
 			} else {
-				this.currentGoodList = this.fakeData;
+				this.currentGoodList =[];
 			}
 		},
 		created() {

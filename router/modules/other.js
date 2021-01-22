@@ -191,12 +191,6 @@ const other = [
 		meta: {
 			title: '活动助力',
 		}
-	},{ //login页面 买茶送包 
-		path: '/pages/autoIndex/autoIndex',
-		name: 'autoIndex',
-		meta: {
-			title: '活动助力',
-		}
 	},{//pages/shoppingMall/order/ManageOrderInfo 模板消息订单通知详情
 		path: '/pages/shoppingMall/order/ManageOrderInfo',
 		name: 'ManageOrderInfo',

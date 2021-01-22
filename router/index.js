@@ -40,6 +40,8 @@ router.beforeEach((to, from, next) => {
 				if (Cookie.get('mainStyle')) {
 					getApp().globalData.mainStyle = Cookie.get('mainStyle')
 				}
+				let locationUrl = window.location.href;
+				sessionStorage.setItem('searchUrl',locationUrl)
 				getApp().globalData.mainStyle = 'theme2'
 				Cookie.set('mainStyle', 'theme2')
                 let Code = GetQueryString("code");

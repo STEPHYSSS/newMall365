@@ -47,9 +47,15 @@
 						<div class="orderTime_label">方案优惠</div>
 						<span class="priceSpan">-¥{{OrderInfo.DiscAmt}}</span>
 					</div>
-					<div class="orderTime" v-if="Number(OrderInfo.TicketAmt)>0">
-						<div class="orderTime_label">电子券优惠</div>
-						<span class="priceSpan">-¥{{OrderInfo.TicketAmt}}</span>
+					<div class="orderTime" v-show="OrderInfo.TicketNo">
+						<p class="orderTime_label" @click="showTicketInfo">电子券优惠 
+						<!-- icon-xiajiantou -->
+							<!-- <span class="iconfont icon-jiantou" style="font-size: 12px;"></span> -->
+							<span class="iconfont" :class="hideTicketInfo===true?'icon-jiantou9':'icon-jiantou'" style="font-size: 12px;"></span>
+						</p>
+						<span class="priceSpan" v-if="Number(OrderInfo.TicketAmt)>0">-¥{{OrderInfo.TicketAmt}}</span>
+						<p v-show="hideTicketInfo">券编号：{{OrderInfo.TicketNo}}</p>
+						<p v-show="hideTicketInfo">券名称：{{OrderInfo.TicketName}}</p>
 					</div>
 					<div class="orderTime" v-if="Number(OrderInfo.ScoreAmt)>0">
 						<div class="orderTime_label">积分抵扣</div>
@@ -58,6 +64,11 @@
 					<div class="orderTime" v-if="OrderInfo.OrderType =='2'">
 						<div class="orderTime_label">运费</div>
 						<span class="priceSpan">{{Number(OrderInfo.Freight)?'¥'+OrderInfo.Freight:'免运费'}}</span>
+					</div>
+					<!-- DiscAmt -->
+					<div class="orderTime" v-if="Number(OrderInfo.DiscAmt) > 0">
+						<div class="orderTime_label">优惠金额</div>
+						<span class="priceSpan">{{'¥'+OrderInfo.Freight}}</span>
 					</div>
 					<div class="orderTime">
 						<div class="orderTime_label priceName">实付金额</div>
@@ -95,7 +106,7 @@
 				<div class="orderTime">
 					<div class="orderTime_label">订单编号：</div>
 					<span>{{OrderInfo.ExchNo}}</span>
-					<span class="copyText colorStyle" id="copyText" @click="copyTextFun(OrderInfo.SID)">复制</span>
+					<span class="copyText colorStyle" id="copyText" @click="copyTextFun(OrderInfo.ExchNo)">复制</span>
 					<div id="NewsToolBox"></div>
 				</div>
 				<div class="orderTime" v-if="OrderInfo.OrderType!=='3'">
@@ -157,7 +168,8 @@
 				Refund: {}, //退款信息
 				infoData: {},
 				orderId:'',
-				OrderType:''
+				OrderType:'',
+				hideTicketInfo:false
 			};
 		},
 		created() {
@@ -169,14 +181,6 @@
 				this.orderId=getDQuery.order_id;
 				this.OrderType = getDQuery.OrderType
 				this.getInfo();
-				// this.CateSID= getDQuery.order_id
-				// let abc = JSON.parse(this.$route.query.query)
-				// let getDQuery = JSON.parse(getDecode)
-				// let getObj = JSON.parse(getDQuery.query)
-				// let key = Object.keys(getObj)
-				// if(key=="SID"){
-				// 	this.SID = Object.values(getObj)
-				// }
 			}
 			
 			// this.$store.commit("SET_HISTORY_URL", {
@@ -236,6 +240,9 @@
 				// }else if(type === '3'){
 					
 				// }
+			},
+			showTicketInfo(){
+				this.hideTicketInfo = !this.hideTicketInfo;
 			},
 			setScore(val) {
 				let str = "";

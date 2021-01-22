@@ -77,8 +77,7 @@
 							<span v-show="item.Type === '5'">{{interestName}}</span>
 						</view>
 						<view style="width: 100px;text-align: center;">
-							<span class="" style="padding-left: 5px;">- ¥ {{item.Float}}</span>
-							
+							<span v-if="Number()>0" style="padding-left: 5px;" >- ¥ {{item.Float}}</span>
 						</view>
 					</view>					
 				</view>
@@ -219,31 +218,35 @@
 			</div>
 		</uni-popup>
 		<!-- 优惠方案弹窗 -->
-		<uni-popup ref="discountProgram" type="bottom">
-			<radio-group @change="setDiscountClick">
-				<ad-cell text="暂不使用" @click="DiscountClick('undefined')" showArrow="false">
-					<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioDiscount" />
-				</ad-cell>
-				<div v-for="(item,index) in DiscountList" :key="index">
-					<adCell :text="item.PrefName" showArrow="false" showBottomLine="false" @click="DiscountClick(item,1)">
-						<radio :value="item.PrefNo" :checked="item.PrefNo === radioDiscount" />
-					</adCell>
-				</div>
-			</radio-group>
+		<uni-popup ref="discountProgram" type="bottom" style="max-height:50%">
+			<div>
+				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
+					<radio-group @change="setDiscountClick" style="max-height: 300px;">
+						<ad-cell text="暂不使用" @click="DiscountClick('undefined')" showArrow="false">
+							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioDiscount" />
+						</ad-cell>
+						<div v-for="(item,index) in DiscountList" :key="index">
+							<adCell :text="item.PrefName" showArrow="false" showBottomLine="false" @click="DiscountClick(item,1)">
+								<radio :value="item.PrefNo" :checked="item.PrefNo === radioDiscount" />
+							</adCell>
+						</div>
+					</radio-group>
+				</scroll-view>			
+			</div>
 		</uni-popup>
 		<!-- 电子券弹窗 -->
 		<uni-popup ref="ticketProgram" type="bottom" style="max-height:50%">
-			<div >
+			<div style="height: 300px;">
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
-					<radio-group @change="setTicketClick">
+					<radio-group @change="setTicketClick" style="max-height:50%">
 						<ad-cell text="暂不使用" @click="ticketClick('undefined')" showArrow="false">
 							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioTicket" />
 						</ad-cell>
-						<div v-for="(item,index) in TicketList" :key="index">
+						<view v-for="(item,index) in TicketList" :key="index">
 							<adCell :text="item.TicketName" showArrow="false" showBottomLine="false" @click="ticketClick(item,1)">
 								<radio :value="item.TicketNo" :checked="item.TicketNo === radioTicket" />
 							</adCell>
-						</div>
+						</view>
 					</radio-group>
 				</scroll-view>
 			</div>		
@@ -252,7 +255,7 @@
 		<uni-popup ref="interestProgram" type="bottom" style="max-height:50%">
 			<div>
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
-					<radio-group @change="setBeneClick">
+					<radio-group @change="setBeneClick" style="max-height: 300px;">
 						<ad-cell text="暂不使用" @click="beneClick('undefined')" showArrow="false">
 							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioBene" />
 						</ad-cell>
@@ -581,8 +584,7 @@
 							if(Data.FloatLis){
 								this.FloatList = Data.FloatList;
 							}
-							this.CardInfo = Data.hasOwnProperty("CardInfo") ?
-								Data.CardInfo : {};
+							this.CardInfo = Data.hasOwnProperty("CardInfo") ? Data.CardInfo : {};
 							if (JSON.stringify(this.CardInfo) !== "{}") {
 								if (Number(Data.CardInfo.Balance) < Number(Data.SumTotal)) {
 									//余额不足默认微信支付

@@ -44,6 +44,10 @@
 			<div class="wu-cell goodCoupon-express lineTop">
 				<div style="flex:1">剩余库存：{{stockNum}}</div>
 			</div>
+			<div class="ImportantNotes-cell-group">
+				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>
+				<span style="margin: 5px 0;display: block;" v-if="goods.Tip">{{goods.Tip}}</span>
+			</div>
 			<!-- <div class="wu-cell goodCoupon-express lineTop" v-if="goods.StockType == '0'&&skuDataInfo.TotalSurplusQty>0">
 				<div style="flex:1">剩余库存：{{skuDataInfo.TotalSurplusQty}}</div>
 			</div> -->
@@ -53,17 +57,6 @@
 			</adCell>
 		</div>
 
-		<div class="ImportantNotes-cell-group" v-if="(goods.ImportantNotes||goods.Tip)">
-			<div>
-				<span class="goodCoupon-notice-title" v-if="goods.ImportantNotes">重要提示</span>
-				<div class="goodCoupon-notice-content" v-if="goods.ImportantNotes">
-					<div v-html="goods.ImportantNotes"></div>
-				</div>
-				<span class="goodCoupon-cell-line" v-if="goods.Tip&&goods.ImportantNotes"></span>
-				<span class="goodCoupon-notice-title" v-if="goods.Tip">预定提示</span>
-				<div class="goodCoupon-notice-content" v-if="goods.Tip">{{goods.Tip}}</div>
-			</div>
-		</div>
 		<div style="background-color: #fff" class="lineTop">
 			<view class="goodInfoNewsTitle">
 				<wuc-tab textFlex :tab-list="tabList" :tabCur.sync="TabCur" tab-class="'text-center','text-black','bg-white'"
@@ -85,6 +78,22 @@
 				</view>
 			</view>
 		</div>
+		<div v-if="(goods.ImportantNotes||goods.PromImportantNotes)">
+			<!-- <span class="goodCoupon-notice-title titleSize">重要提示</span> -->
+			<div v-html="goods.ImportantNotes" v-if="goods.ImportantNotes"></div>
+			<div v-html="goods.PromImportantNotes" v-if="goods.PromImportantNotes"></div>
+		</div>
+		
+		<!-- <div class="ImportantNotes-cell-group" v-if="(goods.ImportantNotes||goods.PromImportantNotes)">
+			<div>
+				<span class="goodCoupon-notice-title titleSize" v-if="goods.ImportantNotes||goods.PromImportantNotes">重要提示</span>
+				<div class="goodCoupon-notice-content" v-if="goods.ImportantNotes||goods.PromImportantNotes">
+					<div v-html="goods.ImportantNotes"></div>
+					<div v-html="goods.PromImportantNotes"></div>
+				</div>
+				
+			</div>
+		</div> -->
 		<!-- 底部占位 -->
 		<div class="goods-action">
 			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo.ProdInfo" :isStartIS="startIS" v-show="isBuyShow"></navSeckill> -->
@@ -180,17 +189,15 @@
 				this.goods.ImgList = this.goods.ImgList ? this.goods.ImgList.split(",") : [];
 				this.goods.ImgList.unshift(this.goods.Img)
 			}
-			this.goods.Features = this.goods.Features ?
-				Base64.decode(this.goods.Features) : "";
-			this.goods.ImportantNotes = this.goods.ImportantNotes ?
-				Base64.decode(this.goods.ImportantNotes) : "";
+			this.goods.Features = this.goods.Features ? Base64.decode(this.goods.Features) : "";
+			this.goods.ImportantNotes = this.goods.ImportantNotes ? Base64.decode(this.goods.ImportantNotes) : "";
+			this.goods.PromImportantNotes = this.goods.PromImportantNotes?Base64.decode(this.goods.PromImportantNotes):"";
 
 			//加图片 ../前缀
 			this.goods.Features = setfix(this.goods.Features, this);
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
-
+			this.goods.PromImportantNotes = setfix(this.goods.ImportantNotes, this);
 			this.tradeList()
-			console.log(this.goods,'44')
 			if(this.goods.BuyTime!='' || this.goods.StartTime!=''||this.goods.EndTime!=''){
 				let BuyTime = this.goods.BuyTime.split(',')
 				this.IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
@@ -205,6 +212,7 @@
 					backgroundColor: '#fe5252',
 					color: '#fff',
 					borderRadius: '25px',
+					disabled:this.skuDataInfo.IsBuy === '0'? true : false
 					// disabled: (this.skuDataInfo.IsBuy === '0' ||this.IsGoodBuyTime == false ||this.IsSeckillTime  == false ||
 					// this.goods.StockType != '0' && this.goods.StoreQty <= '0' || this.startIS !== true) ? true : false
 				})
@@ -613,6 +621,9 @@
 		.timeSty{
 			color:#ee0a24;
 			font-size:14px
+		}
+		.titleSize{
+			font-size: 14px;
 		}
 	}
 </style>

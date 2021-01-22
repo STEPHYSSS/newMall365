@@ -72,7 +72,7 @@
 				<div class="orderTime">
 					<div class="orderTime_label">订单编号：</div>
 					<span>{{OrderInfo.ExchNo}}</span>
-					<span class="copyText colorStyle" id="copyText" @click="copyTextFun(OrderInfo.SID)">复制</span>
+					<span class="copyText colorStyle" id="copyText" @click="copyTextFun(OrderInfo.ExchNo)">复制</span>
 					<div id="NewsToolBox"></div>
 				</div>
 				<div class="orderTime" v-if="OrderInfo.OrderType!=='3'">
