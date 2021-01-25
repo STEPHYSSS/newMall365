@@ -13,6 +13,7 @@ export default {
 	// BASE_URL_OnLine: 'http://dingtalk.bak365.cn/WeixinNew/Dist/',
 	BASE_URL_OnLine:BASE_URL_OnL,
 	BASE_URL_OnLine2:process.env.NODE_ENV === "development" ?'http://dingtalk.bak365.cn/WeixinNew/': BASE_URL_OnL,
-	Bak365_Dev:1
+	Bak365_Dev:1,
+	IsNewModule:1,//用来控制后面新功能开放展示
 	// BASE_URL: 'http://192.168.0.101:8001'
 }

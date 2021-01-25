@@ -62,7 +62,7 @@ App.mpType = 'app'
 Vue.prototype.$store = store
 Vue.prototype.$VUE_APP_PREFIX = dataConfig.VUE_APP_PREFIX
 Vue.prototype.$VUE_APP_PREFIX2 = dataConfig.BASE_URL_OnLine2 //用于图片路径
-Vue.prototype.$vconsole = new vconsole() // 使用vconsole
+// Vue.prototype.$vconsole = new vconsole() // 使用vconsole
 Vue.prototype.$UrlSearch = function (){
 	let name,value,str=window.location.href,num=str.indexOf("?"); //取得整个地址栏
 	str=str.substr(num+1); //取得所有参数 stringvar.substr(start [, length ]

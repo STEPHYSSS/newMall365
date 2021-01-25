@@ -11,13 +11,16 @@
 							<div data-lazy-log="1" :class="['cap-goods__img--'+currentObj.contain]" class="cap-goods__img" lazy="loaded"
 							 :style="{'background-image':`url(${setImgPrex(item.Img)})`}"></div>
 						</div>
-						<div class="timer-style">
-							<span class="timer-left">{{startIS?'距结束':'距开始'}}</span>
+						<!-- <div class="timer-style"> -->
+							<!-- <span class="timer-left">{{startIS?'距结束':'距开始'}}</span>
 							<span class="timer-right">
 								<uni-countdown color="#FFFFFF" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
 								 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
-							</span>
-						</div>
+							</span> -->
+							<!-- <div class="cap-goods-layout__tag small">
+							  <countDown :examInfo="item" :nowTime3 = curTime v-if="item" @autoSubmit="autoHandInExaminationPaper" ref="countDown" class="exam-interval fr"></countDown>    
+							</div> -->
+						<!-- </div> -->
 						<div>
 							<div class="bgcopacity" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></div>
 							<image :class="classObject" src="@/static/img/yishouqin.png" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></image>
@@ -34,10 +37,7 @@
 								<span>区域</span>
 							</div>
 							<img v-if="currentObj.typeSign==='4'&&currentObj.typeSignImg" :src="currentObj.typeSignImg |setImgPrex" class="cap-goods-layout__corner-mark cap-goods-layout__corner-mark--custom" />
-						</div>
-						<div class="cap-goods-layout__tag small">
-						  <countDown :examInfo="item" :nowTime3 = curTime v-if="item" @autoSubmit="autoHandInExaminationPaper" ref="countDown" class="exam-interval fr"></countDown>    
-						</div>
+						</div>						
 					</div>
 					<div class="cap-goods-layout__info" v-if="currentObj.textCenter&&currentObj.showContent">
 						<div class="has-title-1 has-subtitle-1 cap-goods-layout__info-title" :class="[currentObj.listStyle]" goods-index="0"
@@ -149,7 +149,6 @@
 				btnTitle: "马上抢",
 				countDownInfo: null, // 定时器所需信息
 				curTime: new Date().getTime(), // 当前服务器时间
-				startIS:false,
 				fakeData: [{
 						Img: "https://img.yzcdn.cn/public_files/2018/01/30/585dae8447d80013ef9344adc973c6ee.png",
 						Name: "这里显示商品名称，最多显示1行",
@@ -193,6 +192,8 @@
 					this.currentObj._Prod_Data = this.currentObj._Prod_Data.splice(0, goodsMaxNum)
 				}
 				this.currentGoodList = this.currentObj._Prod_Data;
+				// console.log(this.currentGoodList,'获取信息')
+				// this.getTimeout()
 				
 			} else {
 				this.currentGoodList =[];
@@ -211,12 +212,12 @@
 			},
 			getTimeout(current) {
 				let currentT = new Date().getTime()
-				let End = new Date(this.itemData.EndDate.replace(/-/g, '/')).getTime()
-				let Start = new Date(this.itemData.StartDate.replace(/-/g, '/')).getTime()
-				// let Start = new Date('2020-05-18 13:34:00').getTime()
-				// let End = new Date('2020-05-18 13:34:50').getTime()
+				let End = new Date(this.currentGoodList[0].EndDate.replace(/-/g, '/')).getTime()
+				let Start = new Date(this.currentGoodList[0].StartDate.replace(/-/g, '/')).getTime()
+				// let End = new Date('2020-05-18 14:55:50').getTime()
 				// false 活动未开始 true 活动开始了 end为活动结束
 				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
+				
 				let activeTimeMy = this.startIS ? End - currentT : Start - currentT
 				let myTime = activeTimeMy
 				this.activeTimeMy = {
@@ -225,7 +226,6 @@
 					minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
 					second: parseInt((myTime % (1000 * 60)) / 1000)
 				}
-			
 				if (!this.startIS) {
 					//表示活动已经结束
 					this.btnTitle = " 活动未开始";
@@ -264,7 +264,8 @@
 					path: '/pages/shoppingMall/list/infoGood',
 					query: {
 						SID: item.SID,
-						seckill: "true"
+						seckill: "true",
+						seckillHome:"true"
 					}
 				})
 			}

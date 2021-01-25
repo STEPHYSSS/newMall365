@@ -40,6 +40,16 @@
 					<input type="text" placeholder="请输入留言" v-model="UserRemarks">
 				</adCell>
 			</div>
+			<div class="setADcell" v-if="radioModes === 2">
+				<adCell @click="clickDataTime" :text="radioModes === 1?'选择自取时间':'选择收货时间'" showArrow="false" v-if="prodList[0].DeliveryType&&!(prodList[0].DeliveryType.indexOf('3')>-1&&radioModes === 2)">
+					<view class="customView">
+						{{UserTime}}
+					</view>
+				</adCell>
+				<adCell text="备注留言" showArrow="false" showBottomLine="false">
+					<input type="text" placeholder="请输入留言" v-model="UserRemarks">
+				</adCell>
+			</div>
 			<!-- 商品信息 -->
 			<div class="good_card_box">
 				<div v-for="(item,index) in prodList" :key="index" style="margin-bottom:10px">					
@@ -77,7 +87,7 @@
 							<span v-show="item.Type === '5'">{{interestName}}</span>
 						</view>
 						<view style="width: 100px;text-align: center;">
-							<span v-if="Number()>0" style="padding-left: 5px;" >- ¥ {{item.Float}}</span>
+							<span v-if="Number(item.Float)>0" style="padding-left: 5px;" >- ¥ {{item.Float}}</span>
 						</view>
 					</view>					
 				</view>
@@ -236,7 +246,7 @@
 		</uni-popup>
 		<!-- 电子券弹窗 -->
 		<uni-popup ref="ticketProgram" type="bottom" style="max-height:50%">
-			<div style="height: 300px;">
+			<div style="max-height: 300px;">
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
 					<radio-group @change="setTicketClick" style="max-height:50%">
 						<ad-cell text="暂不使用" @click="ticketClick('undefined')" showArrow="false">
@@ -581,7 +591,7 @@
 								TicketPrice:this.TicketPrice,
 								DiscPrice:this.DiscPrice
 							}
-							if(Data.FloatLis){
+							if(Data.FloatList){
 								this.FloatList = Data.FloatList;
 							}
 							this.CardInfo = Data.hasOwnProperty("CardInfo") ? Data.CardInfo : {};
@@ -1222,7 +1232,7 @@
 									id:'0'
 								}
 							})
-						}, 3000);
+						}, 5000);
 						this.payTypePop = false;
 						this.$refs.payTypePop.close();
 					} else {
@@ -1236,7 +1246,7 @@
 										path: "/pages/vip/allMyOrder",
 										query: {id: '0'}
 									})
-								}, 3000);
+								}, 5000);
 							}else{
 								weChatPayment(this, Data, false);
 							}
@@ -1409,6 +1419,7 @@
 		padding-bottom: 50px !important;
 	}
 	.confirm-order-style {
+		box-sizing: border-box;
 		margin-bottom: 80px;
 		.uni-popup {
 			z-index: 999

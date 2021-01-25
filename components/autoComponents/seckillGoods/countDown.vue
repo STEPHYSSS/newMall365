@@ -34,14 +34,13 @@
             nowTime3:Number
         },
         created() {
-            console.log(this.examInfo,this.nowTime3)
             // 统一单位 ，时间戳的单位是毫秒  除以1000变成秒
             this.nowTime = new Date(this.nowTime3).getTime()/1000;//转化为时间戳
-            this.starTime = new Date(this.examInfo.StartDate).getTime()/1000;
+            this.starTime = new Date(this.examInfo.StartDate).getTime()/1000;//开始时间
             if (this.examInfo.EndDate){
-                this.deadline = new Date(this.examInfo.EndDate).getTime()/1000;
+                this.deadline = new Date(this.examInfo.EndDate).getTime()/1000;//结束时间
             }
-            this.duration = (this.deadline-this.starTime)
+            this.duration = (this.deadline-this.starTime)//时长
             // this.duration = this.examInfo.duration*60;//时长  时长单位为分钟乘以60变成秒
         },
         mounted(){
@@ -54,7 +53,9 @@
             let that = this;
             if(starTime - nowTime >= 0 ){
                 this.title = "距开始"
-                this.lDur = parseInt(nowTime-starTime);
+                // this.lDur = parseInt(nowTime-starTime);
+				this.lDur = parseInt(starTime-nowTime)
+				console.log(this.lDur,'oooo')
             } else {
                 this.title = "距结束"
                 // 先将时间渲染到页面
@@ -88,7 +89,7 @@
             }
         },
         watch: {
-          lDur: function (val) { // 监听lDur小于0 时 提交试卷清除定时器
+          lDur: function (val) { // 监听lDur小于0 时 清除定时器
             if ((this.deadline && this.nowTime > this.deadline) || val < 0 ) {
               this.title="已结束"
 			  this.ds=0

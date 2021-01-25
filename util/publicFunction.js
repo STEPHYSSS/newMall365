@@ -218,7 +218,7 @@ export function weChatPayment(that, Data, bool) {
 
 	function onBridgeReady() {
 		let historyUrl=Cookies.get('historyUrl') || {}
-		console.log(historyUrl.path)
+		console.log(historyUrl.path,'wechat支付时调用的接口')
 		WeixinJSBridge.invoke(
 			"getBrandWCPayRequest", {
 				appId: Data.appId,

@@ -38,9 +38,19 @@
 						<div class="orderTime_label">优惠金额</div>
 						<span class="priceSpan">-¥{{OrderInfo.DiscAmt}}</span>
 					</div>
-					<div class="orderTime" v-if="Number(OrderInfo.TicketAmt)>0">
+					<!-- <div class="orderTime" v-if="Number(OrderInfo.TicketAmt)>0">
 						<div class="orderTime_label">电子券优惠</div>
 						<span class="priceSpan">-¥{{OrderInfo.TicketAmt}}</span>
+					</div> -->
+					<div class="orderTime" v-show="OrderInfo.TicketNo">
+						<p class="orderTime_label" @click="showTicketInfo">电子券优惠 
+						<!-- icon-xiajiantou -->
+							<!-- <span class="iconfont icon-jiantou" style="font-size: 12px;"></span> -->
+							<span class="iconfont" :class="hideTicketInfo===true?'icon-jiantou9':'icon-jiantou'" style="font-size: 12px;"></span>
+						</p>
+						<span class="priceSpan" v-if="Number(OrderInfo.TicketAmt)>0">-¥{{OrderInfo.TicketAmt}}</span>
+						<p v-show="hideTicketInfo">券编号：{{OrderInfo.TicketNo}}</p>
+						<p v-show="hideTicketInfo">券名称：{{OrderInfo.TicketName}}</p>
 					</div>
 					<div class="orderTime" v-if="Number(OrderInfo.ScoreAmt)>0">
 						<div class="orderTime_label">积分抵扣</div>
@@ -88,6 +98,14 @@
 					<span v-if="OrderInfo.PayTime">{{OrderInfo.PayTime}}</span>
 					<span v-else>--</span>
 				</div>
+				<div class="orderTime">
+					<div class="orderTime_label">提货时间：</div>
+					<span>{{OrderInfo.PickTime}}</span>
+				</div>
+				<div class="orderTime">
+					<div class="orderTime_label">下单备注：</div>
+					<span>{{OrderInfo.UserRemarks}}</span>
+				</div>
 			</div>
 		</div>
 		<div class="confirm-area-popup-fa">
@@ -126,7 +144,8 @@
 				Refund: {}, //退款信息
 				infoData: {},
 				orderId:'',
-				OrderType:''
+				OrderType:'',
+				hideTicketInfo:false
 			};
 		},
 		created() {
@@ -199,6 +218,9 @@
 					str = "¥" + val.PayAmt;
 				}
 				return str;
+			},
+			showTicketInfo(){
+				this.hideTicketInfo = !this.hideTicketInfo;
 			},
 			clickGo() {
 				this.$Router.push({

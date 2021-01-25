@@ -23,10 +23,10 @@
 		<div>
 			<div class="wu-cell" style="display: block;">
 				<div class="goodCoupon-title">{{ goods.Name }}</div>
-				<div class="goodCoupon-express" style="padding:0" v-if="skuDataInfo.IsBuy === '0'">
-					<span v-if="goods.BuyTime">商品可购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span><br/>					
-					<span v-if="goods.StartTime">活动可购买时间：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
-					
+				<!-- v-if="skuDataInfo.IsBuy === '0'" -->
+				<div class="goodCoupon-express" style="padding:0">
+					<span v-if="goods.BuyTime" style="display: block;">商品可购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span>					
+					<span v-if="goods.StartTime">商品购买时间段：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
 				</div>
 				<div class="goodCoupon-price ">
 					<div>

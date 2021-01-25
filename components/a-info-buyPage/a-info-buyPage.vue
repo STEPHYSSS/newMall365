@@ -83,23 +83,15 @@
 				<div style="flex:1" v-if="goods.StockType != 0">剩余库存：{{ Number(goods.StoreQty)}}</div>
 				<!--                <div v-if="!isCouponPage">规格：</div>-->
 			</div>
+			<div class="ImportantNotes-cell-group">
+				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>
+				<span style="margin: 5px 0;display: block;" v-if="goods.Tip">{{goods.Tip}}</span>
+			</div>
 		</div>
 
 		<div>
 			<adCell text="商城" icon="/static/img/shangcheng1.png" @click="clickShop" detail="进入店铺" :showBottomLine="false">
 			</adCell>
-		</div>
-
-		<div class="ImportantNotes-cell-group" v-if="!isCouponPage&&(goods.ImportantNotes||goods.Tip)">
-			<div>
-				<span class="goodCoupon-notice-title" v-if="goods.ImportantNotes">重要提示</span>
-				<div class="goodCoupon-notice-content" v-if="goods.ImportantNotes">
-					<div v-html="goods.ImportantNotes"></div>
-				</div>
-				<span class="goodCoupon-cell-line" v-if="goods.Tip&&goods.ImportantNotes"></span>
-				<span class="goodCoupon-notice-title" v-if="goods.Tip">预定提示</span>
-				<div class="goodCoupon-notice-content" v-if="goods.Tip">{{goods.Tip}}</div>
-			</div>
 		</div>
 		<div v-if="!isIntegral&&!seckill">
 			<adCell detail="查看全部" :text="`用户评价(${goods.CommentCnt&&Number(goods.CommentCnt)!==0?goods.CommentCnt:0})`" @click="userEvaluation(goods)"
@@ -126,6 +118,17 @@
 					<view class="tableRow_col">{{item.AddTime}}</view>
 				</view>
 			</view>
+		</div>
+		<div class="ImportantNotes-cell-group" v-if="!isCouponPage&&(goods.ImportantNotes||goods.Tip)">
+			<div>
+				<!-- <span class="goodCoupon-notice-title" v-if="goods.ImportantNotes">重要提示</span> -->
+				<div class="goodCoupon-notice-content" v-if="goods.ImportantNotes">
+					<div v-html="goods.ImportantNotes"></div>
+				</div>
+				<!-- <span class="goodCoupon-cell-line" v-if="goods.Tip&&goods.ImportantNotes"></span>
+				<span class="goodCoupon-notice-title" v-if="goods.Tip">预定提示</span>
+				<div class="goodCoupon-notice-content" v-if="goods.Tip">{{goods.Tip}}</div> -->
+			</div>
 		</div>
 		<div class="goods-action" v-show="goods.ProdType == '0'">
 			<!-- 当状态等于0下面的框是绿色，如果下面goods.StockType != '0'&& item.StoreQty <= '0'" 那么下面的框就是灰色不让点击 -->

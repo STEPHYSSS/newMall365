@@ -44,7 +44,7 @@
 						<span class="priceSpan">¥{{OrderInfo.ProdAmt}}</span>
 					</div>
 					<div class="orderTime" v-if="Number(OrderInfo.DiscAmt)>0">
-						<div class="orderTime_label">方案优惠</div>
+						<div class="orderTime_label">优惠</div>
 						<span class="priceSpan">-¥{{OrderInfo.DiscAmt}}</span>
 					</div>
 					<div class="orderTime" v-show="OrderInfo.TicketNo">
@@ -121,6 +121,14 @@
 					<div class="orderTime_label">支付时间：</div>
 					<span v-if="OrderInfo.PayTime">{{OrderInfo.PayTime}}</span>
 					<span v-else>--</span>
+				</div>
+				<div class="orderTime">
+					<div class="orderTime_label">提货时间：</div>
+					<span>{{OrderInfo.PickTime}}</span>
+				</div>
+				<div class="orderTime">
+					<div class="orderTime_label">下单备注：</div>
+					<span>{{OrderInfo.UserRemarks}}</span>
 				</div>
 			</div>
 		</div>

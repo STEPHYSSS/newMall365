@@ -106,12 +106,14 @@
 					this.$Router.push('/pages/shoppingMall/list/goodsList')
 				} else if (this.$Route.query.isIntegral) {
 					this.$Router.push('/pages/integralMall/index')
-				} else if (this.seckill) {
-					this.$Router.push('/pages/shoppingMall/seckill/index')
 				} else if (this.$Route.query.admin) {
 					//从首页点击进来
 					this.$Router.push('/pages/shoppingMall/index')
-				}
+				}else if(this.$Route.query.seckillHome&&this.seckill){
+					this.$Router.push('/pages/shoppingMall/index')
+				}else if (this.seckill) {
+					this.$Router.push('/pages/shoppingMall/seckill/index')
+				} 
 				// else if(this.$Route.query.makeUpGroup){
 				// 	this.$Router.push('/pages/shoppingMall/makeUpGroup/index')
 				// }

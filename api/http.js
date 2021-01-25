@@ -17,7 +17,7 @@ export const vipCard = (data, ViewKay, AppNo) => {
 					// h5
 					// let UserMACPhone = sessionStorage.getItem('UserMACPhone')
 					let UserMACPhone = Cookies.get("UserMACPhone")
-					// let UserMACPhone = 'db333836b94e470079cc5f5623400931u'
+					// let UserMACPhone = '4f2779083e6b43309a75f29c768dc5a4u'
 					// let AppNo = Cookies.get('AppNo') ? Cookies.get('AppNo') : AppNo
 					let AppNo = sessionStorage.getItem('AppNo')
 					
@@ -46,15 +46,15 @@ export const vipCard = (data, ViewKay, AppNo) => {
 									uni.hideLoading();
 									return resolve(response.data)
 								} else {
-									// console(response.data.Message)
-									if(response.data.Message!='暂无赠送信息'){
-										uni.showToast({
-											title: response.data.Message,
-											icon: 'none'
-										});
-									}else{
-										sessionStorage.setItem("IsCoupon",response.data.Message)
-									}									
+									// if(response.data.Message!='暂无赠送信息'){
+									// 	uni.showToast({
+									// 		title: response.data.Message,
+									// 		icon: 'none'
+									// 	});
+									// }else{
+									// 	sessionStorage.setItem("IsCoupon",response.data.Message)
+									// }									
+									sessionStorage.setItem("IsCoupon","1")
 									uni.hideLoading();
 									return reject(response.data.Message || '操作失败')
 								}
