@@ -86,7 +86,7 @@
 							<span v-show="item.Type === '4'">{{UserDiscountName}}</span>
 							<span v-show="item.Type === '5'">{{interestName}}</span>
 						</view>
-						<view style="width: 100px;text-align: center;">
+						<view style="width: 110px;text-align: right;">
 							<span v-if="Number(item.Float)>0" style="padding-left: 5px;" >- ¥ {{item.Float}}</span>
 						</view>
 					</view>					
@@ -96,7 +96,7 @@
 						<view style="flex: 1;">
 							<span style="">{{UserTicketName}}</span>
 						</view>
-						<view style="width: 100px;text-align: center;">
+						<view style="width: 110px;text-align: right;">
 							<span class="" style="padding-left: 5px;" >- ¥ {{TicketPrice}}</span>
 							
 						</view>
@@ -107,7 +107,7 @@
 				<view style="flex: 1;">
 					<span>总计 ¥ {{ProdTotal}}</span> <span style="display: inline-block;margin-left: 10px;" v-if="sumPrice>0">优惠 ¥ {{sumPrice}}</span>
 				</view>
-				<view style="width: 110px;text-align: center;">
+				<view style="width: 110px;text-align: right;padding-right: 1px;">
 					实付<span style="padding-left: 5px;color: #ff8917;">¥ {{total}}</span>
 				</view>
 			</view>
@@ -320,14 +320,13 @@
 		setUrlDelCode
 	} from "@/util/publicFunction";
 	import wx from 'weixin-js-sdk'
-	// import Mixins from "../mixins.js";
-	import Mixins from "@/pages/mixins.js";
+	// import Mixins from "@/pages/mixins.js";
 	import adCell from '@/node_modules/adcell/ADCell.vue';
 	import lineBoxConfirm from '@/components/a-good-lineBox/a-good-lineBoxConfirm'
 	import Cookies from '@/config/cookie-my/index.js';
 	export default {
 		name: "confirmOrder",
-		mixins: [Mixins],
+		// mixins: [Mixins],
 		components: {
 			// receiveAddress
 			adCell,
@@ -629,20 +628,32 @@
 							}
 							let num = Number(Data.ShopBase.ScopeDay);//获取商城的提货期限 后台默认7天
 							let dayAdvance = 0;//提前天数
-							let tAdvance = 0;//提前时间
+							let tAdvance = 0;//提前时间		
 							let advanceTime = 0;//日期 当FinType==1&&FinHour>0就代表这有提前日期  //提前的时间+当前的时间>下班时间 的情况下就延迟到第二天							
 							let startTime = countDown(Data.ShopBase.StartTime);//商城开始时间秒数
 							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
 							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间
 							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
 							// jka
+							console.log(new Date().getMinutes().toString(),'系统时间')
 							if(FinTypeCun==='2'){
-								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间		
+								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间	
+									console.log(dayTime,'一天营业时间')
+								
 								if((acTime + cutTime).toFixed(2) > endTime){//提前小时+当前时间>商城结束时间	
 									let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
-									let mallTime = (acTime-(endTime - cutTime))/60/60;
-									dayAdvance+=Number(mallTime)/dayTime//然后算出提前时间减去结束时间-当前时间的是否大于一天
-									FinTypeDay=parseInt(dayAdvance)+parseInt(time);
+									if(cutTime>endTime){
+										// 只要当前时间大于结束时间，那么就自动往后加一天然后加上提前的小时换算成天加在一起
+										// FinTypeDay = Number(dayAdvance)+1
+									}	
+									// let mallTime = (acTime-(endTime - cutTime))/60/60;
+									let a = endTime-cutTime;
+									let b = cutTime-endTime;
+									console.log(a,b,'a是结束时间减去当前时间','b是当前时间减掉结束时间')
+									// 提前小时-结束时间-当前时间
+									// dayAdvance+=Number(mallTime)/dayTime//然后算出提前时间减去结束时间-当前时间的是否大于一天
+									FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time);
+									console.log(FinTypeDay,'FinTypeDay')
 									tAdvance = Number(FinTypeHour);//提前小时
 								}else {
 									if(cutTime>endTime){
@@ -726,53 +737,52 @@
 			// 	}
 			// },
 			orderArea() {},
-			// async getWxConfig() {
-			// 	try {
-			// 		let {
-			// 			Data
-			// 		} = await vipCard({
-			// 			Action: "GetJSSDK",
-			// 			Url: window.location.href
-			// 		}, "UProdOpera");
-			// 		wx.config({
-			// 			debug: false,
-			// 			appId: Data.SDK.appId,
-			// 			timestamp: Data.SDK.timestamp,
-			// 			nonceStr: Data.SDK.noncestr,                                                                                                                                                                                                                                             
-			// 			signature: Data.SDK.signature,
-			// 			jsApiList: ["getLocation", "openAddress", "scanQRCode"]
-			// 		});
-			// 		wx.ready(res => {
-			// 			let _this = this;
-			// 			wx.getLocation({
-			// 				type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-			// 				success: function(res) {
-			// 					// alert(JSON.stringify(res))
-			// 					// _this.location.latitude = res.latitude;// 纬度，浮点数，范围为90 ~ -90
-			// 					// _this.location.longitude = res.longitude;// 经度，浮点数，范围为180 ~ -180。
-			// 					_this.location = {
-			// 						longitude: res.longitude,
-			// 						latitude: res.latitude
-			// 					}
-			// 					_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
-			// 					sessionStorage.setItem('location', JSON.stringify(_this.location))
-			// 				},
-			// 				cancel: function(res) {
-			// 					this.$toast.fail(res);
-			// 				}
-			// 			});
-			// 			wx.error(function(res) {
-			// 				this.$toast.fail(res);
-			// 				// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-			// 				console.log("调用微信接口获取当前位置失败", res);
-			// 			});
-			// 		})
-			// 	} catch (e) {
-			// 		this.$toast.fail(e);
-			// 	}
-			// },
+			async getWxConfig() {
+				try {
+					let {
+						Data
+					} = await vipCard({
+						Action: "GetJSSDK",
+						Url: window.location.href
+					}, "UProdOpera");
+					wx.config({
+						debug: false,
+						appId: Data.SDK.appId,
+						timestamp: Data.SDK.timestamp,
+						nonceStr: Data.SDK.noncestr,                                                                                                                                                                                                                                             
+						signature: Data.SDK.signature,
+						jsApiList: ["getLocation", "openAddress", "scanQRCode"]
+					});
+					wx.ready(res => {
+						let _this = this;
+						wx.getLocation({
+							type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+							success: function(res) {
+								// alert(JSON.stringify(res))
+								// _this.location.latitude = res.latitude;// 纬度，浮点数，范围为90 ~ -90
+								// _this.location.longitude = res.longitude;// 经度，浮点数，范围为180 ~ -180。
+								_this.location = {
+									longitude: res.longitude,
+									latitude: res.latitude
+								}
+								_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
+								sessionStorage.setItem('location', JSON.stringify(_this.location))
+							},
+							cancel: function(res) {
+								this.$toast.fail(res);
+							}
+						});
+						wx.error(function(res) {
+							this.$toast.fail(res);
+							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+							console.log("调用微信接口获取当前位置失败", res);
+						});
+					})
+				} catch (e) {
+					this.$toast.fail(e);
+				}
+			},
 			getAddress() { //获取共享地址
-			// debugger
 				let _this = this;
 				wx.openAddress({
 					success: function(res) {
@@ -1316,25 +1326,65 @@
 		let endTime = countDown(ShopBase.EndTime);
 		let cutTime = countDown(getTime(false, false, true));//当前时间
 		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间	
-
-		if((acTime + cutTime).toFixed(2) > endTime){//提前小时+当前时间>商城结束时间	
-					
+		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
 			/*
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
 				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算			
 			*/
-			let mallTime = (acTime-(endTime - cutTime));
-			// console.log(mallTime,'zheli')
+		  //  if(endTime-cutTime>0){
+			 //   let mallTime = (acTime-(endTime - cutTime));
+				// console.log(mallTime,'zheli')
+				// while (Number(startTime)+Number(mallTime) <= endTime) {
+				// 	arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
+				// 	startTime += a;
+				// 	console.log(startTime)
+				// }
+				// arrToday = arr;	
+		  //  }else{
+			   // let time = Number(tAdvance)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
+			   // let mallTime = (Number(tAdvance)%dayTime) * 60 * 60
+			   // // console.log(mallTime,'剩余几个小时')
+			   // // 如果当前时间大于结束时间，那么就用提前时间减去商城的营业时间，然后看看剩下的时间
+			   // while (Number(startTime)+Number(mallTime) <= endTime) {
+			   // 	arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
+			   // 	startTime += a;
+			   // 	// console.log(startTime)
+			   // }
+			   // arrToday = arr;		
+		   // }
+		   // debugger
+			let mallTime = 0;
+			if(endTime-cutTime>0){
+				let mouTime = (acTime-(endTime - cutTime))
+				// 提前的时间还剩下几个小时
+				mallTime = 	(Number(mouTime/60/60)%dayTime)* 60 * 60
+				// console.log(mallTime,'55')
+			}else{
+				mallTime = (Number(tAdvance)%dayTime) * 60 * 60
+			}
 			while (Number(startTime)+Number(mallTime) <= endTime) {
 				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
 				startTime += a;
+				// console.log(startTime)
 			}
-			arrToday = arr;			
-			
-		}else{
-			while (startTime <= endTime) {
-				arr.push(changeCountDown(startTime));
-				startTime += a;
+			arrToday = arr;	
+		}else{			
+			// while (startTime <= endTime) {
+			// 	arr.push(changeCountDown(startTime));
+			// 	startTime += a;
+			// }
+			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
+			let tomorrow = endTime - cutTime;
+			if(cutTime-startTime>0){
+				while (cutTime <= endTime) {
+					arr.push(changeCountDown(cutTime));
+					cutTime += a;
+				}
+			}else {
+				while (startTime <= endTime) {
+					arr.push(changeCountDown(startTime));
+					startTime += a;
+				}
 			}
 			if (dayAdvance == 0) {
 				arr.forEach(DATA => {
@@ -1410,10 +1460,12 @@
 		margin-top: 5px;
 	}
 	.onlyPrice{
-		padding: 0 12px;display: inline-block;height: 40px;line-height: 40px;display: flex;
+		padding: 0 12px;height: 40px;line-height: 40px;
+		display: flex;
+		box-sizing: border-box;
 	}
 	.Discount{
-		padding: 0 12px;display: inline-block;height: 34px;line-height: 34px;display: flex;color: #ff8917;
+		padding: 0 12px;box-sizing: border-box;height: 34px;line-height: 34px;display: flex;color: #ff8917;
 	}
 	.activePrice{
 		padding-bottom: 50px !important;

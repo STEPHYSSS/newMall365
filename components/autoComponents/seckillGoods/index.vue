@@ -4,23 +4,20 @@
 		<ul class="cap-goods-layout__container card" :class="[currentObj.listStyle,currentObj.goodStyle]" :style="{'padding-left':currentObj.pageSpace +'px','padding-right':currentObj.pageSpace +'px',
           'margin-left':-(currentObj.goodSpace/2)+'px','margin-right':-(currentObj.goodSpace/2)+'px'}">
 			<li class="cap-goods-layout__wrapper cap-goods-layout__wrapper--0" v-for="(item,index) in currentGoodList" :key="index">
-				<a @click="urlGoodClick(item)" log-params="null" class="cap-goods-layout__item card" style="margin: 5px;" :class="[currentObj.listStyle,currentObj.goodStyle,currentObj.chamfer]"
+				<!-- <a @click="urlGoodClick(item)" log-params="null" class="cap-goods-layout__item card" style="margin: 5px;" :class="[currentObj.listStyle,currentObj.goodStyle,currentObj.chamfer]"
 				 :style="{'margin':(currentObj.goodSpace/2)+'px'}">
 					<div class="cap-goods__photo">
 						<div class="cap-goods__image-wrap" :style="{'padding-top':currentObj.imgScale+ '%'}">
 							<div data-lazy-log="1" :class="['cap-goods__img--'+currentObj.contain]" class="cap-goods__img" lazy="loaded"
 							 :style="{'background-image':`url(${setImgPrex(item.Img)})`}"></div>
 						</div>
-						<!-- <div class="timer-style"> -->
-							<!-- <span class="timer-left">{{startIS?'距结束':'距开始'}}</span>
+						<div class="timer-style">
+							<span :class="currentObj.listStyle==='list'?'timer-left2':'timer-left'">{{startIS?'距结束':'距开始'}}</span>
 							<span class="timer-right">
 								<uni-countdown color="#FFFFFF" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
 								 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
-							</span> -->
-							<!-- <div class="cap-goods-layout__tag small">
-							  <countDown :examInfo="item" :nowTime3 = curTime v-if="item" @autoSubmit="autoHandInExaminationPaper" ref="countDown" class="exam-interval fr"></countDown>    
-							</div> -->
-						<!-- </div> -->
+							</span>
+						</div>
 						<div>
 							<div class="bgcopacity" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></div>
 							<image :class="classObject" src="@/static/img/yishouqin.png" v-if="item.StockType != '0'&& item.StoreQty <= '0'"></image>
@@ -57,14 +54,11 @@
                  'font-weight': currentObj.fontWeight}">
 								<span class="sale-price" v-if="currentObj.showContent.indexOf('3')>-1">
 									<div class="cap-theme-view" style="color: rgb(255, 68, 68);">
-										<span v-if="item.MemberPrice">
-											<span class="price-tag">¥{{item.MemberPrice}}</span>
-											<span style="text-decoration:line-through;color: #969799;font-size:8pt;padding-left: 6px;">¥{{item.SalePrice}}</span>
+										<span v-if="item.SalePrice">
+											<span class="price-tag" style="font-size: 20px;">¥{{item.SalePrice}}</span>
+											<span style="text-decoration:line-through;color: #969799;font-size:8pt;padding-left: 6px;">¥{{item.OldPrice}}</span>
 										</span>
-										<span class="price-tag" v-else>¥{{item.SalePrice}}</span>
-										<!-- <span class="price-tag">¥</span>
-										{{item.SalePrice}}
-										 -->
+										<span class="price-tag" v-else>¥{{item.OldPrice}}</span>
 									</div>
 								</span>
 							</div>
@@ -87,7 +81,8 @@
 							</div>
 						</div>
 					</div>
-				</a>
+				</a> -->
+				<miaosha-goods :propsObj = "propsObj" :goods="item"></miaosha-goods>
 			</li>
 		</ul>
 	</div>
@@ -96,9 +91,11 @@
 <script>
 	import Mixins from "../public";
 	import countDown from "./countDown.vue"
+	import miaoshaGoods from "./miaoshaGoods.vue"
 	import {
 		GetBaseImgUrl
 	} from "@/util/publicFunction";
+	
 	export default {
 		mixins: [Mixins],
 		name: "",
@@ -177,7 +174,7 @@
 				// reportErrorsFun:true
 			};
 		},
-		components: {countDown},
+		components: {countDown,miaoshaGoods},
 		mounted() {
 			this.currentObj.showContent = this.currentObj.showContent ?
 				this.currentObj.showContent : [];
@@ -193,7 +190,7 @@
 				}
 				this.currentGoodList = this.currentObj._Prod_Data;
 				// console.log(this.currentGoodList,'获取信息')
-				// this.getTimeout()
+				// this.finishTimer()
 				
 			} else {
 				this.currentGoodList =[];
@@ -210,22 +207,39 @@
 					this.getTimeout()
 				}, 1000)
 			},
+			
 			getTimeout(current) {
 				let currentT = new Date().getTime()
-				let End = new Date(this.currentGoodList[0].EndDate.replace(/-/g, '/')).getTime()
-				let Start = new Date(this.currentGoodList[0].StartDate.replace(/-/g, '/')).getTime()
+				let End = "";
+				let Start = "";
+				this.currentGoodList.forEach((item,index)=>{
+					End =  new Date(item.EndDate.replace(/-/g, '/')).getTime();
+					Start = new Date(item.StartDate.replace(/-/g, '/')).getTime();
+					this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
+					
+					let activeTimeMy = this.startIS ? End - currentT : Start - currentT
+					let myTime = activeTimeMy
+					this.activeTimeMy = {
+						day: parseInt(myTime / (1000 * 60 * 60 * 24)),
+						hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
+						minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
+						second: parseInt((myTime % (1000 * 60)) / 1000)
+					}
+				})
+				// let End = new Date(this.currentGoodList[0].EndDate.replace(/-/g, '/')).getTime()
+				// let Start = new Date(this.currentGoodList[0].StartDate.replace(/-/g, '/')).getTime()
 				// let End = new Date('2020-05-18 14:55:50').getTime()
 				// false 活动未开始 true 活动开始了 end为活动结束
-				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
+				// this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
 				
-				let activeTimeMy = this.startIS ? End - currentT : Start - currentT
-				let myTime = activeTimeMy
-				this.activeTimeMy = {
-					day: parseInt(myTime / (1000 * 60 * 60 * 24)),
-					hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
-					minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
-					second: parseInt((myTime % (1000 * 60)) / 1000)
-				}
+				// let activeTimeMy = this.startIS ? End - currentT : Start - currentT
+				// let myTime = activeTimeMy
+				// this.activeTimeMy = {
+				// 	day: parseInt(myTime / (1000 * 60 * 60 * 24)),
+				// 	hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
+				// 	minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
+				// 	second: parseInt((myTime % (1000 * 60)) / 1000)
+				// }
 				if (!this.startIS) {
 					//表示活动已经结束
 					this.btnTitle = " 活动未开始";
@@ -336,6 +350,9 @@
 	
 		.timer-left {
 			padding-left: 5px;
+		}
+		.timer-left2{
+			padding-left: 0;
 		}
 	}
 	

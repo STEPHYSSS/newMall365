@@ -17,8 +17,11 @@
 						<!-- #ifdef H5 -->
 						<img class="cap-cube__table-image--invisible" :src="item.img |fmtImgUrl" alt="loaded" />
 						<!-- #endif -->
+						<!-- <a :href="item.urlObj.url">超链接</a> -->
 					</div>
+					
 				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -70,7 +73,9 @@
 				listBox: [],
 				bigBoxM: 0,
 				bigBoxH: 0,
-				bigBoxW: 0
+				bigBoxW: 0,
+				SpecResultPrice:"",
+				
 			};
 		},
 		mounted() {
@@ -90,12 +95,15 @@
 				}
 			},
 			clickLink(item) {
+				console.log(item.urlObj.url,'自定义页面')
 				// 点击跳转
+				
 				if (item.urlObj && item.urlObj.url) {
 					// let url = item.urlObj.url.split('#');
+					// let b = url[1].split('=')					
 					// if(url!=url[0]){
 					   window.location.href = item.urlObj.url
-					//    console.log(item.urlObj.url,'888')
+					   
 					// }else
 					// {
 						// let path = url[1];
@@ -234,7 +242,7 @@
 			'propsObj.changeMode'(val) {
 				this.changeBox();
 			}
-		}
+		},
 	};
 </script>
 

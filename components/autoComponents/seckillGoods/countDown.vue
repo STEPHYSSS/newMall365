@@ -46,6 +46,7 @@
         mounted(){
             // 创建倒计时
             clearInterval(this.timeName);
+			debugger
             let duration = this.duration;
             let nowTime = this.nowTime;
             let starTime = this.starTime;           

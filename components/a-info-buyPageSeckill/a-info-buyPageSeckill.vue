@@ -83,7 +83,6 @@
 			<div v-html="goods.ImportantNotes" v-if="goods.ImportantNotes"></div>
 			<div v-html="goods.PromImportantNotes" v-if="goods.PromImportantNotes"></div>
 		</div>
-		
 		<!-- <div class="ImportantNotes-cell-group" v-if="(goods.ImportantNotes||goods.PromImportantNotes)">
 			<div>
 				<span class="goodCoupon-notice-title titleSize" v-if="goods.ImportantNotes||goods.PromImportantNotes">重要提示</span>
@@ -192,11 +191,10 @@
 			this.goods.Features = this.goods.Features ? Base64.decode(this.goods.Features) : "";
 			this.goods.ImportantNotes = this.goods.ImportantNotes ? Base64.decode(this.goods.ImportantNotes) : "";
 			this.goods.PromImportantNotes = this.goods.PromImportantNotes?Base64.decode(this.goods.PromImportantNotes):"";
-
 			//加图片 ../前缀
 			this.goods.Features = setfix(this.goods.Features, this);
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
-			this.goods.PromImportantNotes = setfix(this.goods.ImportantNotes, this);
+			this.goods.PromImportantNotes = setfix(this.goods.PromImportantNotes, this);
 			this.tradeList()
 			if(this.goods.BuyTime!='' || this.goods.StartTime!=''||this.goods.EndTime!=''){
 				let BuyTime = this.goods.BuyTime.split(',')
