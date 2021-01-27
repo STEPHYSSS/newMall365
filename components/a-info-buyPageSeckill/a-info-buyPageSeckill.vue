@@ -25,7 +25,7 @@
 				<div class="goodCoupon-title">{{ goods.Name }}</div>
 				<!-- v-if="skuDataInfo.IsBuy === '0'" -->
 				<div class="goodCoupon-express" style="padding:0">
-					<span v-if="goods.BuyTime" style="display: block;">商品可购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span>					
+					<span v-if="goods.BuyTime" style="display: block;">商品购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span>					
 					<span v-if="goods.StartTime">商品购买时间段：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
 				</div>
 				<div class="goodCoupon-price ">
@@ -78,29 +78,19 @@
 				</view>
 			</view>
 		</div>
-		<div v-if="(goods.ImportantNotes||goods.PromImportantNotes)">
+		<div v-if="(goods.ImportantNotes||goods.PromImportantNotes)" style="background-color: #FFFFFF;">
 			<!-- <span class="goodCoupon-notice-title titleSize">重要提示</span> -->
 			<div v-html="goods.ImportantNotes" v-if="goods.ImportantNotes"></div>
 			<div v-html="goods.PromImportantNotes" v-if="goods.PromImportantNotes"></div>
 		</div>
-		<!-- <div class="ImportantNotes-cell-group" v-if="(goods.ImportantNotes||goods.PromImportantNotes)">
-			<div>
-				<span class="goodCoupon-notice-title titleSize" v-if="goods.ImportantNotes||goods.PromImportantNotes">重要提示</span>
-				<div class="goodCoupon-notice-content" v-if="goods.ImportantNotes||goods.PromImportantNotes">
-					<div v-html="goods.ImportantNotes"></div>
-					<div v-html="goods.PromImportantNotes"></div>
-				</div>
-				
-			</div>
-		</div> -->
 		<!-- 底部占位 -->
 		<div class="goods-action">
-			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo.ProdInfo" :isStartIS="startIS" v-show="isBuyShow"></navSeckill> -->
-			<navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" 
-			:isStartIS="startIS" :IsSeckillTime="IsSeckillTime" :IsGoodBuyTime="IsGoodBuyTime" @buttonClick="addCart" @click="jumpCart"></navSeckill>
+			<navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" @buttonClick="addCart" :IsTimeObj = "IsTimeObj"></navSeckill>
+			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" 
+			:isStartIS="startIS" :IsSeckillTime="IsSeckillTime" :IsGoodBuyTime="IsGoodBuyTime" @buttonClick="addCart" @click="jumpCart"></navSeckill> -->
 		</div>
 		<!-- 商品弹窗 -->
-		<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :isStartIS="startIS" :IsSeckillTime="IsSeckillTime" :seckill="seckill"></showSkuSeckill>
+		<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :seckill="seckill"></showSkuSeckill>
 	</div>
 </template>
 
@@ -177,13 +167,12 @@
 				buttonGroup: [],
 				activeTimeMy: {},
 				IsGoodBuyTime:false,
-				IsSeckillTime:false,
+				IsTimeObj:{},//所有时间数组
 				showStock:true,
 				stockNum:''
 			};
 		},
 		created() {
-			// $.base64.atob(this.goods.Features, "utf8")
 			if(this.goods.ImgList.length>0){
 				this.goods.ImgList = this.goods.ImgList ? this.goods.ImgList.split(",") : [];
 				this.goods.ImgList.unshift(this.goods.Img)
@@ -196,28 +185,36 @@
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
 			this.goods.PromImportantNotes = setfix(this.goods.PromImportantNotes, this);
 			this.tradeList()
-			if(this.goods.BuyTime!='' || this.goods.StartTime!=''||this.goods.EndTime!=''){
-				let BuyTime = this.goods.BuyTime.split(',')
-				this.IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
-				this.IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)
-			}else{
-				this.IsGoodBuyTime = true;
-				this.IsSeckillTime = true
+			
+			let BuyTime = this.goods.BuyTime.split(',')
+			let IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
+			let IsEndDate = this.isDuringDate(this.goods.StartDate,this.goods.EndDate)//活动日期
+			let IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)//活动时间段
+			let IsPromWeeks= this.getWeekDate(this.goods.PromWeeks);//秒杀活动的周
+			let IsPromDate = this.IsDuringDay(this.goods.PromDates);//秒杀活动的天
+			let IsBuy = this.skuDataInfo.IsBuy !== '0'? true : false;
+			let IsStart = this.startIS !== true? true : false;
+			this.IsTimeObj = {
+				IsEndDate:IsEndDate,
+				IsSeckillTime:IsSeckillTime,
+				IsGoodBuyTime:IsGoodBuyTime,
+				IsPromWeeks:IsPromWeeks,
+				IsPromDate:IsPromDate,
+				IsBuy:IsBuy,
+				IsStart:IsStart
 			}
-			if (this.seckill) {
-				this.buttonGroup.push({
-					text: '立即抢购',
-					backgroundColor: '#fe5252',
-					color: '#fff',
-					borderRadius: '25px',
-					disabled:this.skuDataInfo.IsBuy === '0'? true : false
-					// disabled: (this.skuDataInfo.IsBuy === '0' ||this.IsGoodBuyTime == false ||this.IsSeckillTime  == false ||
-					// this.goods.StockType != '0' && this.goods.StoreQty <= '0' || this.startIS !== true) ? true : false
-				})
-			}
-			// if(goods.StockType!=0&&goods.StoreQty>0&&skuDataInfo.TotalSurplusQty>0){
-			// 	// stockNum
-			// }
+			console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
+			this.buttonGroup.push({
+				text: '立即抢购',
+				backgroundColor: '#fe5252',
+				color: '#fff',
+				borderRadius: '25px',
+				// disabled:this.startIS !== true? true : false
+				// disabled:this.skuDataInfo.IsBuy !== '0'? true : false
+				// disabled: (this.skuDataInfo.IsBuy === '0' ||this.IsGoodBuyTime == false ||this.IsSeckillTime  == false ||
+				// this.goods.StockType != '0' && this.goods.StoreQty <= '0' || this.startIS !== true) ? true : false
+			})
+				
 			// 判断当商品库存状态为0的时候同时判断活动库存是否大于0，大于的话就展示
 			if(this.goods.StockType == '0'&& this.skuDataInfo.TotalSurplusQty>=0){
 				this.stockNum = this.skuDataInfo.TotalSurplusQty;
@@ -227,7 +224,8 @@
 				this.stockNum = this.skuDataInfo.TotalSurplusQty;
 			}
 		},
-		mounted() {			
+		mounted() {		
+			
 			this.classA = {
 				// 图片和屏幕的width一样大
 				height: uni.getSystemInfoSync().windowWidth + "px"
@@ -237,7 +235,39 @@
 			// #endif			
 		},
 		methods: {
-			isDuringDate(beginDateStr, endDateStr){
+			getWeekDate(Prweek) {
+			   var now = new Date();
+			   var day = now.getDay();
+			   var weeks = new Array("0", "1", "2", "3", "4", "5", "6");			  
+			   var week = weeks[day];
+			   if(Prweek){
+				   if(Prweek.indexOf(week)>-1){
+				   				 return true;
+				   }
+				   return false;
+			   }else{
+					return true
+				}
+			   
+			},
+			IsDuringDay(PromDates){
+				var date = new Date();
+				var day = date.getDate();
+				if (day < 10) {
+				    day = "0" + day;
+				}
+				let nowDay =  day;
+				if(PromDates){
+					if(PromDates.indexOf(nowDay)>-1){
+						return true;
+					}
+					return false;
+				}else{
+					return true
+				}
+				
+			},
+			isDuringDate(beginDateStr, endDateStr){//判断系统时间是否在这个范围
 				var date = new Date();
 				var year = date.getFullYear();
 				var month = date.getMonth() + 1;
@@ -256,8 +286,14 @@
 				minute = minute < 10 ? ('0' + minute) : minute;
 				second = second < 10 ? ('0' + second) : second;
 				var nowddd =  year + "-" + month + "-" + day+' '+h+':'+minute+':'+second
-				let StartTime  = nowDate + ' ' +beginDateStr;
-				let endTime  = nowDate + ' ' + endDateStr;
+				let StartTime ="",endTime=""
+				if(beginDateStr.indexOf(' ')>-1){
+					StartTime  =beginDateStr;
+					endTime  = endDateStr;
+				}else{
+					StartTime  = nowDate + ' ' +beginDateStr;
+					endTime  = nowDate + ' ' + endDateStr;
+				}
 				if (nowddd >= StartTime && nowddd <= endTime) {
 					return true;
 				}
@@ -268,10 +304,6 @@
 				if (val.content.text === '立即抢购' ) {
 					this.show = true;
 					this.isAddCart = false;
-				} else {
-					// 点击购物车，出现弹框
-					this.show = true;
-					this.isAddCart = true;
 				}
 			},
 			jumpCart() {
@@ -334,8 +366,7 @@
 				let Start = new Date(this.goods.StartDate.replace(/-/g, '/')).getTime()
 				// let End = new Date('2020-05-18 14:55:50').getTime()
 				// false 活动未开始 true 活动开始了 end为活动结束
-				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
-				
+				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'				
 				let activeTimeMy = this.startIS ? End - currentT : Start - currentT
 				let myTime = activeTimeMy
 				this.activeTimeMy = {
@@ -343,30 +374,11 @@
 					hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
 					minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
 					second: parseInt((myTime % (1000 * 60)) / 1000)
-				}
-				// if (this.seckill) {
-				// 	this.buttonGroup[0].disabled =
-				// 		(this.skuDataInfo.IsBuy === '0' || this.goods.StoreQty == 0 || this.startIS !== true) ? true : false
-				// 		if (!this.startIS) {
-				// 			//表示活动已经结束
-				// 			this.btnTitle = " 活动未开始";
-				// 		} else if (this.startIS === 'end') {
-				// 			this.btnTitle = "活动结束";
-				// 		} else {
-				// 			this.bt
-				// }
+				}				
 			},
 		}
 	};
 
-	// function setfix(val, _this) {
-	// 	let str = "";
-	// 	if (!val) {
-	// 		return ''
-	// 	}
-	// 	str = val.replace(/src="/g, `src="${_this.$VUE_APP_PREFIX}`);
-	// 	return str;
-	// }
 	function setfix(val, _this) {
 		//console.log(val,'url地址')
 		let str = "";

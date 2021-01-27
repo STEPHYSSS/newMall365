@@ -3,7 +3,7 @@
 		<!-- 商品 -->
 		<ul class="cap-goods-layout__container card" :class="[currentObj.listStyle,currentObj.goodStyle]" :style="{'padding-left':currentObj.pageSpace +'px','padding-right':currentObj.pageSpace +'px',
           'margin-left':-(currentObj.goodSpace/2)+'px','margin-right':-(currentObj.goodSpace/2)+'px'}">
-			<li class="cap-goods-layout__wrapper cap-goods-layout__wrapper--0" v-for="(item,index) in currentGoodList" :key="index">
+			<li class="cap-goods-layout__wrapper cap-goods-layout__wrapper--0" :class="swipeTimeStyle" v-for="(item,index) in currentGoodList" :key="index">
 				<!-- <a @click="urlGoodClick(item)" log-params="null" class="cap-goods-layout__item card" style="margin: 5px;" :class="[currentObj.listStyle,currentObj.goodStyle,currentObj.chamfer]"
 				 :style="{'margin':(currentObj.goodSpace/2)+'px'}">
 					<div class="cap-goods__photo">
@@ -311,6 +311,12 @@
 					return 'isActivelist'
 				}
 
+			},
+			swipeTimeStyle:function(){
+				// timer-style
+				if(this.currentObj.listStyle=='swipe'){
+					return 'swipeTimes'
+				}
 			}
 		}
 	};
@@ -409,5 +415,14 @@
 		.cap-goods__image-wrap {
 			border: 1px solid #eee;
 		}
+	}
+	.swipeTimes{
+		    -webkit-box-flex: 0;
+		    -webkit-flex: 0 0 40%;
+		    -moz-box-flex: 0;
+		    -ms-flex: 0 0 40%;
+		    flex: 0 0 40% !important;
+		    width: 40%;
+		    float: none;
 	}
 </style>

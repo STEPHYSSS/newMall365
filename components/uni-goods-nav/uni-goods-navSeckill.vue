@@ -1,15 +1,12 @@
 <template>
 	<view class="uni-goods-nav">
 		<!-- 底部占位 -->
-		<!-- <p v-if="skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0'" class="xiajia">商品已经售罄啦~要不要瞧瞧别的~</p>
-		<p v-if="isStartIS!=true" class="xiajia">还未到开始时间~要不要瞧瞧别的~</p> -->
 		<view class="uni-tab__seat" />
 		<view class="uni-tab__cart-box flex">
 			<view class="flex uni-tab__cart-sub-left">
 				<view v-for="(item,index) in options" :key="index" class="flex uni-tab__cart-button-left uni-tab__shop-cart" @click="onClick(index,item)">
 					<view class="uni-tab__icon">
 						<uni-icons :type="item.icon" size="20" color="#646566"></uni-icons>
-						<!-- <image class="image" :src="item.icon" mode="widthFix" /> -->
 					</view>
 					<text class="uni-tab__text">{{ item.text }}</text>
 					<view class="flex uni-tab__dot-box">
@@ -17,9 +14,11 @@
 					</view>
 				</view>
 			</view>
-			
+			<!-- 'opacity':skuDataInfo.IsBuy ==='0'?'0.3':''} -->
 			<!-- 这一块是用来判断活动不能够购买的 isStartIS IsSeckillTime 到时候再传一个下架的状态来控制按钮不能点击-->
-			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right " v-if="isStartIS==false || IsSeckillTime == false  || (skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0'||skuDataInfo.IsBuy==='0')">
+			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right " v-if="IsTimeObj.IsEndDate===false || IsTimeObj.IsSeckillTime===false
+			||IsTimeObj.IsGoodBuyTime===false||IsTimeObj.IsPromWeeks===false||IsTimeObj.IsPromDate===false||IsTimeObj.IsBuy===false||IsTimeObj.IsStart===false
+			  || (skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0')">
 				<view v-for="(item,index) in buttonGroup" :key="index" style="opacity: .3;" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right2">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
@@ -29,15 +28,11 @@
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
-					<view class="disabled-style" v-if="item.disabled"></view>
+					<!-- <view class="disabled-style" v-if="item.disabled"></view> -->
 				</view>
 			</view>
 		</view>
 		<p class="xiajia" v-show="hideTips">{{showTips}}</p>
-		<!-- <p v-if="skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'||
-		 skuDataInfo.TotalSurplusQty<='0'" class="xiajia">商品已经售罄啦~要不要瞧瞧别的~</p>
-		<p v-if="isStartIS==false" class="xiajia">活动还未开始~请稍后再来~</p>
-		<p v-if="IsSeckillTime == false" class="xiajia">不在活动时间范围内~</p> -->
 	</view>
 </template>
 
@@ -96,7 +91,7 @@
 					]
 				}
 			},
-			skuDataInfo: {
+			skuDataInfo: {//商品信息
 				type: Object,
 				default () {
 					return {};
@@ -120,6 +115,12 @@
 			},
 			goods:{
 				type: Object,
+			},
+			IsTimeObj: {//商品信息
+				type: Object,
+				default () {
+					return {};
+				}
 			}
 		},
 		created() {
@@ -157,7 +158,7 @@
 				}
 		   }
 		   if(this.IsSeckillTime == false){
-				this.showTips = "不在活动时间范围内~"
+				this.showTips = "不在可购买时间范围内~"
 				this.hideTips = true;
 				return false
 			}else if(this.skuDataInfo.ProdInfo.State !='1'){

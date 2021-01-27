@@ -7,11 +7,14 @@
 					<div data-lazy-log="1" :class="['cap-goods__img--'+currentObj.contain]" class="cap-goods__img" lazy="loaded"
 					 :style="{'background-image':`url(${setImgPrex(goods.Img)})`}"></div>
 				</div>
-				<div class="" :class="currentObj.listStyle==='three'?'timer-style2':'timer-style'">
+				<!-- class="timer-style" :class="miaoStyle" -->
+				<!-- :class="currentObj.listStyle==='three'?'timer-style2':'timer-style'" -->
+				<div :class="miaoStyle">
 					<span :class="currentObj.listStyle==='list'?'timer-left2':'timer-left'">{{startIS?'距结束':'距开始'}}</span>
 					<span class="timer-right">
-						<uni-countdown color="#FFFFFF" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
+						<uni-countdown :color="currentObj.listStyle==='big'?'#fe5252':'#fff'" splitor-color="#fff" :background-color="currentObj.listStyle==='big'?'#fff':'transparent'" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
 						 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
+						
 					</span>
 				</div>
 				<div>
@@ -51,7 +54,7 @@
 						<span class="sale-price" v-if="currentObj.showContent.indexOf('3')>-1">
 							<div class="cap-theme-view" style="color: rgb(255, 68, 68);">
 								<span v-if="goods.SalePrice">
-									<span  :class="currentObj.listStyle==='three'? 'price-tagThress':'price-tag'">¥{{goods.SalePrice}}</span>
+									<span :class="currentObj.listStyle==='three' || currentObj.listStyle ==='swipe'? 'price-tagThress':'price-tag'">¥{{goods.SalePrice}}</span>
 									<span style="text-decoration:line-through;color: #969799;font-size:8pt;padding-left: 6px;">¥{{goods.OldPrice}}</span>
 								</span>
 								<span class="price-tag" v-else>¥{{goods.OldPrice}}</span>
@@ -194,6 +197,16 @@
 				})
 			}
 		},
+		computed:{
+			miaoStyle:function(){
+				// timer-style
+				if(this.currentObj.listStyle=='big'){
+					return 'bigTimerStyle'
+				}else if(this.currentObj.listStyle=='three'){
+					return 'timer-style2'
+				}else return 'timer-style'
+			}
+		}
 	};
 </script>
 
@@ -234,9 +247,10 @@
 	
 		.timer-left {
 			padding-left: 5px;
+			font-size: 14px;
 		}
 		.timer-left2{
-			padding-left: 0;
+			padding-left: 2px;
 		}
 	}
 	.timer-style2{
@@ -250,7 +264,45 @@
 		font-size: 12px;
 		.timer-left {
 			margin-left: 5px;
+		}
+	}	
+	.bigTimerStyle{
+		position: absolute;
+		height: 100rpx;
+		line-height: 100rpx;
+		width: 100%;
+		background: #fe5252;
+		bottom: 0;
+		color: #fff;
+		font-size: 12px;
+		.van-count-down {
+			font-size: 12px;
+			color: #fff;
+			line-height: 30px;
+		}
 			
+		.timer-right {
+			float: right;
+			transform: scale(0.9);
+			
+			/deep/.uni-countdown__number,/deep/.uni-countdown__splitor {
+				height: 45px;
+				font-size: 20px;
+			}
+			/deep/.uni-countdown__splitor{
+				line-height: 45px;
+			}
+			/deep/.uni-countdown__number{
+				width: 50px;
+			}
+			/deep/.uni-countdown {
+				// padding:3px 0;
+			}
+		}
+		.timer-left{
+			font-size: 20px;
+			letter-spacing: 2px;
+			margin-left: 8px;
 		}
 	}
 	.price-tagThress{
@@ -266,38 +318,6 @@
 		height: 100%;
 		background-color: #5d5a5a;
 		opacity: 0.6;
-	}
-
-	.isActive2 {
-		position: absolute;
-		top: 26%;
-		width: 100px;
-		height: 88px;
-		left: 23%;
-	}
-
-	.isActiveBig {
-		position: absolute;
-		top: 21%;
-		left: 21%;
-		width: 60%;
-		height: 54%;
-	}
-
-	.isActivethree {
-		position: absolute;
-		top: 14%;
-		width: 100px;
-		height: 88px;
-		left: 10%;
-	}
-
-	.isActivelist {
-		position: absolute;
-		top: 19%;
-		width: 100px;
-		height: 88px;
-		left: 17%;
 	}
 
 	.cap-goods-layout {

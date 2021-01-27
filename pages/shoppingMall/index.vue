@@ -39,7 +39,7 @@
 				  <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a>
 				</div> -->
 				
-				<!-- <button type="default" size="mini" @click="makeUpGroup">拼团</button> -->
+				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<div>
 					<div v-for="(item,index) in listMode" :key="index">
 						<!-- <shopinfoma v-if="item.viewComponets === 'shopinfoma'" :propsObj="item.props"></shopinfoma> -->
@@ -190,11 +190,11 @@
 				}else{
 					this.getShopList();
 				}
-				// console.log(sessionStorage.getItem('searchUrl'),'homeo')
 				let url = sessionStorage.getItem('searchUrl');
 				let index = url.lastIndexOf("?");
 		        url = url.slice(index);
 		        this.SID = getQueryString2("SID", url);
+				// sessionStorage.removeItem("searchUrl")
 				this.getAutoMode();
 			},
 			async getShopList() {//获取门店

@@ -635,7 +635,7 @@
 							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间
 							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
 							// jka
-							console.log(new Date().getMinutes().toString(),'系统时间')
+							// console.log(new Date().getMinutes().toString(),'系统时间')
 							if(FinTypeCun==='2'){
 								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间	
 									console.log(dayTime,'一天营业时间')
@@ -659,6 +659,10 @@
 									if(cutTime>endTime){
 										FinTypeDay = Number(dayAdvance)+1
 									}
+								}
+							}else{
+								if(cutTime>endTime){
+									FinTypeDay = Number(dayAdvance)+1
 								}
 							}
 							// 拿到天数之后调用setChangeData方法算出列表
@@ -1318,12 +1322,12 @@
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
 	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')
 		let arr = [];
-		let arrToday = [];//今天一天的时间段数组
+		let arrToday = [];//一天的时间段数组
 		let dayM = 60 * 60; //秒值
 		let a = 60 * Number(ShopBase.IntervalMinute); //求秒值 间隔时长
 		let acTime = Number(tAdvance) * 60 * 60;//提前小时
-		let startTime = Number(countDown(ShopBase.StartTime));
-		let endTime = countDown(ShopBase.EndTime);
+		let startTime = Number(countDown(ShopBase.StartTime));//商城开始时间
+		let endTime = countDown(ShopBase.EndTime);//商城结束时间
 		let cutTime = countDown(getTime(false, false, true));//当前时间
 		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间	
 		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
@@ -1331,28 +1335,6 @@
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
 				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算			
 			*/
-		  //  if(endTime-cutTime>0){
-			 //   let mallTime = (acTime-(endTime - cutTime));
-				// console.log(mallTime,'zheli')
-				// while (Number(startTime)+Number(mallTime) <= endTime) {
-				// 	arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
-				// 	startTime += a;
-				// 	console.log(startTime)
-				// }
-				// arrToday = arr;	
-		  //  }else{
-			   // let time = Number(tAdvance)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
-			   // let mallTime = (Number(tAdvance)%dayTime) * 60 * 60
-			   // // console.log(mallTime,'剩余几个小时')
-			   // // 如果当前时间大于结束时间，那么就用提前时间减去商城的营业时间，然后看看剩下的时间
-			   // while (Number(startTime)+Number(mallTime) <= endTime) {
-			   // 	arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
-			   // 	startTime += a;
-			   // 	// console.log(startTime)
-			   // }
-			   // arrToday = arr;		
-		   // }
-		   // debugger
 			let mallTime = 0;
 			if(endTime-cutTime>0){
 				let mouTime = (acTime-(endTime - cutTime))
@@ -1374,7 +1356,7 @@
 			// 	startTime += a;
 			// }
 			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
-			let tomorrow = endTime - cutTime;
+			let tomorrow = endTime - cutTime;			
 			if(cutTime-startTime>0){
 				while (cutTime <= endTime) {
 					arr.push(changeCountDown(cutTime));
@@ -1389,10 +1371,7 @@
 			if (dayAdvance == 0) {
 				arr.forEach(DATA => {
 					DATA = countDown(DATA);
-					if (
-						dayAdvance == 0 &&
-						DATA > countDown(getTime(false, false, true)) + Number(tAdvance) * dayM
-					) {
+					if ( dayAdvance == 0 && DATA > countDown(getTime(false, false, true)) + Number(tAdvance) * dayM ) {
 						arrToday.push(changeCountDown(DATA));
 					}
 				});
