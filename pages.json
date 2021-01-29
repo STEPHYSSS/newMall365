@@ -182,11 +182,11 @@
         }
         ,{
             "path" : "pages/myAddress/myAddress",
-            "style" : {"navigationBarTitleText": "我的地址"}
+            "style" : {"navigationBarTitleText": ""}
         }
         ,{
             "path" : "pages/myAddress/add",
-            "style" : {"navigationBarTitleText": "新增地址"}
+            "style" : {"navigationBarTitleText": ""}
         }
         ,{
             "path" : "pages/shoppingMall/menu_naixue/invite",

@@ -30,9 +30,11 @@
 		},
 		created() {
 			let url = sessionStorage.getItem('searchUrl');
-		    let index = url.lastIndexOf("?");
-	        url = url.slice(index);
-	        this.seckillSID = getQueryString2("SID", url);				
+			if(url!=null&&url.lastIndexOf("?")){
+				let index = url.lastIndexOf("?");
+		        url = url.slice(index);
+		        this.seckillSID = getQueryString2("SID", url);
+			}			
 		},
 		mounted() {
 			this.$store.commit("SET_HISTORY_URL", {path:'/pages/shoppingMall/seckill/index'})

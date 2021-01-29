@@ -157,15 +157,28 @@
 					return false
 				}
 		   }
-		   if(this.IsSeckillTime == false){
-				this.showTips = "不在可购买时间范围内~"
-				this.hideTips = true;
-				return false
-			}else if(this.skuDataInfo.ProdInfo.State !='1'){
+		   // IsTimeObj.IsEndDate===false || IsTimeObj.IsSeckillTime===false ||IsTimeObj.IsGoodBuyTime===false||IsTimeObj.IsPromWeeks===false||IsTimeObj.IsPromDate===false||IsTimeObj.IsBuy===false||IsTimeObj.IsStart===false
+			if(this.IsTimeObj.IsEndDate===false || this.IsTimeObj.IsSeckillTime===false ||
+			this.IsTimeObj.IsGoodBuyTime===false||this.IsTimeObj.IsPromWeeks===false||this.IsTimeObj.IsPromDate===false||
+			this.IsTimeObj.IsBuy===false||this.IsTimeObj.IsStart===false){
+			   	this.showTips = "不在可购买时间范围内~"
+			   	this.hideTips = true;
+			   	return false
+			}
+			if(this.skuDataInfo.ProdInfo.State !='1'){
 				this.showTips = "此商品已下架~要不要瞧瞧别的~"
 				this.hideTips = true;
 				return false
 			}
+		 //   if(this.IsSeckillTime == false){
+			// 	this.showTips = "不在可购买时间范围内~"
+			// 	this.hideTips = true;
+			// 	return false
+			// }else if(this.skuDataInfo.ProdInfo.State !='1'){
+			// 	this.showTips = "此商品已下架~要不要瞧瞧别的~"
+			// 	this.hideTips = true;
+			// 	return false
+			// }
 			
 		},
 		methods: {

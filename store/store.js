@@ -79,7 +79,9 @@ const store = new Vuex.Store({
 							}
 						});
 					}
-					
+					if(response.Data.hasOwnProperty('CrsInfo')){
+						Cookies.set('CrsInfo',response.Data.CrsInfo)//客服
+					}
 					if (response.Data.hasOwnProperty('UserBind')) {
 						// ismenber:0 未绑定会员卡，1 绑定了会员卡  CardType :0 未绑定会员卡,net:微卡 ，mang||shop 实体卡
 						Cookies.set('isMember', response.Data.UserBind)

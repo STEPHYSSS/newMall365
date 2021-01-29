@@ -19,7 +19,23 @@ export function GetQueryString(name) {
 	}
 	return null;
 }
-
+export function GetCrsInfo(){
+	let Crs = Cookies.get('CrsInfo');
+	let CrsUrl = Crs.CsrUrl;
+	// let split = url.split("&");
+	// let business_id = split[split.length - 2].split("=")[1];
+	// let groupid = split[split.length-1].split("=")[1];
+	// let CrsUrl = {
+	// 	business_id:business_id,
+	// 	groupid:groupid
+	// }
+	return CrsUrl;
+}
+export function GetCsrStart(){
+	let Crs = Cookies.get('CrsInfo');
+	let CsrStart = Crs.Start;
+	return CsrStart;
+}
 export function GetAppNo() {
 	 if(window.location.hostname == "localhost" || window.location.hostname == "dingtalk.bak365.cn" ){
 		  let AppNo='001';
@@ -56,26 +72,11 @@ export function GetBaseImgUrl() {//获取当前图片url
 }
 export function getQueryString2(name, query){
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-	    var r = query.substr(1).match(reg);
-	    if (r != null) return unescape(r[2]);
-	    return null;
+    var r = query.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
 }
 
-export function UrlSearch(){
-    let name,value,str=location.href,num=str.indexOf("?"); //取得整个地址栏
-    str=str.substr(num+1); //取得所有参数 stringvar.substr(start [, length ]
-    let arr=str.split("&"); //各个参数放到数组里
-    // arr=str.split("？"); //各个参数放到数组里
-    console.log(arr,'打印地址栏')
-    for(let i=0;i < arr.length;i++){
-        num=arr[i].indexOf("=");
-        if(num>0){
-            name=arr[i].substring(0,num);
-            value=arr[i].substr(num+1);
-            this[name]=value;
-        }
-    }
-}
 
 function decodeA(a) {
 	// console.log(a,'5555')

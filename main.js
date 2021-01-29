@@ -2,9 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/store'
 import router from './router'
-import {
-	RouterMount
-} from 'uni-simple-router'
+import { RouterMount } from 'uni-simple-router'
 import dataConfig from '@/config/index'
 import './config/vueFilter'
 
@@ -63,22 +61,7 @@ Vue.prototype.$store = store
 Vue.prototype.$VUE_APP_PREFIX = dataConfig.VUE_APP_PREFIX
 Vue.prototype.$VUE_APP_PREFIX2 = dataConfig.BASE_URL_OnLine2 //用于图片路径
 Vue.prototype.$vconsole = new vconsole() // 使用vconsole
-Vue.prototype.$UrlSearch = function (){
-	let name,value,str=window.location.href,num=str.indexOf("?"); //取得整个地址栏
-	str=str.substr(num+1); //取得所有参数 stringvar.substr(start [, length ]
-	let arr=str.split("&"); //各个参数放到数组里
-	// arr=str.split("？"); //各个参数放到数组里
-	console.log(arr)
-	for(let i=0;i < arr.length;i++){
-	    num=arr[i].indexOf("=");
-	    if(num>0){
-	        name=arr[i].substring(0,num);
-	        value=arr[i].substr(num+1);
-	        this[name]=value;
-	    }
-	}
-	return this[name]
-}
+
 Vue.prototype.$toast = (val) => {
 	uni.showToast({
 		title: val,

@@ -17,14 +17,15 @@ export default {
 	  return{
 		  mainStyle:getApp().globalData.mainStyle,
 		  message:"",
-		  historyUrl:Cookies.get('historyUrl') || {}
+		  historyUrl:Cookies.get('historyUrl') || {},
 	  }
   },
   created() {
 	  // 返回订单列表
-	  if(this.historyUrl == '/pages/vip/weiFull'){
+	  let PathV = Object.values(this.historyUrl)[0]
+	  if(PathV == '/pages/vip/weiFull'){
 		this.message = "返回"
-	  }else if(this.historyUrl == '/pages/packages/detail'){
+	  }else if(PathV == '/pages/packages/detail'){
 		this.message = "返回权益列表"
 	  }else{
 		  this.message = "返回订单列表"
@@ -32,10 +33,11 @@ export default {
   },
   methods: {
     clickOrderPage() {
-		if(this.historyUrl == '/pages/vip/weiFull'){//微卡充值支付
-			that.$Router.push({path:'/pages/home'})
-		}else if(this.historyUrl == '/pages/packages/detail'){//会员权益支付
-			that.$Router.push({path:'/pages/vip/interests/interests'})												
+		let PathV = Object.values(this.historyUrl)[0]
+		if(PathV == '/pages/vip/weiFull'){//微卡充值支付
+			this.$Router.push({path:'/pages/home'})
+		}else if(PathV == '/pages/packages/detail'){//会员权益支付
+			this.$Router.push({path:'/pages/vip/interests/interests'})												
 		}else{
 			this.$Router.push({
 				path: "/pages/vip/allMyOrder",

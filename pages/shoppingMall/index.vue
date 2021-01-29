@@ -34,10 +34,13 @@
 				<br>
 				<button @click="clickClear" size="mini">去除usermac</button> -->
 				<button type="default" size="mini" @click="seckill">秒杀</button>
-				<!-- <div class="cgwl-form" id="cgwl-kefu" >
-				  <i class="cgwl-icon"></i>
-				  <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a>
-				</div> -->
+				<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
+					<p style="width: 60px;height:60px;">						
+						<a :href="kefuUrl"><image src="../../static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
+						<!-- <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a> -->
+					</p>
+				  
+				</div>
 				
 				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<div>
@@ -67,14 +70,13 @@
 			<div v-if="loadding&&JSON.stringify(location)==='{}'">
 				<!-- <a-nodeData v-if="listMode.length===0"></a-nodeData> -->
 			</div>
-			
 		</div>
 		<view>
 			<tabBar :pagePath="'/pages/shoppingMall/index'"></tabBar>
 		</view>			
 	</div>
 </template>
-
+<script src="http://cs365.bak365.net/assets/front/cgwl_1.js?v=1611821588"></script>
 <script>
 	import {
 		vipCard
@@ -84,10 +86,7 @@
 	import msDropdownMenu from "@/components/ms-dropdown/dropdown-menu.vue"
 	import msDropdownItem from "@/components/ms-dropdown/dropdown-item.vue"
 	import ticketPop from "@/components/ticketPopup/ticketPopup.vue"
-	import {getQueryString2,UrlSearch} from '@/util/publicFunction.js'
-	import {
-		GetQueryString
-	} from "@/util/publicFunction";
+	import {getQueryString2,GetCrsInfo,GetCsrStart} from '@/util/publicFunction.js'
 	export default {
 		mixins: [Mixins],
 		components: {
@@ -124,7 +123,9 @@
 				currentStoreInfo:{},//用来接收门店信息
 				addressName: {}, //地址名称
 				SID:'',
-				location:{}
+				location:{},
+				kefuUrl:GetCrsInfo(),
+				start:GetCsrStart()
 			};
 		},
 		created() {			
@@ -147,7 +148,7 @@
 			}
 		},
 		mounted() {
-			
+			// this.kefuUrl = `http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=${this.BusinessID}&groupid=${this.GroupID}&special=${this.SpecialID}`;
 		},
 		methods: {
 			 init(){
@@ -191,10 +192,11 @@
 					this.getShopList();
 				}
 				let url = sessionStorage.getItem('searchUrl');
-				let index = url.lastIndexOf("?");
-		        url = url.slice(index);
-		        this.SID = getQueryString2("SID", url);
-				// sessionStorage.removeItem("searchUrl")
+				if(url!=null&&url.lastIndexOf("?")){
+					let index = url.lastIndexOf("?");
+			        url = url.slice(index);
+			        this.SID = getQueryString2("SID", url);
+				}
 				this.getAutoMode();
 			},
 			async getShopList() {//获取门店

@@ -220,6 +220,12 @@
 				</div>
 			</div>
 		</div>
+		<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
+			 <p style="width: 60px;height:60px;">
+				<a :href="kefuUrl"><image src="@/static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
+				<!-- <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a> -->
+			 </p>
+		</div>
 		<view>
 			<tabBar :pagePath="'/pages/home'"></tabBar>
 		</view>	
@@ -232,10 +238,7 @@
 	import Cookie from '@/config/cookie-my/index.js';
 	import adCell from '@/node_modules/adcell/ADCell.vue';
 	import adCell2 from '@/node_modules/adcell/ADCell2.vue';
-	import {
-		bottomScrollbar,GetAppNo
-	} from "@/util/publicFunction";
-	import {GetBaseImgUrl} from "@/util/publicFunction";
+	import { bottomScrollbar,GetAppNo,GetCrsInfo,GetBaseImgUrl ,GetCsrStart} from "@/util/publicFunction";
 	export default {
 		name: "home",
 		components: {
@@ -260,7 +263,8 @@
 				UserPhoto:'',
 				CardBase:{},
 				AwaitPayCnt:'',//待支付数量
-				
+				kefuUrl:GetCrsInfo(),
+				start:GetCsrStart()
 			};
 		},
 		async created() {
@@ -275,6 +279,10 @@
 			// sessionStorage.setItem('CardType',this.CardType)
 			// this.isMember = Cookie.get("isMember");
 			// bottomScrollbar(this, ".callInfo", ".homeFa", 60);			
+		},
+		mounted() {
+			
+			// this.kefuUrl = `http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=${this.BusinessID}&groupid=${this.GroupID}&special=${this.SpecialID}`;
 		},
 		methods: {
 			clickBalance() {
@@ -400,6 +408,7 @@
 	};
 </script>
 <style lang="less">
+	@import '@/assets/css/cgwl_online.css';
 	.home{
 		margin-bottom: 50px;
 	}

@@ -5,6 +5,11 @@
 		 :seckill="seckill" :isBrowse="isBrowse"></a-info-buyPage> -->
 		<a-info-buyPageSeckill :goods="goodList" :skuDataInfo="skuDataInfo" v-if="seckill&&this.goodList.Name" :seckill="seckill" ></a-info-buyPageSeckill>
 		<a-info-buyPage ref="aInfoBuyPage" :goods="goodList" :skuDataInfo="skuDataInfo" v-if="this.goodList.Name&&!seckill" ></a-info-buyPage>
+		<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
+		  <p style="width: 60px;height:60px;">
+		  	<a :href="kefuUrl"><image src="@/static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
+		  </p>
+		</div>
 	</div>
 </template>
 <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script> -->
@@ -13,7 +18,8 @@
 		vipCard
 	} from "@/api/http.js";
 	import Mixins from '@/pages/shoppingMall/mixins.js'
-	import {GetBaseImgUrl} from "@/util/publicFunction";
+	import {GetBaseImgUrl,GetCrsInfo,GetCsrStart} from "@/util/publicFunction";
+	import Cookie from '@/config/cookie-my/index.js';
 	export default {
 		name: "goodsPage",
 		mixins: [Mixins],
@@ -24,7 +30,9 @@
 				skuDataInfo: {},
 				SID:'',//,
 				//title:this.$Route.query.title
-				title:''
+				title:'',
+				kefuUrl:GetCrsInfo(),
+				start:GetCsrStart()
 			};
 		},
 		onLoad(option) {
@@ -44,6 +52,9 @@
 				}
 			})
 			this.wxRegister();
+		},
+		mounted() {
+			// this.kefuUrl = `http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=${this.BusinessID}&groupid=${this.GroupID}&special=${this.SpecialID}`;
 		},
 		methods: {
 			async getInfo() {
@@ -200,6 +211,7 @@
 </script>
 
 <style scoped>
+	@import '@/assets/css/cgwl_online.css';
 	.boxMargin{
 		padding-bottom: 45px;
 	}
