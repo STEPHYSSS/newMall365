@@ -156,6 +156,14 @@ const other = [
 		name:'makeGroup',
 		meta:{title:'拼团活动'}
 	},{
+		path:'/pages/shoppingMall/makeGroup/groupInfoSuccess',
+		name:'groupInfoSuccess',
+		meta:{title:'拼团详情'}
+	},{
+		path:'/pages/shoppingMall/makeGroup/leagueList',
+		name:'leagueList',
+		meta:{title:'团员情况'}
+	},{
 		path: '/pages/integralMall/index',
 		name: 'integralMall',
 		meta: {

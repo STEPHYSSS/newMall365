@@ -231,6 +231,17 @@
             	// "enablePullDownRefresh": true
             }
         }
+        ,{
+            "path" : "pages/shoppingMall/makeGroup/groupInfoSuccess",
+            "style" : {
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+        }
+        ,{
+            "path" : "pages/shoppingMall/makeGroup/leagueList",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

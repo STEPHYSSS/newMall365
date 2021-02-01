@@ -2,7 +2,6 @@
 	<view class="makeUpGroup">
 		<view>
 			<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickLeft" title="拼团活动" :status-bar="true" :shadow="false"></uni-nav-bar>
-			<!-- <a-info-buyPage ref="aInfoBuyPage" :goods="goodList" :skuDataInfo="skuDataInfo" v-if="this.goodList.Name&&!seckill" ></a-info-buyPage> -->
 			<a-info-buyPageGroup ref="buyPageGroup"></a-info-buyPageGroup>
 		</view>
 	</view>

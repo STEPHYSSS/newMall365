@@ -100,7 +100,7 @@
 		vipCard
 	} from "@/api/http.js";
 	import showSkuSeckill from '@/components/a-shopping-showSku/a-shopping-showSkuSeckill';
-	 import navSeckill from '@/components/uni-goods-nav/uni-goods-navSeckill.vue';
+	import navSeckill from '@/components/uni-goods-nav/uni-goods-navSeckill.vue';
 	import {
 		Base64
 	} from 'js-base64';
@@ -186,12 +186,20 @@
 			this.goods.PromImportantNotes = setfix(this.goods.PromImportantNotes, this);
 			this.tradeList()
 			
-			let BuyTime = this.goods.BuyTime.split(',')
-			let IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
-			let IsEndDate = this.isDuringDate(this.goods.StartDate,this.goods.EndDate)//活动日期
-			let IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)//活动时间段
-			let IsPromWeeks= this.getWeekDate(this.goods.PromWeeks);//秒杀活动的周
-			let IsPromDate = this.IsDuringDay(this.goods.PromDates);//秒杀活动的天
+			let BuyTime ;
+			// let IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
+			// let IsEndDate = this.isDuringDate(this.goods.StartDate,this.goods.EndDate)//活动日期
+			// let IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)//活动时间段
+			// let IsPromWeeks= this.getWeekDate(this.goods.PromWeeks);//秒杀活动的周
+			// let IsPromDate = this.IsDuringDay(this.goods.PromDates);//秒杀活动的天
+			if(this.goods.BuyTime){
+				BuyTime = this.goods.BuyTime.split(',')
+			}
+			let IsGoodBuyTime = BuyTime ? this.isDuringDate(BuyTime[0],BuyTime[1]):true;
+			let IsEndDate = (this.goods.StartDate,this.goods.EndDate) ? this.isDuringDate(this.goods.StartDate,this.goods.EndDate):true//活动日期
+			let IsSeckillTime = (this.goods.StartTime&&this.goods.EndTime) ? this.isDuringDate(this.goods.StartTime,this.goods.EndTime):true//活动时间段
+			let IsPromWeeks = this.goods.PromWeeks ? this.isDuringDate(this.goods.PromWeeks):true//秒杀活动的周
+			let IsPromDate = this.goods.PromDates ? this.isDuringDate(this.goods.PromDates):true//秒杀活动的天
 			let IsBuy = this.skuDataInfo.IsBuy !== '0'? true : false;
 			let IsStart = this.startIS !== true? true : false;
 			this.IsTimeObj = {
@@ -202,7 +210,7 @@
 				IsPromDate:IsPromDate,
 				IsBuy:IsBuy,
 				IsStart:IsStart
-			}
+			}			
 			console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
 			this.buttonGroup.push({
 				text: '立即抢购',

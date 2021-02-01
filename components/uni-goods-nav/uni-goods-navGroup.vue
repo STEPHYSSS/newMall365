@@ -1,38 +1,39 @@
 <template>
 	<view class="uni-goods-nav">
 		<!-- 底部占位 -->
+		<p v-if="skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'" class="xiajia">商品已经售罄啦~要不要瞧瞧别的~</p>
+		<p v-if="skuDataInfo.State==='0'" class="xiajia">此商品已下架~要不要瞧瞧别的~</p>
 		<view class="uni-tab__seat" />
 		<view class="uni-tab__cart-box flex">
 			<view class="flex uni-tab__cart-sub-left">
 				<view v-for="(item,index) in options" :key="index" class="flex uni-tab__cart-button-left uni-tab__shop-cart" @click="onClick(index,item)">
 					<view class="uni-tab__icon">
 						<uni-icons :type="item.icon" size="20" color="#646566"></uni-icons>
+						<!-- <image class="image" :src="item.icon" mode="widthFix" /> -->
 					</view>
 					<text class="uni-tab__text">{{ item.text }}</text>
 					<view class="flex uni-tab__dot-box">
 						<text v-if="item.info" :class="{ 'uni-tab__dots': item.info > 9 }" class="uni-tab__dot ">{{ item.info }}</text>
 					</view>
 				</view>
-			</view>			
-			<!-- 'opacity':skuDataInfo.IsBuy ==='0'?'0.3':''} -->
-			<!-- 这一块是用来判断活动不能够购买的 isStartIS IsSeckillTime 到时候再传一个下架的状态来控制按钮不能点击-->
-			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right " v-if="IsTimeObj.IsEndDate===false || IsTimeObj.IsSeckillTime===false
-			||IsTimeObj.IsGoodBuyTime===false||IsTimeObj.IsPromWeeks===false||IsTimeObj.IsPromDate===false||IsTimeObj.IsBuy===false||IsTimeObj.IsStart===false
-			  || (skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'|| skuDataInfo.TotalSurplusQty<='0')">
+			</view>
+			<!-- v-if="skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0'" -->
+			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right" v-if="skuDataInfo.State ==='0'||skuDataInfo.StockType != '0'&& skuDataInfo.StoreQty <= '0' || IsGoodBuyTime==false" >
 				<view v-for="(item,index) in buttonGroup" :key="index" style="opacity: .3;" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right2">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
+					<text>￥178</text>
 				</view>
 			</view>
+			
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right" v-else>
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
-					<!-- <view class="disabled-style" v-if="item.disabled"></view> -->
+					<text>￥{{item.Price}}</text>
 				</view>
 			</view>
 		</view>
-		<p class="xiajia" v-show="hideTips">{{showTips}}</p>
 	</view>
 </template>
 
@@ -54,12 +55,6 @@
 		components: {
 			uniIcons
 		},
-		data(){
-			return{
-				showTips:"",
-				hideTips:false
-			}
-		},
 		props: {
 			options: {
 				type: Array,
@@ -77,37 +72,32 @@
 				type: Array,
 				default () {
 					return [{
-							text: '加入购物车',
+							text: '单独购买',
 							backgroundColor: '#ffa200',
 							color: '#fff',
-							borderRadius: 0
+							borderRadius: 0,
+							Price:'178'
 						},
 						{
-							text: '立即抢购',
+							text: '立即开团',
 							backgroundColor: '#ff0000',
 							color: '#fff',
-							borderRadius: 0
+							borderRadius: 0,
+							Price:'100'
 						}
 					]
 				}
 			},
-			skuDataInfo: {//商品信息
+			IsGoodBuyTime: {
+				type: Boolean,
+				default:true
+				
+			},
+			skuDataInfo: {
 				type: Object,
 				default () {
 					return {};
 				}
-			},
-			isStartIS: {
-				type: Boolean,
-				default: false
-			},
-			IsSeckillTime: {
-				type: Boolean,
-				default: false
-			},
-			IsGoodBuyTime: {
-				type: Boolean,
-				default: false
 			},
 			fill: {
 				type: Boolean,
@@ -115,72 +105,9 @@
 			},
 			goods:{
 				type: Object,
-			},
-			IsTimeObj: {//商品信息
-				type: Object,
-				default () {
-					return {};
-				}
 			}
 		},
-		created() {
-			console.log(this.IsTimeObj)
-			// if(this.isStartIS==false){
-			// 	this.showTips = "活动还未开始~请稍后再来~"
-			// 	this.hideTips = true;
-			// }else 
-			/*
-				Stocktype==1代表是无限库存，
-				立即抢购的时候要根据TotalSurplusQty<0或者
-				StockType ==1并且StoreQty==0的时候，立即购买按钮置灰并提示库存不足
-				
-				问:
-				先判断库存类型，0就判断活动库存 1 和2先判断商品库存
-				
-				问:
-				然后在判断活动库存，
-				
-				问:
-				只要一个不满足都是已售罄
-			
-			*/ 
-		   if(this.skuDataInfo.ProdInfo.StockType === '0'){//不限库存
-				if(Number(this.skuDataInfo.TotalSurplusQty)<=0){
-					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
-					this.hideTips = true;
-					return false
-				}
-		   }else{
-		   	// 如果商品库存小于限购数量，输入框中就展示商品数量
-				if(Number(this.skuDataInfo.ProdInfo.StoreQty)<=0 || Number(this.skuDataInfo.TotalSurplusQty)<=0){
-					this.showTips = "商品已经售罄啦~要不要瞧瞧别的~"
-					this.hideTips = true;
-					return false
-				}
-		   }
-		   // IsTimeObj.IsEndDate===false || IsTimeObj.IsSeckillTime===false ||IsTimeObj.IsGoodBuyTime===false||IsTimeObj.IsPromWeeks===false||IsTimeObj.IsPromDate===false||IsTimeObj.IsBuy===false||IsTimeObj.IsStart===false
-			if(this.IsTimeObj.IsEndDate===false || this.IsTimeObj.IsSeckillTime===false ||
-			this.IsTimeObj.IsGoodBuyTime===false||this.IsTimeObj.IsPromWeeks===false||this.IsTimeObj.IsPromDate===false||
-			this.IsTimeObj.IsBuy===false||this.IsTimeObj.IsStart===false){
-			   	this.showTips = "不在可购买时间范围内~"
-			   	this.hideTips = true;
-			   	return false
-			}
-			if(this.skuDataInfo.ProdInfo.State !='1'){
-				this.showTips = "此商品已下架~要不要瞧瞧别的~"
-				this.hideTips = true;
-				return false
-			}
-		 //   if(this.IsSeckillTime == false){
-			// 	this.showTips = "不在可购买时间范围内~"
-			// 	this.hideTips = true;
-			// 	return false
-			// }else if(this.skuDataInfo.ProdInfo.State !='1'){
-			// 	this.showTips = "此商品已下架~要不要瞧瞧别的~"
-			// 	this.hideTips = true;
-			// 	return false
-			// }
-			
+		mounted() {
 		},
 		methods: {
 			onClick(index, item) {
@@ -191,6 +118,12 @@
 				})
 			},
 			buttonClick(index, item) {
+				// if(item.isbuy=='0'){
+				// 	return this.$toast('未到购买时间，无法购买')
+				// }
+				// if (item.disabled) {
+				// 	return this.$toast('商品已售罄，无法购买')
+				// }
 				if (uni.report) {
 					uni.report(item.text, item.text)
 				}

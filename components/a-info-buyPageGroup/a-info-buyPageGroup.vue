@@ -11,30 +11,39 @@
 					<!-- #endif -->
 				</swiper-item>
 			</swiper>
+			<div class="timer-style" style="height: 35px;">
+				<span class="timer-left">2人拼团价格</span>
+				<div class="timer-right">
+					<span style="margin-right:4px">距开始12天</span>					
+				</div>
+			</div>
 		</view>
-		<view style="background-color: #fff;width: 96%;margin: 0 13px;">
+		<view style="background-color: #fff;width: 100%;padding: 0 13px 10px;">
 			<p style="color: red;font-size: 20px;">￥{{goods.price}}</p>
 			<p style="font-size: 15px;margin-bottom: 5px;">{{goods.Name}}</p>
 			<view>
-				<span style="display: inline-block;padding: 3px 5px;background-color:#cf0000;color: #fff;border-radius: 3px;margin-right: 7px;">领券</span>
+				<span style="display: inline-block;padding: 3px 5px;background-color:#fe5252;color: #fff;border-radius: 3px;margin-right: 7px;">领券</span>
 				<span style="display: inline-block;padding: 3px 5px;border: 1px solid rgb(243, 88, 88);color: #cf0000;margin-right: 6px;border-radius: 3px;">6元无门槛商品券</span>
 				<span style="display: inline-block;padding: 3px 5px;border: 1px solid rgb(243, 88, 88);color: #cf0000;border-radius: 3px;">5元无门槛商品券</span>
 			</view>
 		</view>
-		<view style="background-color: #fff;margin: 8px 0;">
+		<view style="background-color: #fff;margin: 8px 0;padding-bottom: 15px;">
 			<adCell text="拼团玩法"  detail="详细规则" :showBottomLine="false"></adCell>
-			用户开团--------用户参团--------拼团成功
+			<p style="width: 96%;margin: 0 13px;">支付开团邀请1人参团，人数不足自动退款</p>
 		</view>
 		<view style="background-color: #fff;margin: 8px 0;">
-			<adCell text="31人在拼单,可直接参与"  detail="查看更多" :showBottomLine="false"></adCell>
-			<view style="display: flex;">
-				<p style="flex: 1;">
-					<text>燕子</text>
+			<adCell text="以下小伙伴正在发起拼团,可直接参与"  :showBottomLine="false"></adCell>
+			<view style="display: flex;box-sizing: border-box;padding-bottom: 10px;">
+				<p style="flex: 1;margin-left: 10px;display: flex;">
+					<image style="width: 35px;height: 35px;border-radius: 50%;background-color: orange;margin-right: 8px;"></image>
+					<view style="flex: 1;">
+						<p style="margin-bottom: 5px;">燕子</p>
+						<p style="color: #7e7e7e;letter-spacing: 1px;">还差<text style="color:#f30000 ;">1人</text>成团</p>
+					</view>
 				</p>
-				<p style="flex: 1;">
-					<text>还差<text>1人</text>拼成</text>
-					<button style="display: inline-block;padding: 0px 10px;background-color:#f30000;color: #fff;border-radius: 3px;
-					line-height: 30px;font-size: 14px;letter-spacing: 1px;">去拼单</button>
+				<p style="width: 100px;text-align: center;">
+					<button style="display: inline-block;padding: 0px 10px;background-color:#fe5252;color: #fff;border-radius: 3px;
+					line-height: 30px;font-size: 14px;letter-spacing: 1px ;">去凑团</button>
 				</p>
 				
 			</view>
@@ -42,6 +51,9 @@
 		<view>
 			<adCell text="商城" icon="/static/img/shangcheng1.png" @click="clickShop" detail="进入店铺" :showBottomLine="false"></adCell>
 		</view>
+		<div class="goods-action">
+			<navGroup ></navGroup>
+		</div>
 	</view>
 </template>
 <script>
@@ -57,11 +69,13 @@
 	} from 'js-base64';
 	import adCell from '@/node_modules/adcell/ADCell.vue';
 	import showTicket from '@/components/a-shopping-showSku/a-shopping-showTicket'
+	import navGroup from "@//components/uni-goods-nav/uni-goods-navGroup"
 	export default {
 		name: "couponPage",
 		components: {
 			adCell,
-			showTicket
+			showTicket,
+			navGroup
 		},
 		props: {
 			goods: {
@@ -189,6 +203,18 @@
 </script>
 
 <style lang="less">
+	.actime-style{
+		display: flex;
+		.actime_left,.actime_right{
+			flex: 1;
+		}
+		.actime_left text:first-letter{
+			font-size: 2em;
+			padding: 0.1em;
+			color: #cf0000;
+			vertical-align: middle;
+		}
+	}
 	.goodCoupon {
 		margin-bottom: 55px;
 		.udStyle{

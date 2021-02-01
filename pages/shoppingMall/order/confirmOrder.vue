@@ -632,39 +632,46 @@
 							let advanceTime = 0;//日期 当FinType==1&&FinHour>0就代表这有提前日期  //提前的时间+当前的时间>下班时间 的情况下就延迟到第二天							
 							let startTime = countDown(Data.ShopBase.StartTime);//商城开始时间秒数
 							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
-							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间
+							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间							
 							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
 							// jka
 							// console.log(new Date().getMinutes().toString(),'系统时间')
-							if(FinTypeCun==='2'){
-								let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间	
-									console.log(dayTime,'一天营业时间')
-								
-								if((acTime + cutTime).toFixed(2) > endTime){//提前小时+当前时间>商城结束时间	
-									let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
-									if(cutTime>endTime){
-										// 只要当前时间大于结束时间，那么就自动往后加一天然后加上提前的小时换算成天加在一起
-										// FinTypeDay = Number(dayAdvance)+1
-									}	
-									// let mallTime = (acTime-(endTime - cutTime))/60/60;
-									let a = endTime-cutTime;
-									let b = cutTime-endTime;
-									console.log(a,b,'a是结束时间减去当前时间','b是当前时间减掉结束时间')
-									// 提前小时-结束时间-当前时间
-									// dayAdvance+=Number(mallTime)/dayTime//然后算出提前时间减去结束时间-当前时间的是否大于一天
-									FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time);
-									console.log(FinTypeDay,'FinTypeDay')
+							/*
+								1、判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天并且加上提前的时间
+								3、如果当前系统时间加上提前时间不大于结束时间的话，就在当前时间上加上提前时间 
+							*/
+							//FinTypeCun为2的时候代表是提前小时，1是提前天数
+							let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间
+							let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间 
+							console.log(dayTime,'one day')
+							if(FinTypeCun==='2'){//提前小时
+								if(cutTime>endTime){ //判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天就加上提前的时间
+									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
 									tAdvance = Number(FinTypeHour);//提前小时
-								}else {
-									if(cutTime>endTime){
-										FinTypeDay = Number(dayAdvance)+1
+								}else if((acTime + cutTime).toFixed(2) > endTime){//如果当前时间+提前小时大于商城结束时间 例：现在一点半 提前23小时 这里是2天3个小时									
+									if(cutTime>endTime){//当前时间大于结束时间，就直接到第二天开始算 如果提前时间大于商城结束时间那就直接加上一天
+										FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数
+										tAdvance = Number(FinTypeHour);//提前小时
+									}else{
+										if(endTime-cutTime<acTime){
+											FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
+											tAdvance = Number(FinTypeHour);//提前小时	
+										}else{
+											FinTypeDay=(parseInt(dayAdvance))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
+											tAdvance = Number(FinTypeHour);//提前小时	
+										}
+											
 									}
+								}else{
+									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
+									tAdvance = FinTypeHour;
 								}
-							}else{
+							}else{//提前天数
+								// 如果当前时间大于结束时间 那么就应该提前天数+1  如果当前时间不大于结束时间 那么就应该是第二天的当前时间
 								if(cutTime>endTime){
-									FinTypeDay = Number(dayAdvance)+1
-								}
-							}
+									FinTypeDay = Number(FinTypeDay)+1
+								}							
+							}							
 							// 拿到天数之后调用setChangeData方法算出列表
 							this.sidebarList = setChangeData(num, FinTypeDay); //左侧的天数
 							let { arr, arrToday } = setChangeTime( Data.ShopBase, tAdvance, FinTypeDay );
@@ -697,6 +704,25 @@
 					uni.hideLoading()
 				}
 			},
+			 formateSeconds(endTime){
+				 // 如果当前时间的分钟大于30 ，那么就应该从16：00开始算，否则从15：30算
+			      let secondTime = parseInt(endTime)//将传入的秒的值转化为Number
+			      let min = 0// 初始化分
+			      let h =0// 初始化小时
+			      let result=''
+			      if(secondTime>60){//如果秒数大于60，将秒数转换成整数
+			        min=parseInt(secondTime/60)//获取分钟，除以60取整数，得到整数分钟
+			        secondTime=parseInt(secondTime%60)//获取秒数，秒数取佘，得到整数秒数
+			        if(min>60){//如果分钟大于60，将分钟转换成小时
+			          h=parseInt(min/60)//获取小时，获取分钟除以60，得到整数小时
+			          min=parseInt(min%60) //获取小时后取佘的分，获取分钟除以60取佘的分
+					  
+			        }
+					
+			      }
+				  result=`${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`
+			      return result 
+			    } ,       
 			async getInfoIntegral() { //积分活动商品信息
 				try {
 					uni.showLoading()
@@ -1320,7 +1346,8 @@
 		return arrData;
 	}
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
-	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')
+	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')		
+		
 		let arr = [];
 		let arrToday = [];//一天的时间段数组
 		let dayM = 60 * 60; //秒值
@@ -1330,6 +1357,16 @@
 		let endTime = countDown(ShopBase.EndTime);//商城结束时间
 		let cutTime = countDown(getTime(false, false, true));//当前时间
 		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间	
+		
+		let nowTime= new Date();
+		let cutMinutes=nowTime.getMinutes();
+		let cutTime2 = countDown2(getTime(false, false, true));//当前时间
+		if(cutMinutes<30){
+			cutMinutes = cutTime2-cutMinutes*60;//当前的秒
+		}else{
+			cutMinutes = cutTime2+(3600-cutMinutes*60);//当前的秒
+		}
+		debugger
 		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
 			/*
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
@@ -1340,11 +1377,10 @@
 				let mouTime = (acTime-(endTime - cutTime))
 				// 提前的时间还剩下几个小时
 				mallTime = 	(Number(mouTime/60/60)%dayTime)* 60 * 60
-				// console.log(mallTime,'55')
 			}else{
 				mallTime = (Number(tAdvance)%dayTime) * 60 * 60
 			}
-			while (Number(startTime)+Number(mallTime) <= endTime) {
+			while (Number(startTime)+Number(mallTime) <= endTime+a) {
 				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
 				startTime += a;
 				// console.log(startTime)
@@ -1357,13 +1393,13 @@
 			// }
 			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
 			let tomorrow = endTime - cutTime;			
-			if(cutTime-startTime>0){
-				while (cutTime <= endTime) {
-					arr.push(changeCountDown(cutTime));
+			if(cutTime-startTime>0){//如果当前时间
+				while (cutTime <= endTime+a) {
+					arr.push(changeCountDown(cutTime+acTime));
 					cutTime += a;
 				}
 			}else {
-				while (startTime <= endTime) {
+				while (startTime <= endTime+a) {
 					arr.push(changeCountDown(startTime));
 					startTime += a;
 				}
@@ -1387,6 +1423,15 @@
 	}
 	function countDown(time) {
 		//20:08:90转换为秒
+		var s = 0;
+		var hour = time.split(":")[0];
+		var min = time.split(":")[1];
+		var sec = time.split(":")[2];
+		// s = Number(hour * 3600) + Number(min * 60) + Number(sec);
+		s = Number(hour * 3600);
+		return s;
+	}
+	function countDown2(time){
 		var s = 0;
 		var hour = time.split(":")[0];
 		var min = time.split(":")[1];
