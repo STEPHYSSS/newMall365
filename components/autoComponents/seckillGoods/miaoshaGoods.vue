@@ -7,8 +7,6 @@
 					<div data-lazy-log="1" :class="['cap-goods__img--'+currentObj.contain]" class="cap-goods__img" lazy="loaded"
 					 :style="{'background-image':`url(${setImgPrex(goods.Img)})`}"></div>
 				</div>
-				<!-- class="timer-style" :class="miaoStyle" -->
-				<!-- :class="currentObj.listStyle==='three'?'timer-style2':'timer-style'" -->
 				<div :class="miaoStyle">
 					<span :class="currentObj.listStyle==='list'?'timer-left2':'timer-left'">{{startIS?'距结束':'距开始'}}</span>
 					<span class="timer-right">
@@ -216,6 +214,13 @@
 	.title{
 		font-size: 16px !important;
 	}
+	.cap-goods-layout__item.list .cap-goods__photo {
+	    float: left;
+	    margin-right: 10px;
+	    min-height: auto;
+	    width: 150px;
+	    height: 150px;
+	}
 	.timer-style {
 		position: absolute;
 		height: 62rpx;
@@ -241,7 +246,7 @@
 			}
 	
 			/deep/.uni-countdown {
-				// padding:3px 0;
+				padding:2px 0;
 			}
 		}
 	

@@ -19,15 +19,17 @@
 				</view>
 			</view>
 			<view class="center">
-				<view class="successBox">
-					<p class="title">拼团成功</p>
-					<image style="background-color: orange;z-index: 5;">
-					</image>
-					<image style="background-color: pink;margin-left: -17px;"></image>					
+				<view class="successBox">					
+					<p class="title">
+						<image class="bgTips" src="../../../static/img/groupTips.png"></image>
+						<text class="spanTips">拼团成功</text>
+					</p>
+					<image class="photo" style="background-color: orange;z-index: 5;"></image>
+					<image class="photo" style="background-color: pink;margin-left: -17px;"></image>					
 					<p class="detail" @click="groupInfo">查看全部团员</p>
-					<span>团长</span>
+					<span class="captain">团长</span>
 				</view>
-				<p class="detailBtn">查看订单详情</p>
+				<p class="detailBtn" @click="toOrderInfo">查看订单详情</p>
 			</view>
 		</view>
 	</view>
@@ -46,6 +48,9 @@
 		},
 		methods: {
 			clickLeft(){},
+			toOrderInfo(){
+				
+			},
 			groupInfo(){
 				uni.navigateTo({
 				   url: '/pages/shoppingMall/makeGroup/leagueList'
@@ -59,7 +64,9 @@
 .makeUpGroup{
 	.top{
 		height: 214px;
-		background-color: #fff;
+		// background-color: #fff;
+		background-image: url(../../../static/img/groupBg.png);
+		background-size: 100% 100%;
 		box-sizing: border-box;
 		padding-top: 45px;
 		.goodInfo{
@@ -67,7 +74,8 @@
 			border-radius: 5px;
 			margin: 0 auto;
 			display: flex;
-			box-shadow: rgb(226, 226, 226) 0px 0px 4px 2px;
+			background-color: #fff;
+			box-shadow: rgb(226, 226, 226) 1px 1px 4px 2px;;
 		}
 		.tips{
 			margin: 20px 20px 0 20px;
@@ -78,27 +86,39 @@
 		}
 	}
 	.center{
-		height: 100vh;
+		height: calc(100vh - 278px);;
 		background-color: #fff;
 		padding-top: 10px;
 		margin-top: 10px;
 		.successBox{
 			position: relative;
-			text-align: center;
 			margin: 0 20px;
-			image{
+			text-align: center;
+			.photo{
 				width: 65px;
 				height: 65px;
 				border-radius: 50%;
 			}
 			.title{
+				text-align: center;
+				position: relative;
+				display: block;				
+				line-height: 40px;
 				font-size: 15px;
 				color: #fff;
-				background: #f87676;
-				padding: 5px;
-				margin-bottom: 15px;
+				.bgTips{
+					width: 400px;
+					height: 40px;
+					display: inline-block;
+					margin-left: -34px;		
+				}
+				.spanTips{
+					position: absolute;
+					top: -2px;
+					left: 41%;
+				}
 			}
-			span{
+			.captain{
 				padding: 2px 6px;
 				border-radius: 10px;
 				background-color: #f87676;

@@ -52,8 +52,9 @@
 			<adCell text="商城" icon="/static/img/shangcheng1.png" @click="clickShop" detail="进入店铺" :showBottomLine="false"></adCell>
 		</view>
 		<div class="goods-action">
-			<navGroup ></navGroup>
+			<navGroup  @buttonClick="buySeparately" @click="jumpCart"></navGroup>
 		</div>
+		<a-shopping-showSku :show="show" @hideShow="hideShow" :isBrowse="isBrowse" :isGroup = "isGroup"></a-shopping-showSku>
 	</view>
 </template>
 <script>
@@ -113,9 +114,9 @@
 			return {
 				classHome: getApp().globalData.mainStyle,
 				active: "",
-				show: false,
-				// 点击的是购物车
-				isAddCart: true,
+				show: false,				
+				isAddCart: true,// 点击的是购物车
+				isGroup:true,//拼团
 				classA: "",
 				userList: [],
 				TabCur: 0,
@@ -137,6 +138,21 @@
 			// #endif
 		},
 		methods: {
+			buySeparately(val) {//购买按钮				
+				this.show = true;
+				this.isAddCart = true;
+			},
+			hideShow() {
+				this.show = false;
+			},
+			jumpCart() {//加入购物车
+				if (this.isBrowse) {
+					return;
+				}
+				this.$Router.pushTab({
+					path: "/pages/shoppingMall/shoppingCart/index"
+				});
+			},
 			isDuringDate(beginDateStr, endDateStr) {
 				var date = new Date();
 				var year = date.getFullYear();

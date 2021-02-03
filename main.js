@@ -60,7 +60,7 @@ App.mpType = 'app'
 Vue.prototype.$store = store
 Vue.prototype.$VUE_APP_PREFIX = dataConfig.VUE_APP_PREFIX
 Vue.prototype.$VUE_APP_PREFIX2 = dataConfig.BASE_URL_OnLine2 //用于图片路径
-// Vue.prototype.$vconsole = new vconsole() // 使用vconsole
+Vue.prototype.$vconsole = new vconsole() // 使用vconsole
 
 Vue.prototype.$toast = (val) => {
 	uni.showToast({

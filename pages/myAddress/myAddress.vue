@@ -187,7 +187,7 @@
 			closeCouponDetailModal() {
 				this.couponDetailModalShow = false
 			},
-			async chooseAddress(item) {				
+			async chooseAddress(item) {	
 				if (this.$Route.query.flag == 'towaimai' || this.$Route.query.flag == 'login' || this.$Route.query.flag == 'AutoWaimai'|| this.$Route.query.flag == 'homeD') {
 					let currentStoreOut = {
 						Name: item.Name,
@@ -212,6 +212,7 @@
 						// 	this.chooesAddress = true;
 						// 	this.$refs.chooesAddress.open();
 						// }else{
+							
 							this.$store.commit("SET_CURRENT_ADDRESS",currentStoreOut)
 							this.$store.commit("SET_CURRENT_STORE",currentStoreInfo)
 							sessionStorage.setItem('takeOutAddress', JSON.stringify(currentStoreOut));
@@ -225,7 +226,7 @@
 						if(e.indexOf('距离超长')>-1){
 							setTimeout(()=>{
 								this.couponDetailModalShow = true
-							},1500)
+							},0)
 							
 						}
 						//TODO handle the exception

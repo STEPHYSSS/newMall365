@@ -121,7 +121,7 @@ function NOMAC() {
 	// para = para.join(',')
 	// let currentUrl = arrUrl[0] + '?' + para
 	// Cookies.set('currentUrl', currentUrl)
-
+	let newAppUrl = GetBaseUrl();
 	// let headUrl = window.location.protocol + "//" + window.location.host + '/#/GrantMiddle?AppNo=' + Cookies.get('AppNo')
 	// let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
 	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')

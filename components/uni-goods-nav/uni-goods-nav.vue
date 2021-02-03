@@ -124,6 +124,7 @@
 				if (uni.report) {
 					uni.report(item.text, item.text)
 				}
+				debugger
 				this.$emit('buttonClick', {
 					index,
 					content: item

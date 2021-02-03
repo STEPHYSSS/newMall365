@@ -74,11 +74,6 @@
 								
 									<!-- 商品属性-->
 									<div v-if="attributeList.length >0 ">
-										<!-- <div class="skuTopChoiceTitle" v-for="(item, index) in attributeList" :key="index">
-											{{ item.Name }}
-											<div :class="{'isActive': currentIndex === index, 'skuTopChoiceItem': true }" v-for="(value, index2) in item.Value" :key="value.Name"
-											 @click="skuTopChoice(index)">{{value.Name}}<text v-if="value.Price !='0'">￥{{value.Price}}</text></div>
-										</div>			 -->
 										<view class="property" v-for="(item, index) in attributeList" :key="index">
 											<view class="skuTopChoiceTitle">
 												<text class="name">{{ item.Name }}</text>
@@ -145,6 +140,7 @@
 					return "";
 				}
 			},
+			isGroup:Boolean,
 			skuDataInfo: Object
 		},
 		data() {
@@ -362,24 +358,6 @@
 						ParamInfo:this.currentTastArr.length>0?this.currentTastArr:defaultParamInfo, //商品口味
 						PromotionSID: this.currentNorms.hasOwnProperty("PromotionSID") ?this.currentNorms.PromotionSID : ""
 					};
-					// paramsArr[0] = {
-					// 	ProdNo: this.currentNorms.ProdNo,
-					// 	ProdType: 0,
-					// 	SpecType: this.skuDataInfo.ProdInfo.SpecType,
-					// 	ParamInfo: currentTastArr, //商品口味
-					// 	BuyCnt: this.valueStepper,
-					// 	PartsList: PartsArr ? JSON.stringify(PartsArr) : "",
-					// 	PartsNo: PartsNoArr,
-					// 	ProdSID: this.skuDataInfo.ProdInfo.SID,
-					// 	DeliveryType: this.skuDataInfo.ProdInfo.DeliveryType,
-					// 	SpecSID: this.skuDataInfo.ProdInfo.SpecType !== "1" ?
-					// 		this.currentNorms.SpecSID ?
-					// 		this.currentNorms.SpecSID :
-					// 		this.currentNorms.SID : this.currentNorms.SpecSID || "",
-
-					// 	PromotionSID: this.currentNorms.hasOwnProperty("PromotionSID") ?
-					// 		this.currentNorms.PromotionSID : ""
-					// };
 					obj.ProdList = JSON.stringify(paramsArr);
 					// return;
 					if (bool.index === 0 && !this.seckill) {

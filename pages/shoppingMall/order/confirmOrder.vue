@@ -1347,7 +1347,7 @@
 	}
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
 	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')		
-		
+		// debugger
 		let arr = [];
 		let arrToday = [];//一天的时间段数组
 		let dayM = 60 * 60; //秒值
@@ -1366,7 +1366,6 @@
 		}else{
 			cutMinutes = cutTime2+(3600-cutMinutes*60);//当前的秒
 		}
-		debugger
 		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
 			/*
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
@@ -1382,8 +1381,7 @@
 			}
 			while (Number(startTime)+Number(mallTime) <= endTime+a) {
 				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
-				startTime += a;
-				// console.log(startTime)
+				startTime += a;			
 			}
 			arrToday = arr;	
 		}else{			
@@ -1391,15 +1389,16 @@
 			// 	arr.push(changeCountDown(startTime));
 			// 	startTime += a;
 			// }
+			// debugger
 			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
-			let tomorrow = endTime - cutTime;			
-			if(cutTime-startTime>0){//如果当前时间
-				while (cutTime <= endTime+a) {
+			let tomorrow = endTime - cutTime;			//结束时间 - 当前时间 = 剩余时间
+			if(cutTime>startTime){//如果当前时间大于开始时间，那么就从当前时间一直循环到结束时间
+				while (cutTime+acTime <= endTime+a) {
 					arr.push(changeCountDown(cutTime+acTime));
 					cutTime += a;
 				}
 			}else {
-				while (startTime <= endTime+a) {
+				while (startTime <= endTime) {
 					arr.push(changeCountDown(startTime));
 					startTime += a;
 				}
@@ -1407,9 +1406,14 @@
 			if (dayAdvance == 0) {
 				arr.forEach(DATA => {
 					DATA = countDown(DATA);
+					// 当前时间+提前小时
 					if ( dayAdvance == 0 && DATA > countDown(getTime(false, false, true)) + Number(tAdvance) * dayM ) {
-						arrToday.push(changeCountDown(DATA));
+						// arrToday.push(changeCountDown(DATA));
+						arrToday = arr
+					}else{
+						arrToday = arr;
 					}
+					
 				});
 			} else {
 				arrToday = arr;
@@ -1417,8 +1421,7 @@
 		}
 			
 		return {
-			arr,
-			arrToday
+			arr,arrToday
 		};
 	}
 	function countDown(time) {
@@ -1428,7 +1431,7 @@
 		var min = time.split(":")[1];
 		var sec = time.split(":")[2];
 		// s = Number(hour * 3600) + Number(min * 60) + Number(sec);
-		s = Number(hour * 3600);
+		s = Number(hour * 3600) ;
 		return s;
 	}
 	function countDown2(time){
