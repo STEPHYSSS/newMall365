@@ -2,21 +2,30 @@
 	<view class="makeUpGroup">
 		<view>
 			<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickLeft" title="拼团活动" :status-bar="true" :shadow="false"></uni-nav-bar>
-			<a-info-buyPageGroup ref="buyPageGroup"></a-info-buyPageGroup>
+			<!-- <a-info-buyPageGroup ref="buyPageGroup"></a-info-buyPageGroup> -->
 		</view>
 	</view>
 </template>
 
 <script>
 	import { vipCard } from '@/api/http.js';
+	import Mixins from '@/pages/shoppingMall/mixins.js'
+	import {GetBaseImgUrl,GetCrsInfo,GetCsrStart} from "@/util/publicFunction";
+	import Cookie from '@/config/cookie-my/index.js';
 	export default {
+		mixins: [Mixins],
 		data() {
 			return {
-				
+				goodList: {},
+				skuDataInfo: {},
+				SID:'',//,
+				//title:this.$Route.query.title
+				title:'',
+				kefuUrl:GetCrsInfo(),
+				start:GetCsrStart()
 			}
 		},
 		created() {
-			// this.getGrouplist()
 		},
 		methods: {
 			async getGrouplist() {

@@ -11,8 +11,7 @@
 					<span :class="currentObj.listStyle==='list'?'timer-left2':'timer-left'">{{startIS?'距结束':'距开始'}}</span>
 					<span class="timer-right">
 						<uni-countdown :color="currentObj.listStyle==='big'?'#fe5252':'#fff'" splitor-color="#fff" :background-color="currentObj.listStyle==='big'?'#fff':'transparent'" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
-						 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
-						
+						 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>						
 					</span>
 				</div>
 				<div>

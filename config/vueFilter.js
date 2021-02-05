@@ -103,6 +103,7 @@ Vue.filter('setImgPrex', (val) => {
 })
 Vue.filter('fmtImgUrl', (val) => {
      if (val) {
+		// console.log(val,'fmtImgUrl')
           return GetBaseImgUrl() + val
      } else {
           return ''

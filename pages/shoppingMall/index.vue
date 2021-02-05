@@ -33,7 +33,7 @@
 				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<br>
 				<button @click="clickClear" size="mini">去除usermac</button> -->
-				<!-- <button type="default" size="mini" @click="seckill">秒杀</button> -->
+				<button type="default" size="mini" @click="seckill">秒杀</button>
 				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
 					<p style="width: 60px;height:60px;">						
@@ -192,11 +192,13 @@
 					this.getShopList();
 				}
 				let url = sessionStorage.getItem('searchUrl');
-				if(url!=null&&url.lastIndexOf("?")){
-					let index = url.lastIndexOf("?");
-			        url = url.slice(index);
-			        this.SID = getQueryString2("SID", url);
-				}
+				if(url!=null&&url.indexOf('FlagIndex')>-1){
+					if(url!=null&&url.lastIndexOf("?")){
+						let index = url.lastIndexOf("?");
+				        url = url.slice(index);
+				        this.SID = getQueryString2("SID", url);
+					}
+				}			
 				this.getAutoMode();
 			},
 			async getShopList() {//获取门店
@@ -248,10 +250,22 @@
 			},
 			// 秒杀活动
 			seckill() {
-				this.$Router.push("/pages/shoppingMall/seckill/index");
+				// this.$Router.push("/pages/shoppingMall/seckill/index");
+				this.$Router.push({
+					path:'/pages/shoppingMall/seckill/index',
+					query:{
+						Type:'1'
+					}
+				});
 			},
 			makeUpGroup(){//拼团活动
-			this.$Router.push("/pages/shoppingMall/makeGroup/makeGroup")
+			// this.$Router.push("/pages/shoppingMall/makeGroup/makeGroup")
+			this.$Router.push({
+				path:'/pages/shoppingMall/seckill/index',
+				query:{
+					Type:'5'
+				}
+			});
 			},
 			setVoice() {},
 			voicePlay(obj) {

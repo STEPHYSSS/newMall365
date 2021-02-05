@@ -187,11 +187,6 @@
 			this.tradeList()
 			
 			let BuyTime ;
-			// let IsGoodBuyTime = this.isDuringDate(BuyTime[0],BuyTime[1])
-			// let IsEndDate = this.isDuringDate(this.goods.StartDate,this.goods.EndDate)//活动日期
-			// let IsSeckillTime = this.isDuringDate(this.goods.StartTime,this.goods.EndTime)//活动时间段
-			// let IsPromWeeks= this.getWeekDate(this.goods.PromWeeks);//秒杀活动的周
-			// let IsPromDate = this.IsDuringDay(this.goods.PromDates);//秒杀活动的天
 			if(this.goods.BuyTime){
 				BuyTime = this.goods.BuyTime.split(',')
 			}
@@ -212,8 +207,9 @@
 				IsStart:IsStart
 			}			
 			console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
+			console.log(this.skuDataInfo.UnPaid.UnPaid,'UnPaid')
 			this.buttonGroup.push({
-				text: '立即抢购',
+				text: this.skuDataInfo.UnPaid.UnPaid === "0" ? '立即抢购':'去支付',
 				backgroundColor: '#fe5252',
 				color: '#fff',
 				borderRadius: '25px',
@@ -222,7 +218,7 @@
 				// disabled: (this.skuDataInfo.IsBuy === '0' ||this.IsGoodBuyTime == false ||this.IsSeckillTime  == false ||
 				// this.goods.StockType != '0' && this.goods.StoreQty <= '0' || this.startIS !== true) ? true : false
 			})
-				
+			
 			// 判断当商品库存状态为0的时候同时判断活动库存是否大于0，大于的话就展示
 			if(this.goods.StockType == '0'&& this.skuDataInfo.TotalSurplusQty>=0){
 				this.stockNum = this.skuDataInfo.TotalSurplusQty;
@@ -312,6 +308,16 @@
 				if (val.content.text === '立即抢购' ) {
 					this.show = true;
 					this.isAddCart = false;
+				}else{
+					if(this.skuDataInfo.UnPaid.UnPaid === "1" ){
+						this.$Router.push({
+							path: "/pages/shoppingMall/order/orderInfo",
+							query: {
+								order_id: this.skuDataInfo.UnPaid.OrderSID,
+								OrderType:this.skuDataInfo.UnPaid.OrderType			
+							}
+						});
+					}
 				}
 			},
 			jumpCart() {
@@ -329,7 +335,7 @@
 				if (this.isBrowse) {
 					return;
 				}
-				this.$Router.push({
+				this.$Router.push({	
 					path: "/pages/shoppingMall/index"
 				});
 			},

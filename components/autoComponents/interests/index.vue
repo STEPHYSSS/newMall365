@@ -8,13 +8,13 @@
 						<!-- <div class="cap-image-ad__image" :style="'background-image':`url(${setImgPrex(item.url)})`}"></div> -->
 						<!-- <image :src="setImgPrex(item.url)"></image> -->
 						<div class="boxTitle">
-							<img src="/static/img/interestTip.jpg">
+							<img src="@/static/img/interestTip.jpg">
 							<span>{{item.name}}</span>
 						</div>
-						<div>
+						<!-- <div>
 							<img v-if="item.url" class="cap-image-ad__image" :style="{'width':currentObj.isScroll==1?widthBox+'px':'100%'}" 
 							:src="setImgPrex(item.url)" />
-						  </div>     
+						 </div>   -->  
 						  <!-- <image :src="`http://192.168.0.107:8001/`+item.url" style="width: 100%;height: 161px;"></image> -->
 						<!-- <image :src="setImgPrex(item.url)" style="width: 100%;height: 161px;"></image> -->						
 						<!-- <h3 class="cap-image-ad__nav-title">{{item.name}}</h3> -->

@@ -134,7 +134,7 @@
 	}, {
 		"path": "pages/shoppingMall/seckill/index",
 		"style": {
-			"navigationBarTitleText": "秒杀活动"
+			"navigationBarTitleText": ""
 		}
 	}, {
 		"path": "pages/integralMall/index",
@@ -240,6 +240,10 @@
         }
         ,{
             "path" : "pages/shoppingMall/makeGroup/leagueList",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/shoppingMall/makeGroup/groupPlay",
             "style" : {}
         }
     ],

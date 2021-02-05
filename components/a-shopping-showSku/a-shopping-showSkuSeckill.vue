@@ -89,7 +89,7 @@
 				<!-- 底部占位 -->
 				<div class="goods-action">
 					<uni-view class="isProdType">
-						<uni-view class="uni-tab__seat" @click="onClickButton">立即抢购</uni-view>				
+						<uni-view class="uni-tab__seat" @click="onClickButton">{{msg}}</uni-view>				
 					</uni-view>
 				</div>
 				<!-- <navSeckill class="goods-action" :options="options" :buttonGroup="buttonGroup" @buttonClick="onClickButton">
@@ -132,6 +132,7 @@
 			return {
 				mainStyle: getApp().globalData.mainStyle,
 				mainColor: getApp().globalData.mainColor,
+				msg:"",
 				isShow: false,
 				showImg: false,
 				currentIndex: 0,
@@ -176,14 +177,15 @@
 			navSeckill
 		},
 		created() {
-			if (this.seckill) {
-				this.buttonGroup = [{
-					text: '立即购买',
-					backgroundColor: '#fe5252',
-					color: '#fff',
-					borderRadius: '25px'
-				}]
-			}
+			this.msg = this.skuDataInfo.UnPaid.UnPaid === "0" ? '立即抢购':'去支付'
+			// if (this.seckill) {
+			// 	this.buttonGroup = [{
+			// 		text: '立即购买',
+			// 		backgroundColor: '#fe5252',
+			// 		color: '#fff',
+			// 		borderRadius: '25px'
+			// 	}]
+			// }
 		},
 		computed: {
 			// isActiveName() {
@@ -261,7 +263,7 @@
 		},
 		methods: {
 			async onClickButton(bool) {
-				console.log(bool)
+				
 				if (this.isBrowse) {
 					return;
 				}
@@ -291,6 +293,7 @@
 					PartsArr = "";
 					PartsNoArr = "";
 				}
+				
 				try {
 					let obj = {
 						ProdList: [],
@@ -330,6 +333,7 @@
 				} catch (e) {
 					this.$toast.error(e);
 				}
+				
 				
 			},
 			closePopup(bool) {

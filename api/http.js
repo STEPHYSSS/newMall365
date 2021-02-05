@@ -34,9 +34,10 @@ export const vipCard = (data, ViewKay, AppNo) => {
 						method: 'POST',
 						success: function(response) {
 							if (response.data.Message === '请登录') {
-								
+								let appid = response.data.Data.AppID;
+								// console.log("11111")
 								// return
-								NOMAC()
+								NOMAC(appid)
 								// response.data.Message
 							}
 							let success = response.data.Success
@@ -45,15 +46,7 @@ export const vipCard = (data, ViewKay, AppNo) => {
 								if (success) {
 									uni.hideLoading();
 									return resolve(response.data)
-								} else {
-									// if(response.data.Message!='暂无赠送信息'){
-									// 	uni.showToast({
-									// 		title: response.data.Message,
-									// 		icon: 'none'
-									// 	});
-									// }else{
-									// 	sessionStorage.setItem("IsCoupon",response.data.Message)
-									// }									
+								} else {									
 									sessionStorage.setItem("IsCoupon","1")
 									uni.hideLoading();
 									return reject(response.data.Message || '操作失败')
@@ -64,7 +57,7 @@ export const vipCard = (data, ViewKay, AppNo) => {
 							}
 						},
 						fail: function(error) {
-							console.log(error, 'error')
+							// console.log(error, '-----error-----')
 							let errors = ''
 							if (error.toString().search('TypeError') || error.toString().search('500')) {
 								errors = '获取请求失败'
@@ -80,6 +73,7 @@ export const vipCard = (data, ViewKay, AppNo) => {
 								icon: 'none' 
 							});
 							uni.hideLoading();
+							// console.log(errors,'errors------')
 							return reject(errors);
 						},
 						complete: function() {
@@ -93,10 +87,11 @@ export const vipCard = (data, ViewKay, AppNo) => {
 	})
 }
 
-function NOMAC() {
+function NOMAC(appId) {	
 	uni.clearStorageSync();
 	var url = document.location.toString();
 	var arrUrl = url.split("?");
+	// console.log('222222',arrUrl)
 	if(arrUrl.length>1){
 		var para = arrUrl[1];
 		para = para.split("&"); //获取url的参数
@@ -110,25 +105,12 @@ function NOMAC() {
 		let currentUrl = arrUrl[0] + '?' + para
 		Cookies.set('currentUrl', currentUrl)
 	}
-	// var para = arrUrl[1];
-	// para = para.split("&"); //获取url的参数
-	// para.forEach((D, index) => { //删除原本url上的code
-	// 	if (D.indexOf('code') > -1) {
-	// 		para.splice(index, 1)
-	// 	}
-	// })
-
-	// para = para.join(',')
-	// let currentUrl = arrUrl[0] + '?' + para
-	// Cookies.set('currentUrl', currentUrl)
 	let newAppUrl = GetBaseUrl();
+	// console.log(newAppUrl,'-----newAppUrl-----')
 	// let headUrl = window.location.protocol + "//" + window.location.host + '/#/GrantMiddle?AppNo=' + Cookies.get('AppNo')
 	// let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
 	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
-	store.dispatch('get_user', {
-		AppNo: sessionStorage.getItem('AppNo')
-	}).then(appId => {
-		if (appId) {
+	if (appId) {
 			router.push({
 				path: '/Grant',
 				query: {
@@ -142,5 +124,23 @@ function NOMAC() {
 				icon: 'none'
 			});
 		}
-	})
+	// store.dispatch('get_user', {
+	// 	AppNo: sessionStorage.getItem('AppNo')
+	// }).then(appId => {
+	// 	// console.log(appId,'---appId---')
+	// 	if (appId) {
+	// 		router.push({
+	// 			path: '/Grant',
+	// 			query: {
+	// 				appId: appId,
+	// 				redirect_uri: headUrl
+	// 			}
+	// 		})
+	// 	} else {
+	// 		uni.showToast({
+	// 			title: '获取appId失败!',
+	// 			icon: 'none'
+	// 		});
+	// 	}
+	// })
 }

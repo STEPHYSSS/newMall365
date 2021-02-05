@@ -164,6 +164,10 @@ const other = [
 		name:'leagueList',
 		meta:{title:'团员情况'}
 	},{
+		path:'/pages/shoppingMall/makeGroup/groupPlay',
+		name:'groupPlay',
+		meta:{title:'玩法详情'}
+	},{
 		path: '/pages/integralMall/index',
 		name: 'integralMall',
 		meta: {

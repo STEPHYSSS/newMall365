@@ -4,7 +4,7 @@
 		<div class="vanImage-style">
 			<a-up-img :key="itemData.Img" :url="itemData.Img|setImgPrex" :height="imgHeight" width="100%"></a-up-img>
 			<image src="@/static/img/shouqin.png" style="width: 100%;height: 100%;position: absolute;top: 0;" v-if="itemData.StockType != '0'&& itemData.StoreQty <= '0'"></image>
-			<div class="timer-style" style v-if="seckill">
+			<div class="timer-style" v-if="seckill||isGroup">
 				<span class="timer-left">{{startIS?'距结束':'距开始'}}</span>
 				<span class="timer-right">
 					<uni-countdown color="#FFFFFF" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
@@ -12,7 +12,6 @@
 				</span>
 			</div>
 		</div>
-		<!-- <div class="oneBoxTitle">{{seckill?itemData.PromName:itemData.Name}}</div> -->
 		<div class="oneBoxTitle">{{seckill?itemData.Name:itemData.Name}}</div>
 		<div v-if="startIS" class="progress-style">
 			<!-- 进度条展示 -->
@@ -20,6 +19,10 @@
 		</div>
 		<div class="oneBoxTitleSell" v-if="seckill&&startIS">已抢{{Number(itemData.StoreQty)-Number(itemData.SurplusQty)}}件</div>
 		<div v-if="seckill&&!startIS" class="oneBoxTitleSell">总共{{itemData.StoreQty|setMoney}}件</div>
+		<!-- 拼团的进度条文字展示 -->
+		<div v-if="isGroup"  class="oneBoxTitleSell">
+			已抢{{Number(itemData.StoreQty)-Number(itemData.SurplusQty)}}件
+		</div>
 		<div class="oneBoxMoney">
 			<span v-if="isIntegral">{{itemData.Score}}积分</span>
 			<span v-if="itemData.SalePrice>0&&isIntegral">+</span>
@@ -35,9 +38,9 @@
 			</div>
 			<!-- <span @click.stop="addCart"> -->
 			<span @click="addCart">
-				<uni-icons v-if="!isIntegral&&!seckill" style="color:#fe5252" type="plus" class="addIcon"></uni-icons>
+				<uni-icons v-if="!isIntegral&&!seckill&&!isGroup" style="color:#fe5252" type="plus" class="addIcon"></uni-icons>
 			</span>
-			<div class="addIconBtn" v-if="seckill">
+			<div class="addIconBtn" v-if="seckill||isGroup">
 				<!-- itemData.SurplusQty)===0 -->
 				<button style="background: #cac7cb;bottom: 0;color: #fff;" size="mini" v-if="Number(itemData.SurplusQty)===0">{{btnTitle}}</button>
 				<button style="background: #fe5252;bottom: 0;color: #fff;" size="mini" v-else>{{btnTitle}}</button>
@@ -64,9 +67,11 @@
 				startIS:false
 			};
 		},
-		props: {},
+		props: {
+			isGroup:Boolean
+		},
 		created() {
-			if (this.itemData.StartDate && this.seckill) {
+			if (this.itemData.StartDate && this.seckill|| this.itemData.StartDate && this.isGroup) {
 				this.getTimeout()
 			}
 		},
@@ -81,11 +86,11 @@
 				}, 1000)
 			},
 			getTimeout(current) {
+				// let Start = new Date('2020-05-18 13:34:00').getTime()
+				// let End = new Date('2020-05-18 13:34:50').getTime()
 				let currentT = new Date().getTime()
 				let End = new Date(this.itemData.EndDate.replace(/-/g, '/')).getTime()
 				let Start = new Date(this.itemData.StartDate.replace(/-/g, '/')).getTime()
-				// let Start = new Date('2020-05-18 13:34:00').getTime()
-				// let End = new Date('2020-05-18 13:34:50').getTime()
 				// false 活动未开始 true 活动开始了 end为活动结束
 				this.startIS = Start - currentT >= 0 ? false : End - currentT > 0 ? true : 'end'
 				let activeTimeMy = this.startIS ? End - currentT : Start - currentT
@@ -96,7 +101,6 @@
 					minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
 					second: parseInt((myTime % (1000 * 60)) / 1000)
 				}
-
 				if (!this.startIS) {
 					//表示活动已经结束
 					this.btnTitle = " 活动未开始";

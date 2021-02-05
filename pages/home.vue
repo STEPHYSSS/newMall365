@@ -90,7 +90,6 @@
 							<uni-grid-item :index="1">
 								<view class="grid-item-box">
 									<div class="iconfont icon-gerenzhongxindingdandaifukuan"></div>
-									<!-- <span>{{AwaitPayCnt}}</span>	 -->
 									<div>待付款</div>
 								</view>
 							</uni-grid-item>
@@ -184,23 +183,20 @@
 					
 					<div class="cardWei" v-if="CardType!='0'">
 						<div>
-							<!-- <adCell text="微卡充值" @click="acWeFull" /> -->
 							<adCell text="微卡充值" @click="$Router.push('/pages/vip/weiFull')"></adCell>
 						</div>
 						<div>
 							<adCell text="付款码" @click="toPayMeng"></adCell>
-							<!-- <adCell text="付款码" @click="$Router.push('/pages/vip/payCode')" /> -->
 						</div>
 					</div>
 					<div class="cardWei">
 						<div>
 							<adCell text="交易记录" @click="$Router.push('/pages/vip/surplus')" />
 						</div>
-						<!--                    <van-cell title="积分记录" is-link to="/home/integral"/>-->
+						<!--<van-cell title="积分记录" is-link to="/home/integral"/>-->
 					</div>
 					<div class="cardWei">
 						<div>
-							<!-- <adCell text="收货地址" to="/home/myAddress" /> -->
 							<adCell text="收货地址" @click="$Router.push({path:'/pages/myAddress/myAddress',query:{flag:'homeD'}})"  />
 						</div>
 					</div>
@@ -211,7 +207,6 @@
 					</div>
 					<div style="text-align: center;margin-top:40px" class="callInfo">
 						<div class="logBottom">烘焙365提供技术支持</div>
-						<!--                <van-icon name="fire-o"/>-->
 						<div class="phoneStyle">
 							<uni-icons type="phone" size="10"></uni-icons>
 							<span @click="callClick">027-85750188</span>
@@ -223,7 +218,6 @@
 		<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
 			 <p style="width: 60px;height:60px;">
 				<a :href="kefuUrl"><image src="@/static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
-				<!-- <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a> -->
 			 </p>
 		</div>
 		<view>

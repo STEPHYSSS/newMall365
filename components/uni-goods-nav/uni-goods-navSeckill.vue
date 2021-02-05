@@ -124,7 +124,6 @@
 			}
 		},
 		created() {
-			console.log(this.IsTimeObj)
 			// if(this.isStartIS==false){
 			// 	this.showTips = "活动还未开始~请稍后再来~"
 			// 	this.hideTips = true;

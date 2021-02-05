@@ -1108,6 +1108,13 @@
 						// TicketPrice: type != 3 ? this.TicketPrice : '', //type为1和2的时候传，电子券金额
 						// DiscPrice: type === 3 ? this.DiscPrice : '', //type 为3的时候传,优惠金额
 					}
+					// if (this.currentItem[0].hasOwnProperty("PromotionItemSID")) {
+					// 	// 活动
+					// 	obj.PromotionItemSID = this.currentItem[0].PromotionItemSID;
+					// }
+					if(this.currentItem[0].hasOwnProperty("PromotionItemSID")){
+						obj.PromotionItemSID = this.currentItem[0].PromotionItemSID
+					}
 					let {
 						Data
 					} = await vipCard(obj, "UProdOpera");
