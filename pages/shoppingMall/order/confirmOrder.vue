@@ -1190,6 +1190,7 @@
 				setTimeout(() => {
 				  this.isDisabled = false;
 				}, 5000)
+				// debugger
 				let DeliveryType = this.radioModes; //2、1       //获取当前配送方式
 				if (this.radioModes === 2) {
 					if (this.currentDeliveryType.indexOf("2") > -1) {
@@ -1238,6 +1239,7 @@
 					PassWord: this.password ? this.password : '',
 					ScoreDeduction: this.allck === true ? this.ScoreDeduction : ''
 				};
+				// console.log(obj,'支付的对象')
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("PromotionItemSID")) {
 					// 活动
 					obj.PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID;

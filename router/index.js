@@ -14,7 +14,6 @@ import dataConfig from '@/config/index'
 
 Vue.use(Router)
 //初始化
-
 // encodeURI: false,
 const router = new Router({
 	routes: [...modules] //路由表
@@ -40,24 +39,23 @@ router.beforeEach((to, from, next) => {
 				if (Cookie.get('mainStyle')) {
 					getApp().globalData.mainStyle = Cookie.get('mainStyle')
 				}
-				// http://dingtalk.bak365.cn/WeixinNew/Dist/#/pages/shoppingMall/seckill/index?SID=4751209751038953933&Flag=true
 				let locationUrl = window.location.href;
-				if(locationUrl.indexOf('Flag')>-1){
-					sessionStorage.setItem('searchUrl',locationUrl)
+				if (locationUrl.indexOf('Flag') > -1) { //秒杀href
+					sessionStorage.setItem('searchUrl', locationUrl)
 				}
-				if(locationUrl.indexOf('FlagIndex')>-1){
-					sessionStorage.setItem('searchUrl',locationUrl)
+				if (locationUrl.indexOf('FlagIndex') > -1) { //首页href
+					sessionStorage.setItem('searchUrl', locationUrl)
 				}
 				getApp().globalData.mainStyle = 'theme2'
 				Cookie.set('mainStyle', 'theme2')
-                let Code = GetQueryString("code");
+				let Code = GetQueryString("code");
 				let newAppNo = GetAppNo();
 				let newAppUrl = GetBaseUrl();
 				let UserMACPhone = Cookie.get("UserMACPhone")
 				// let UserMACPhone = '8247569c1631da6216cd72a2b4a8c33au'
 				UserMACPhone = UserMACPhone == 'undefined' ? '' : UserMACPhone
 				UserMACPhone = UserMACPhone == 'null' ? '' : UserMACPhone
-				
+
 				let currentUrl = setUrlDelCode()
 				if (newAppNo) {
 					if (to.path !== '/pages/error/index' && to.path !== '/Grant' && to.path !== '/GrantMiddle' && !UserMACPhone) {
@@ -66,18 +64,19 @@ router.beforeEach((to, from, next) => {
 
 						let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : newAppUrl) +
 							'#/GrantMiddle?AppNo=' + newAppNo //调回到固定页面
+							
 						if (UserMACPhone && UserMACPhone !== null && UserMACPhone !== undefined && UserMACPhone !== '') {
 							next()
-						}else if( Code && Code !== null && Code !== undefined && Code !== '' ){
+						} else if (Code && Code !== null && Code !== undefined && Code !== '') {
 							// uni.clearStorageSync();
 							//重新登录清除缓存
 							store.commit("SET_HISTORY_URL", {})
 							try {
 								let appId = await store.dispatch('get_user', {
 									AppNo: newAppNo,
-									Code:Code
+									Code: Code
 								})
-								
+
 								if (appId) {
 									next()
 								} else {
@@ -100,18 +99,18 @@ router.beforeEach((to, from, next) => {
 									})
 								}
 							}
-						}else{
+						} else {
 							next({
-							 	path: '/Grant',
-							 	query: {
-							 		redirect_uri: headUrl
-							 	}
-							 })
-					    }
+								path: '/Grant',
+								query: {
+									redirect_uri: headUrl
+								}
+							})
+						}
 					} else {
 						next()
 					}
-					
+
 				} else if (to.path === '/pages/error/index') {
 					next()
 				} else {

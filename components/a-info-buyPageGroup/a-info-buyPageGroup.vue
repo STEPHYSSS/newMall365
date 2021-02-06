@@ -12,6 +12,7 @@
 				</swiper-item>
 			</swiper>
 			<div class="timer-style">
+				<!-- 拼团名称 -->
 				<span class="timer-left">{{PromWhereTwo}}</span>
 				<div class="timer-right">
 					<span style="margin-right:4px">{{startIS==='end'?'活动结束':'距'+(startIS?'结束':'开始')+'仅剩'}}</span>
@@ -183,7 +184,10 @@
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
 			this.goods.PromImportantNotes = setfix(this.goods.PromImportantNotes, this);
 			this.tradeList()
-			
+			// if(this.goods.PromWhere){
+				// this.goods.Promwhere
+				// this.PromWhereTwo = this.goods.Promwhere.
+			// }
 			let BuyTime ;
 			if(this.goods.BuyTime){
 				BuyTime = this.goods.BuyTime.split(',')

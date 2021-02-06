@@ -18,7 +18,6 @@ export const vipCard = (data, ViewKay, AppNo) => {
 					// let UserMACPhone = sessionStorage.getItem('UserMACPhone')
 					let UserMACPhone = Cookies.get("UserMACPhone")
 					// let UserMACPhone = '8247569c1631da6216cd72a2b4a8c33au'
-					// let AppNo = Cookies.get('AppNo') ? Cookies.get('AppNo') : AppNo
 					let AppNo = sessionStorage.getItem('AppNo')
 					
 					let urlaspx = 'RenderMobile.aspx'
@@ -37,7 +36,7 @@ export const vipCard = (data, ViewKay, AppNo) => {
 								let appid = response.data.Data.AppID;
 								// console.log("11111")
 								// return
-								NOMAC(appid)
+								NOMAC(appid)//这个地方要跳转重新授权
 								// response.data.Message
 							}
 							let success = response.data.Success
@@ -91,7 +90,7 @@ function NOMAC(appId) {
 	uni.clearStorageSync();
 	var url = document.location.toString();
 	var arrUrl = url.split("?");
-	// console.log('222222',arrUrl)
+	console.log('222222',arrUrl)
 	if(arrUrl.length>1){
 		var para = arrUrl[1];
 		para = para.split("&"); //获取url的参数
@@ -106,10 +105,11 @@ function NOMAC(appId) {
 		Cookies.set('currentUrl', currentUrl)
 	}
 	let newAppUrl = GetBaseUrl();
-	// console.log(newAppUrl,'-----newAppUrl-----')
+	console.log(newAppUrl,'-----newAppUrl-----')
 	// let headUrl = window.location.protocol + "//" + window.location.host + '/#/GrantMiddle?AppNo=' + Cookies.get('AppNo')
 	// let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
-	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
+	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
+	console.log(appId,'appId')
 	if (appId) {
 			router.push({
 				path: '/Grant',

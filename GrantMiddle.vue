@@ -38,6 +38,7 @@
 			if (code && code !== "undefined") {
 				Cookie.remove("UserMACPhone");
 				try {
+					console.log('GrantMiddle')
 					await this.$store.dispatch("get_user", {
 						AppNo: newAppNo,
 						Code: code						
@@ -45,14 +46,14 @@
 					let getPath = url.split('#')
 					
 					this.url = url;
-					
+					console.log(getPath[1],'GrantMiddle--getPath[1]')
 					this.$Router.push({
 						path: getPath[1],
 					});
 					
 		
 				} catch (e) {
-					// // 	//获取mac失败
+					// // 	//获取mac失败 
 					this.$Router.push({
 						path: "/pages/error/index",
 						query: {
