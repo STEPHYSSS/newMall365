@@ -4,11 +4,11 @@
 			<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickLeft" title="拼团详情" :status-bar="true" :shadow="false"></uni-nav-bar>
 			<view class="top">
 				<view class="goodInfo">
-					<image style="width: 100px;height: 100px;background-color: skyblue;margin: 3px;"></image>
+					<image style="width: 100px;height: 100px;margin: 3px;margin: 8px;border: 1px solid #f2f2f2;border-radius: 4px;" :src="ProdInfo.Img|fmtImgUrl"></image>
 					<view style="flex: 1;">
-						<p>小分子玻尿酸紧致保湿弹润面膜</p>
+						<p>{{ProdInfo.Name}}</p>
 						<p>
-							<text>￥100</text><text>￥178</text>
+							<text>￥{{ProdInfo.SalePrice}}</text><text style="text-decoration: line-through;">￥{{ProdInfo.OldPrice}}</text>
 						</p>
 					</view>
 				</view>
@@ -18,38 +18,118 @@
 					<text class="iconfont icon-jiantou" style="font-size: 14px;"></text>
 				</view>
 			</view>
-			<view class="center">
+			<view class="center" v-if="GroupInfo.SurplusCnt === '0'">
 				<view class="successBox">					
 					<p class="title">
 						<image class="bgTips" src="../../../static/img/groupTips.png"></image>
 						<text class="spanTips">拼团成功</text>
 					</p>
-					<image class="photo" style="background-color: orange;z-index: 5;"></image>
-					<image class="photo" style="background-color: pink;margin-left: -17px;"></image>					
+					<!-- <p v-for="(item,index) in GroupList" :key="index"> -->
+						
+						<image class="photo" :src="item.Headimgurl" style="z-index: 5;" v-for="(item,index) in GroupList" :key="index"></image>
+						<!-- <image class="photo" :src="item.Headimgurl" style="margin-left: -17px;"></image> -->
+					<!-- </p>				 -->
 					<p class="detail" @click="groupInfo">查看全部团员</p>
 					<span class="captain">团长</span>
 				</view>
-				<p class="detailBtn" @click="toOrderInfo">查看订单详情</p>
+				<p class="detailBtn" @click="OrderInfo">查看订单详情</p>
+			</view>
+			<view class="center" v-else>
+				<view class="successBox">
+					<text class="spanTips">拼团剩余时间</text>
+					<!-- <uni-countdown color="#fff" splitor-color="#fff" background-color="pink" :hour="activeTimeMy.hours"
+					 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>	 -->
+					 
+					<p v-for="(item,index) in GroupList" :key="index">
+						<image class="photo" :src="item.Headimgurl" style="background-color: orange;z-index: 5;"></image>
+						<image class="photo" :src="imgUrl" style="background-color: #fff;border: 1px dotted #ff0000;margin-left: -17px;"></image>
+					</p>									
+					<span class="captain">团长</span>
+					<p style="margin: 24px 0;">仅剩<span style="color: Red;padding: 0 5px;">{{GroupInfo.SurplusCnt}}</span>人，快来加入我的团吧！</p>
+				</view>
+				<p class="detailBtn" @click="toOrderInfo">立即参团</p>
+				<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :couGroup = "couGroup"></showSkuSeckill>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
 <script>
+	
 	import { vipCard } from '@/api/http.js';
 	import adCell from '@/node_modules/adcell/ADCell.vue';
+	import Cookie from '@/config/cookie-my/index.js';
+	import showSkuSeckill from '@/components/a-shopping-showSku/a-shopping-showSkuSeckill';
 	export default {
 		data() {
 			return {
+				historyUrlSID:Cookie.get('historyUrl'),
+				GroupSID:this.$route.query.GroupSID,
+				ProdInfo:{},//商品信息
+				GroupInfo:{},//团信息
+				GroupList:[],//团列表信息
+				successGroup:0,
+				imgUrl:require("@/static/img/defaultPhoto.png"),
+				activeTimeMy: {},
+				VirtualTime:'',//倒计时
+				show: false,
+				skuDataInfo:{},
+				couGroup:true
 			}
 		},
 		components: {
-			adCell
+			adCell,
+			showSkuSeckill
+		},
+		created() {
+			this.getMyGroupInfo();
+			// this.finishTimer();
 		},
 		methods: {
-			clickLeft(){},
+			clickLeft(){
+				window.history.back(-1)
+			},
 			toOrderInfo(){
-				
+				this.show = true;
+			},
+			hideShow() {
+				this.show = false;				
+			},
+			OrderInfo(){
+				this.$Router.push({
+					path: "/pages/shoppingMall/order/orderInfo",
+					query: {
+						order_id: this.GroupInfo.OrderSID,
+						OrderType:'2'			
+					}
+				});
+			},
+			async getMyGroupInfo(){//我的团
+				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'));
+				let historSId = Cookie.get('historyUrl')
+				try {
+					let {
+						Data
+					} = await vipCard({
+						Action: 'MyPromotion',
+						GroupSID: this.GroupSID,
+						SID:this.historyUrlSID.query.SID,
+						ShopSID:currentStore?currentStore.data.SID:''
+					}, 'UPromotionOpera')
+					this.skuDataInfo = Data;
+					this.ProdInfo = Data.ProdInfo;//拼团商品信息
+					this.GroupInfo = Data.GroupInfo;//拼团规则信息
+					this.GroupList = Data.GroupList;//团列表信息
+					if(this.GroupInfo.GroupNum === this.GroupInfo.SurplusCnt){
+						this.successGroup = 1
+					}					
+					this.VirtualTime = this.GroupInfo.VirtualTime
+					let acTime = Number(this.VirtualTime) * 60 * 60;//提前小时	
+					this.getTimeout(acTime)					
+				} catch (e) {
+					this.$toast(e)		
+				}
 			},
 			groupInfo(){
 				uni.navigateTo({
@@ -57,6 +137,27 @@
 				});
 			}
 		}
+	}
+	function changeCountDown(value) {
+		//秒转换为 20:08:90
+		var theTime = parseInt(value);
+		var middle = 0;
+		var hour = 0;
+		var result = "";
+		if (theTime > 60) {
+			middle = parseInt(theTime / 60);
+			theTime = parseInt(theTime % 60);
+			if (middle > 60) {
+				hour = parseInt(middle / 60);
+				middle = parseInt(middle % 60);
+			}
+		}
+		hour = hour < 10 ? "0" + hour : hour;
+		middle = middle < 10 ? "0" + middle : middle;
+		theTime = theTime < 10 ? "0" + theTime : theTime;
+		result = hour + ":" + middle + ":" + theTime;
+		// result = hour + ":" + middle ;
+		return result;
 	}
 </script>
 
@@ -110,7 +211,7 @@
 					width: 400px;
 					height: 40px;
 					display: inline-block;
-					margin-left: -34px;		
+					margin-left: -32px;		
 				}
 				.spanTips{
 					position: absolute;

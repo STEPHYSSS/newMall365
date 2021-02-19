@@ -13,7 +13,11 @@
 			</swiper>
 			<div class="timer-style">
 				<!-- 拼团名称 -->
-				<span class="timer-left">{{PromWhereTwo}}</span>
+				<span class="timer-left">
+					<span>¥ {{goods.SalePrice>0?goods.SalePrice:0}}</span>
+					<span class="PromWhereIndex">{{goods.PromWhere.split(',')[1]}}人拼团价</span></br>
+					<span class="oldPrice1">价格</span><span class="oldPrice">¥{{goods.OldPrice>0?goods.OldPrice:0}}</span>
+				</span>
 				<div class="timer-right">
 					<span style="margin-right:4px">{{startIS==='end'?'活动结束':'距'+(startIS?'结束':'开始')+'仅剩'}}</span>
 					<uni-countdown color="#fff" splitor-color="#fff" background-color="transparent" :day="activeTimeMy.day" :hour="activeTimeMy.hours"
@@ -23,23 +27,14 @@
 		</div>
 		<div>
 			<div class="wu-cell" style="display: block;">
-				<div class="goodCoupon-title">{{ goods.Name }}</div>
+				<div class="goodCoupon-title">
+					{{ goods.Name }}
+					<span style="float: right;font-size: 13px;">分享</span>
+				</div>
 				<!-- v-if="skuDataInfo.IsBuy === '0'" -->
 				<div class="goodCoupon-express" style="padding:0">
 					<span v-if="goods.BuyTime" style="display: block;">商品购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span>					
 					<span v-if="goods.StartTime">商品购买时间段：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
-				</div>
-				<div class="goodCoupon-price ">
-					<div>
-						<div class="colorStyle">
-							<span>¥{{goods.SalePrice>0?goods.SalePrice:0}}</span>
-							<span v-if="goods.maxPrice">- ¥{{ goods.SalePriceMaxPrice }}</span>
-						</div>
-						<div style="text-decoration: line-through;font-size: 8pt;color:#999;line-height: 10px;font-weight: 100;">
-							<span>¥{{goods.OldPrice>0?goods.OldPrice:0}}</span>
-							<span v-if="goods.OldPriceMaxPrice">- ¥{{ goods.OldPriceMaxPrice }}</span>
-						</div>
-					</div>
 				</div>
 			</div>
 			<div class="wu-cell goodCoupon-express lineTop">
@@ -49,6 +44,30 @@
 				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>
 				<span style="margin: 5px 0;display: block;" v-if="goods.Tip">{{goods.Tip}}</span>
 			</div>
+		</div>
+		<div>
+			<!-- 拼团人数列表 拼团玩法 -->
+			<view style="background-color: #fff;margin: 8px 0;" v-if="skuDataInfo.GroupList.length>0">
+				<adCell text="以下小伙伴正在发起拼团,可直接参与"  :showBottomLine="false"></adCell>
+				<view style="display: flex;box-sizing: border-box;padding-bottom: 10px;" v-for="(item,index) in skuDataInfo.GroupList" :key="index">
+					<p style="flex: 1;margin-left: 10px;display: flex;">
+						<image :src="item.Headimgurl" style="width: 35px;height: 35px;border-radius: 50%;background-color: orange;margin-right: 8px;"></image>
+						<view style="flex: 1;">
+							<p style="margin-bottom: 5px;">{{item.NickName}}</p>
+							<p style="color: #7e7e7e;letter-spacing: 1px;">还差<text style="color:#f30000 ;">{{item.SurplusCnt}}人</text>成团</p>
+						</view>
+					</p>
+					<p style="width: 100px;text-align: center;">
+						<button style="display: inline-block;padding: 0px 10px;background-color:#fe5252;color: #fff;border-radius: 3px;
+						line-height: 30px;font-size: 14px;letter-spacing: 1px ;" @click="toPoolGroup(item)">去凑团</button>
+					</p>
+					
+				</view>
+			</view>
+			<view style="background-color: #fff;margin: 8px 0;padding-bottom: 15px;">
+				<adCell text="拼团玩法"  detail="详细规则" :showBottomLine="false" @click="toGroupPlay"></adCell>
+				<p style="width: 96%;margin: 0 13px;">支付开团邀请1人参团，人数不足自动退款</p>
+			</view>
 		</div>
 		<div>
 			<adCell text="商城" icon="/static/img/shangcheng1.png" @click="clickShop" detail="进入店铺" :showBottomLine="false">
@@ -83,12 +102,11 @@
 		</div>
 		<!-- 底部占位 -->
 		<div class="goods-action">
-			<navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" @buttonClick="addCart" :IsTimeObj = "IsTimeObj"></navSeckill>
-			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" 
-			:isStartIS="startIS" :IsSeckillTime="IsSeckillTime" :IsGoodBuyTime="IsGoodBuyTime" @buttonClick="addCart" @click="jumpCart"></navSeckill> -->
+			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" @buttonClick="addCart" :IsTimeObj = "IsTimeObj"></navSeckill> -->
+			<navGroup  :buttonGroup="buttonGroup" @buttonClick="addCart" :skuDataInfo = "skuDataInfo" @click="jumpCart"></navGroup>
 		</div>
 		<!-- 商品弹窗 -->
-		<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :seckill="seckill"></showSkuSeckill>
+		<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :PromWhereFlag="PromWhereFlag"></showSkuSeckill>
 	</div>
 </template>
 
@@ -99,6 +117,7 @@
 	} from "@/api/http.js";
 	import showSkuSeckill from '@/components/a-shopping-showSku/a-shopping-showSkuSeckill';
 	import navSeckill from '@/components/uni-goods-nav/uni-goods-navSeckill.vue';
+	import navGroup from "@/components/uni-goods-nav/uni-goods-navGroup"
 	import {
 		Base64
 	} from 'js-base64';
@@ -111,7 +130,8 @@
 		components: {
 			adCell,
 			showSkuSeckill,
-			navSeckill
+			navSeckill,
+			navGroup
 		},
 		props: {
 			goods: {
@@ -168,11 +188,11 @@
 				IsTimeObj:{},//所有时间数组
 				showStock:true,
 				stockNum:'',
-				PromWhereTwo:""
+				PromWhereFlag:""
 			};
 		},
 		created() {
-			if(this.goods.ImgList.length>0){
+			if(this.goods.ImgList){
 				this.goods.ImgList = this.goods.ImgList ? this.goods.ImgList.split(",") : [];
 				this.goods.ImgList.unshift(this.goods.Img)
 			}
@@ -184,10 +204,6 @@
 			this.goods.ImportantNotes = setfix(this.goods.ImportantNotes, this);
 			this.goods.PromImportantNotes = setfix(this.goods.PromImportantNotes, this);
 			this.tradeList()
-			// if(this.goods.PromWhere){
-				// this.goods.Promwhere
-				// this.PromWhereTwo = this.goods.Promwhere.
-			// }
 			let BuyTime ;
 			if(this.goods.BuyTime){
 				BuyTime = this.goods.BuyTime.split(',')
@@ -210,10 +226,17 @@
 			}			
 			console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
 			this.buttonGroup.push({
-				text: '立即抢购',
-				backgroundColor: '#fe5252',
+				text: '单独购买',
+				backgroundColor: '#FA895D',
 				color: '#fff',
-				borderRadius: '25px',
+				Price:'￥'+this.goods.OldPrice,
+				borderRadius: '25px 0 0 25px',
+			},{
+				text: this.skuDataInfo.GroupInfo.MyGroup === '1'?'查看我的团':'立即开团',
+				backgroundColor: '#fe5252',
+				Price:this.skuDataInfo.GroupInfo.MyGroup === '1'?'':'￥'+this.goods.SalePrice,
+				color: '#fff',
+				borderRadius: '0 25px 25px 0',
 			})
 				
 			// 判断当商品库存状态为0的时候同时判断活动库存是否大于0，大于的话就展示
@@ -226,7 +249,7 @@
 			}
 		},
 		mounted() {		
-			
+			// console.log(this.skuDataInfo.GroupList,'skuDataInfo')
 			this.classA = {
 				// 图片和屏幕的width一样大
 				height: uni.getSystemInfoSync().windowWidth + "px"
@@ -302,10 +325,34 @@
 				
 			},
 			addCart(val) {
-				if (val.content.text === '立即抢购' ) {
-					this.show = true;
-					this.isAddCart = false;
+				// if (val.content.text === '立即抢购' ) {
+				// 	this.show = true;
+				// 	this.isAddCart = false;
+				// }
+				if(val.content.text === '单独购买'){
+					this.PromWhereFlag = 'aloneBuy'
 				}
+				if(val.content.text === '立即开团'){
+					this.PromWhereFlag = 'promptlyBuy'
+				}
+				if(val.content.text === '查看我的团'){
+					// this.$Router.pushTab({
+					// 	path: "/pages/shoppingMall/makeGroup/groupInfoSuccess"
+					// 	// query:{
+					// 	// 	SID:this.skuDataInfo.
+					// 	// }
+					// });
+					this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+						GroupSID:this.skuDataInfo.GroupInfo.GroupSID
+					}})
+				}	
+				this.show = true;
+				this.isAddCart = false;
+			},
+			toPoolGroup(info){//去凑团
+				this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+					GroupSID:info.GroupSID
+				}})
 			},
 			jumpCart() {
 				if (this.isBrowse) {
@@ -316,7 +363,7 @@
 				});
 			},
 			hideShow() {
-				this.show = false;
+				this.show = false;				
 			},
 			clickShop() {
 				if (this.isBrowse) {
@@ -340,6 +387,11 @@
 						}
 					});
 				}
+			},
+			toGroupPlay(){//拼团玩法
+				uni.navigateTo({
+				    url: '/pages/shoppingMall/makeGroup/groupPlay'
+				});
 			},
 			finishTimer() {
 				setTimeout(() => {
@@ -468,7 +520,7 @@
 				margin-left: auto;
 				align-items: center;
 				text-align: end;
-
+				padding-right: 10px;
 				.item-time {
 					display: inline-block;
 					width: 22px;
@@ -635,6 +687,28 @@
 		}
 		.titleSize{
 			font-size: 14px;
+		}
+		.PromWhereIndex{
+			display: inline-block;
+			background: #fff;
+			color: red;
+			margin-left: 10px;
+			border-radius: 16px;
+			padding: 3px 10px;
+			font-size: 12px;
+			letter-spacing: 1px;
+		}
+		.oldPrice{
+			letter-spacing: 1px;
+			text-decoration: line-through;
+			font-size: 8pt;
+			color:#f9f3f3;
+			line-height: 10px;
+			padding-left: 5px;
+		}
+		.oldPrice1{
+			font-size: 8pt;
+			color:#f9f3f3;
 		}
 	}
 </style>

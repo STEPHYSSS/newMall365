@@ -10,7 +10,12 @@
 								<a-up-img :key="goodsInfo.Img" :url="goodsInfo.Img |setImgPrex"></a-up-img>
 							</div>
 							<div class="skuTopInfo">
-								<div class="skuTopInfoMoney">
+								<div class="skuTopInfoMoney" v-if="PromWhereFlag=='aloneBuy'">
+									¥
+									<span>{{sumPriceCon}}</span>
+								</div>
+								
+								<div class="skuTopInfoMoney" v-else>
 									¥
 									<span v-if="goodsInfo.MemberPrice">{{sumPrice}}</span>
 									<span  v-else class="skuTopInfoMoneyNum">{{sumPrice}}</span>
@@ -127,6 +132,13 @@
 				}
 			},
 			skuDataInfo: Object,
+			couGroup:Boolean,
+			PromWhereFlag:{
+				type: String,
+				default () {
+					return "";
+				}
+			}
 		},
 		data() {
 			return {
@@ -171,13 +183,20 @@
 				currentTastArr:[],
 				TotalSurplusQty:0,//活动剩余数量
 				resultPrice:0,
+				GroupSID:''
 			};
 		},
 		components: {
 			navSeckill
 		},
 		created() {
-			this.msg = this.skuDataInfo.UnPaid.UnPaid === "0" ? '立即抢购':'去支付'
+			// this.msg = this.skuDataInfo.UnPaid.UnPaid === "0" ? '立即抢购':'去支付'
+			// this.msg = this.skuDataInfo.GroupInfo.PerValidity === '1'? "确定" : this.skuDataInfo.UnPaid.UnPaid === "0" ? "立即抢购" : "555";
+			// if(!this.couGroup){
+			// 	this.msg = this.skuDataInfo.UnPaid.UnPaid === "0" ? '立即抢购':'去支付'
+			// }else{
+				this.msg="确定"
+			// }
 			// if (this.seckill) {
 			// 	this.buttonGroup = [{
 			// 		text: '立即购买',
@@ -188,16 +207,6 @@
 			// }
 		},
 		computed: {
-			// isActiveName() {
-			// 	return function(name) {
-			// 		for (let i of this.checkStatic) {
-			// 			if (name === i.Value.Name && i.Name === value.Name) {
-			// 				return 'isActive'
-			// 			}
-			// 		}
-			// 		return ''
-			// 	}
-			// },
 			isActiveName() {
 				return function(name, value) {
 					for (let i of this.checkStatic) {
@@ -207,6 +216,24 @@
 					}
 					return ''
 				}
+			},
+			sumPriceCon(){
+				let num = ''
+				if(this.PromWhereFlag=='aloneBuy'){
+					num = Number(this.goodsInfo.OldPrice)
+				}else{
+					num = Number(this.goodsInfo.SalePrice)
+				}
+				if(this.skuDataInfo.AttributeList&&this.checkStatic.length>0){
+					this.checkStatic.forEach(item => {
+						if (item.Value.Name) {
+							this.resultPrice += isNaN(Number(item.Value.Price)) ? 0 : Number(item.Value.Price)
+						}
+					});
+				}
+				this.resultPrice=(this.resultPrice + num)*this.valueStepper
+				this.resultPrice = parseFloat(this.resultPrice.toFixed(2))
+				return this.resultPrice			
 			},
 			sumPrice () {
 				if(this.goodsInfo.SpecType==='1'){
@@ -311,24 +338,25 @@
 						PartsNo:PartsNoArr,//配件编号
 						PartsList:PartsArr ? JSON.stringify(PartsArr) : "",//配件数组
 						ParamInfo:this.currentTastArr, //商品口味
-						PromotionItemSID: this.goodsInfo.PromotionItemSID
+						PromotionItemSID: this.PromWhereFlag=='aloneBuy'?'':this.goodsInfo.PromotionItemSID,//活动SID
+						GroupSID:this.GroupSID?this.GroupSID:''
 					};
 					obj.ProdList = JSON.stringify(paramsArr);
 					let currentItemSeckill = obj.ProdList;
 						// 立即购买
-						let currentItem = [paramsArr[0]];
-						if(this.goodsInfo.ProdType==='1'){
-								if (currentItemSeckill.length > 0) {
-									this.$store.commit("SET_CURRENT_CARD", currentItemSeckill);
-									this.$Router.push("/pages/shoppingMall/order/confirmOrderTic");
-								}
-							}else{
-								if (currentItem.length > 0) {
-									console.log(currentItem)
-									this.$store.commit("SET_CURRENT_CARD", currentItem);
-									this.$Router.push("/pages/shoppingMall/order/confirmOrder");
-								}
+					let currentItem = [paramsArr[0]];
+					if(this.goodsInfo.ProdType==='1'){
+							if (currentItemSeckill.length > 0) {
+								this.$store.commit("SET_CURRENT_CARD", currentItemSeckill);
+								this.$Router.push("/pages/shoppingMall/order/confirmOrderTic");
 							}
+						}else{
+							if (currentItem.length > 0) {
+								// console.log(currentItem)
+								this.$store.commit("SET_CURRENT_CARD", currentItem);
+								this.$Router.push("/pages/shoppingMall/order/confirmOrder");
+							}
+						}
 					// }
 				} catch (e) {
 					this.$toast.error(e);
@@ -470,7 +498,12 @@
 					let skuDataInfo = this.skuDataInfo;
 					this.TotalSurplusQty = skuDataInfo.TotalSurplusQty//活动剩余数量
 					this.goodsInfo = skuDataInfo.ProdInfo; //商品详情
-					console.log(this.goodsInfo,'watch')
+					console.log(this.goodsInfo,'watch监听')
+					if(this.skuDataInfo.GroupList){
+						for (let s of this.skuDataInfo.GroupList) {
+							this.GroupSID = s.GroupSID;
+						}
+					}
 					this.normsList = []; //规格
 					this.PartsList = []; //配件
 					this.attributeList = []; //属性
@@ -478,19 +511,7 @@
 						this.PartsList = skuDataInfo.PartsList || [];
 					}
 					if (skuDataInfo.AttributeList) {
-						this.attributeList = skuDataInfo.AttributeList || [];
-						
-						// this.$nextTick(function(){
-						// 	this.checkStatic = []
-						// 	this.skuDataInfo.AttributeList.forEach((item, index) => {
-						// 		item.Value.forEach((item1, index1) => {
-						// 			if (item1.IsDefault == '1') {
-						// 				this.checkStatic.push(item)
-						// 			}
-						// 		})
-						// 	})
-						// 	console.log(this.checkStatic,1111)
-						// })
+						this.attributeList = skuDataInfo.AttributeList || [];						
 						this.checkStatic = this.attributeList.map(item => {
 							let obj = item.Value.find(item => item.IsDefault == '1')
 							// 是否必选是radio，默认是的default

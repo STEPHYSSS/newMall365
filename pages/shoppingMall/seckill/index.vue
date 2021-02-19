@@ -55,7 +55,6 @@
 		mounted() {
 			this.$store.commit("SET_HISTORY_URL", {path:'/pages/shoppingMall/seckill/index'})
 			this.imgHeight = (uni.getSystemInfoSync().windowWidth - 22) / 2 + "px";
-			
 			if(this.queryType === "1" || this.seckillSID){
 				this.getlist();
 			}else {

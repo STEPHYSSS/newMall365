@@ -526,6 +526,9 @@
 						// 活动
 						obj.PromotionItemSID = currentItems[0].PromotionItemSID;
 					}
+					if(currentItems[0].hasOwnProperty("GroupSID")){
+						obj.GroupSID = currentItems[0].GroupSID
+					}
 					Promise.all([this.saveArea(true), vipCard(obj, "UProdOpera")])
 						.then(res => {
 							if (res[1].Success == false) {
@@ -1075,7 +1078,7 @@
 			// 权益开始
 			setBeneClick(val){
 				this.radioBene = val.detail.value
-				console.log(this.radioBene)
+				// console.log(this.radioBene)
 			},
 			beneClick(item, type){
 				if (item === "undefined") {
@@ -1244,6 +1247,10 @@
 					// 活动
 					obj.PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID;
 				}
+				if (JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")) {
+					// 活动
+					obj.GroupSID = JSON.parse(this.currentItem)[0].GroupSID;
+				}
 				if (this.$Route.query.isIntegral) {
 					let currentItems = JSON.parse(this.currentItem);
 					obj = currentItems[0];
@@ -1400,8 +1407,8 @@
 			// }
 			// debugger
 			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
-			let tomorrow = endTime - cutTime;			//结束时间 - 当前时间 = 剩余时间
-			if(cutTime>startTime){//如果当前时间大于开始时间，那么就从当前时间一直循环到结束时间
+			let tomorrow = endTime - cutTime;			//结束时间 - 当前时间 = 剩余时间			
+			if(cutTime>=startTime){//如果当前时间大于开始时间，那么就从当前时间一直循环到结束时间
 				while (cutTime+acTime <= endTime+a) {
 					arr.push(changeCountDown(cutTime+acTime));
 					cutTime += a;

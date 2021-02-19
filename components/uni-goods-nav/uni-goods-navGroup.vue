@@ -21,7 +21,7 @@
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)">
 					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
-					<text>￥{{item.Price}}</text>
+					<text>{{item.Price}}</text>
 				</view>
 			</view>
 		</view>
@@ -109,12 +109,6 @@
 				})
 			},
 			buttonClick(index, item) {
-				// if(item.isbuy=='0'){
-				// 	return this.$toast('未到购买时间，无法购买')
-				// }
-				// if (item.disabled) {
-				// 	return this.$toast('商品已售罄，无法购买')
-				// }
 				if (uni.report) {
 					uni.report(item.text, item.text)
 				}
