@@ -328,6 +328,16 @@
 					};
 					let paramsArr = []; //第一个为商品，后面的都是配件
 					let ProdNo = ''
+					let defaultParamInfo = ""
+					if(this.checkStatic &&　this.checkStatic.length){
+						for (let i of this.checkStatic) {
+							if(i.Value.Name) {
+								defaultParamInfo += i.Value.Name+(i.Value.Price==='0'?'':'￥'+i.Value.Price)+"," 
+							}
+						}
+						defaultParamInfo= defaultParamInfo.substring(0, defaultParamInfo.length - 1)
+					}
+					
 					paramsArr[0] = {
 						ProdNo:this.goodsInfo.SpecType =='2' || this.goodsInfo.SpecType =='3' ? this.currentNorms.ProdNo : this.goodsInfo.ProdNo,
 						SpecType:this.goodsInfo.SpecType,
@@ -337,7 +347,7 @@
 						ProdType: this.goodsInfo.ProdType,//0是商品，1是电子券
 						PartsNo:PartsNoArr,//配件编号
 						PartsList:PartsArr ? JSON.stringify(PartsArr) : "",//配件数组
-						ParamInfo:this.currentTastArr, //商品口味
+						ParamInfo:this.currentTastArr.length>0?this.currentTastArr:defaultParamInfo, //商品口味
 						PromotionItemSID: this.PromWhereFlag=='aloneBuy'?'':this.goodsInfo.PromotionItemSID,//活动SID
 						GroupSID:this.GroupSID?this.GroupSID:''
 					};
@@ -345,6 +355,9 @@
 					let currentItemSeckill = obj.ProdList;
 						// 立即购买
 					let currentItem = [paramsArr[0]];
+					if(this.PromWhereFlag=='aloneBuy'){//
+						sessionStorage.setItem('PromWhereFlag',this.PromWhereFlag)
+					}
 					if(this.goodsInfo.ProdType==='1'){
 							if (currentItemSeckill.length > 0) {
 								this.$store.commit("SET_CURRENT_CARD", currentItemSeckill);
@@ -504,6 +517,7 @@
 							this.GroupSID = s.GroupSID;
 						}
 					}
+					
 					this.normsList = []; //规格
 					this.PartsList = []; //配件
 					this.attributeList = []; //属性

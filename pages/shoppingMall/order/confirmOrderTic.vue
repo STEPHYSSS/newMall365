@@ -257,6 +257,8 @@
 					return;
 				}
 				let currentCard = JSON.parse(localStorage.getItem('currentCard'));
+				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');
+				let PromType = sessionStorage.getItem("PromType")
 				try {
 					let {Data} = await vipCard(
 					  {
@@ -265,26 +267,32 @@
 						// ProdList:JSON.stringify(this.prodList),
 						ProdList:this.currentItem,
 						PayType:this.radioPayType,
-						PromotionItemSID:currentCard[0].PromotionItemSID
+						PromotionItemSID:currentCard[0].PromotionItemSID,
+						GroupSID:currentCard[0].GroupSID
 					  }, "UOrderOpera")
 					  if (this.radioPayType === "1") {
 					  	//微卡支付
-						// if(Data.Success==true){
-						// 	this.$toast.success("支付成功");
-						// 	setTimeout(() => {
-						// 		this.$Router.push("/pages/shoppingMall/order/paySuccess");
-						// 	}, 600);
-						// }
-						this.$toast("订单正在处理中...");
-						setTimeout(() => {
-							// this.$Router.push("/pages/shoppingMall/order/paySuccess");
-							this.$Router.push({
-								path:"/pages/vip/allMyOrder",
-								query:{
-									id:'0'
-								}
-							})
-						}, 3000);
+						// && PromWhereFlag != 'aloneBuy'
+						if(PromType === '5' ){//如果不是单独购买的话直接跳到拼团详情页
+							this.$toast("订单正在处理中...");
+							setTimeout(() => {
+								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
+								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+									GroupSID:currentCard[0].GroupSID
+								}})
+							}, 3000);
+						}else{
+							this.$toast("订单正在处理中...");
+							setTimeout(() => {
+								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
+								this.$Router.push({
+									path:"/pages/vip/allMyOrder",
+									query:{
+										id:'0'
+									}
+								})
+							}, 3000);
+						}
 						this.payTypePop = false;
 						this.$refs.payTypePop.close();
 					  } else {
@@ -299,7 +307,7 @@
 					  	}
 					  }
 				} catch (e) {
-					this.$toast.error(e)
+					this.$toast.fail(e)
 				}
 				// if (JSON.parse(this.currentItem)[0].hasOwnProperty("PromotionItemSID")) {
 				// 	// 活动

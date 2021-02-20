@@ -1265,7 +1265,6 @@
 						return;
 					}
 				}
-				let PromType = sessionStorage.getItem("PromType")//活动类型
 				let Opera = this.$Route.query.isIntegral ?
 					"UIntOrderOpera" :
 					"UOrderOpera";
@@ -1280,7 +1279,6 @@
 					this.$store.commit("SET_CURRENT_CARD", []); //清掉购物车
 					uni.removeStorageSync("alreadyPaid"); //清点之前标记的已经下单的字段
 					if (this.radioPayType === "1") {
-						
 						//微卡支付
 						this.$toast("订单正在处理中...");
 						setTimeout(() => {

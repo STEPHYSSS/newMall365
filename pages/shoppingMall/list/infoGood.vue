@@ -76,7 +76,7 @@
 						this.title = Data.ProdInfo.Name;
 						this.goodList = Data.ProdInfo || {};
 						this.skuDataInfo = Data || {};
-						console.log(this.goodList,this.skuDataInfo,'详情')
+						sessionStorage.setItem('PromType',this.goodList.PromType)
 					} else {
 						this.goodList = Data.ProdInfo || {};
 						this.title = Data.ProdInfo.Name;

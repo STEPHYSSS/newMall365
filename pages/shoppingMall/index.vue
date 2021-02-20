@@ -33,8 +33,8 @@
 				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<br>
 				<button @click="clickClear" size="mini">去除usermac</button> -->
-				<!-- <button type="default" size="mini" @click="seckill">秒杀</button>
-				<button type="default" size="mini" @click="makeUpGroup">拼团</button> -->
+				<button type="default" size="mini" @click="seckill">秒杀</button>
+				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
 					<p style="width: 60px;height:60px;">						
 						<a :href="kefuUrl"><image src="../../static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
