@@ -36,8 +36,8 @@
 					<text class="spanTips surplusTime">拼团剩余时间</text>
 					<!-- <uni-countdown color="#fff" splitor-color="#fff" background-color="pink" :hour="activeTimeMy.hours"
 					 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>	 -->
-					 <uni-countdown color="red" splitor-color="red" background-color="pink" :hour="activeTimeMy.hours"
-					  :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
+					 <uni-countdown color="red" splitor-color="red" background-color="pink" :hour="ctiveTimeMy.hours"
+					  :minute="ctiveTimeMy.minute" :second="ctiveTimeMy.second" @timeup="finishTimer2"></uni-countdown>
 					<text class="spanTips surplusTime">活动剩余时间</text>
 					<uni-countdown color="red" splitor-color="red" background-color="pink" :hour="activeTimeMy.hours"
 					 :minute="activeTimeMy.minute" :second="activeTimeMy.second" @timeup="finishTimer"></uni-countdown>
@@ -81,6 +81,7 @@
 				imgUrl:require("@/static/img/defaultPhoto.png"),
 				maskShare:require("@/static/img/share.png"),
 				activeTimeMy: {},//活动时间
+				ctiveTimeMy:{},
 				VirtualTime:'',//倒计时
 				show: false,
 				skuDataInfo:{},
@@ -184,6 +185,11 @@
 					this.getTimeout();
 				}, 1000)
 			},
+			finishTimer2(){
+				setTimeout(() => {
+					this.getViTime();
+				}, 1000)
+			},
 			getTimeout(current) {
 				let currentT = new Date().getTime()
 				let End = new Date(this.ProdInfo.EndDate.replace(/-/g, '/')).getTime()
@@ -207,24 +213,26 @@
 					3、判断当前时间是否小于等于第二步，
 				*/ 
 			   let currentT = new Date().getTime()//系统当前时间时间戳
-			   let VirtualTime = this.GroupInfo.VirtualTime*60*60;
-			   let miao = changeCountDown(VirtualTime);
-			   let year = new Date() .getFullYear(); //获取完整的年份(4位)
-			   let month=new Date() .getMonth(); //获取当前月份(0-11,0代表1月)
-			   let day=new Date() .getDate(); //获取当前日(1-31)
-			   let all = year+'-'+month+'-'+day+' '+ miao;
-			   let dd = 
-			   let Start = new Date(all.replace(/-/g, '/')).getTime();//开团时间时间戳	
+			   let VirtualTime = this.GroupInfo.VirtualTime*60*60*1000;
+			   // let miao = changeCountDown(VirtualTime);
+			   // let year = new Date() .getFullYear(); //获取完整的年份(4位)
+			   // let month=new Date() .getMonth(); //获取当前月份(0-11,0代表1月)
+			   // let day=new Date() .getDate(); //获取当前日(1-31)
+			   // let all = year+'-'+month+'-'+day+' '+ miao;
+			   // let dd = 
+			   let all = new Date(this.GroupInfo.MyAddTime.replace(/-/g, '/')).getTime();
+			   let Start = all+VirtualTime;//开团时间时间戳	
 			   let stTs = currentT<=Start?true:false;
+			   console.log(stTs)
 			   let activeTimeMy = stTs ? Start - currentT :'';
 			   let myTime = activeTimeMy
-			  let ctiveTimeMy = {
+			   this.ctiveTimeMy = {
 			   	day: parseInt(myTime / (1000 * 60 * 60 * 24)),
 			   	hours: parseInt((myTime % (1000 * 60 * 60 * 24)) / (60 * 60 * 1000)),
 			   	minute: parseInt((myTime % (1000 * 60 * 60)) / (60 * 1000)),
 			   	second: parseInt((myTime % (1000 * 60)) / 1000)
 			   }	
-					   console.log(ctiveTimeMy,'ctiveTimeMy')
+					   console.log(this.ctiveTimeMy,'ctiveTimeMy')
 			}
 		}
 	}
@@ -380,7 +388,6 @@
 				color:#f87676 ;
 				font-size: 15px;
 				display: inline-block;
-				height: 55px;
 				background-color: skyblue;
 			}
 			.captain{
