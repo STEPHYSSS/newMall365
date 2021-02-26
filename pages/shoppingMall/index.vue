@@ -61,6 +61,7 @@
 						<goodsGroup v-if="item.viewComponets === 'goodGroup'" :propsObj="item.props"></goodsGroup>
 						<titleBox v-if="item.viewComponets === 'titleBox'" :propsObj="item.props"></titleBox>
 						<seckillGoods v-if="item.viewComponets === 'seckill'" :propsObj="item.props"></seckillGoods>
+						<groupActivity v-if="item.viewComponets === 'groupActivity'" :propsObj="item.props"></groupActivity>
 						<interests v-if="item.viewComponets === 'interests'" :propsObj="item.props"></interests>
 						<!-- <component :is="item.viewComponets" ref="setModeRef" :propsObj="item.props"></component> -->
 					</div>
@@ -345,7 +346,6 @@
 					// uni.setStorageSync('arrVoice', arrVoice);
 				} catch (e) {
 					this.$toast(e)
-					console.log(e);
 				}
 			},
 			toziqu() {

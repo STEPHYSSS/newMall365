@@ -34,7 +34,7 @@
 					isStatus:'2'
 				}]
 			}
-		},
+		},		
 		methods: {
 			clickLeft(){}
 		},

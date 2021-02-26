@@ -92,7 +92,7 @@
 					</view>					
 				</view>
 				<view class="">
-					<view  v-show="TicketPrice>0" class="onlySty Discount">
+					<view  v-show="TicketPrice>='0'" class="onlySty Discount">
 						<view style="flex: 1;">
 							<span style="">{{UserTicketName}}</span>
 						</view>
@@ -440,6 +440,7 @@
 			};
 		},
 		async created() {
+			console.log(this.$Route.query.PromQuery,'PromQuery')
 			if (
 				!this.$store.state.currentCard ||
 				this.$store.state.currentCard.length === 0
@@ -999,6 +1000,7 @@
 					return;
 				}
 				this.radioPayType = item;
+				console.log(item)
 				this.Discount(item, 2)
 			},
 			changeSider(index) {//左侧日期选择
@@ -1243,15 +1245,21 @@
 					PassWord: this.password ? this.password : '',
 					ScoreDeduction: this.allck === true ? this.ScoreDeduction : ''
 				};
-				// console.log(obj,'支付的对象')
+				let PromotionItemSID = ''
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("PromotionItemSID")) {
 					// 活动
 					obj.PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID;
+					PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID
 				}
+				// console.log(this.$store.state.currentCard,'this.$store.state.currentCard')
+				// console.log(JSON.parse(this.currentItem)[0].GroupSID,'JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")')
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")) {
 					// 活动
 					obj.GroupSID = JSON.parse(this.currentItem)[0].GroupSID;
 				}
+				// else if(sessionStorage.getItem('GroupSID')){
+				// 	obj.GroupSID = sessionStorage.getItem('GroupSID');
+				// }
 				if (this.$Route.query.isIntegral) {
 					let currentItems = JSON.parse(this.currentItem);
 					obj = currentItems[0];
@@ -1266,6 +1274,8 @@
 					}
 				}
 				let PromType = sessionStorage.getItem("PromType")//活动类型
+				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');//立即开团
+				let couGroupFlag = sessionStorage.getItem('couGroup');//立即凑团
 				let Opera = this.$Route.query.isIntegral ?
 					"UIntOrderOpera" :
 					"UOrderOpera";
@@ -1279,33 +1289,63 @@
 					uni.hideLoading();
 					this.$store.commit("SET_CURRENT_CARD", []); //清掉购物车
 					uni.removeStorageSync("alreadyPaid"); //清点之前标记的已经下单的字段
+					let CouuuGroupSID = JSON.parse(this.currentItem)[0].GroupSID
 					if (this.radioPayType === "1") {
-						
-						//微卡支付
-						this.$toast("订单正在处理中...");
-						setTimeout(() => {
-							// this.$Router.push("/pages/shoppingMall/order/paySuccess");
-							this.$Router.push({
-								path:"/pages/vip/allMyOrder",
-								query:{
-									id:'0'
-								}
-							})
-						}, 5000);
+						if(PromType === '5'&& this.$Route.query.PromQuery){//如果有PromQuery 就代表是自己开团，开团之后跳转到商品详情页											
+							this.$toast("订单正在处理中...");
+							setTimeout(() => {
+								this.$Router.push({
+									path: "/pages/shoppingMall/list/infoGood",
+									query: {
+										SID: PromotionItemSID,
+										isGroup: "true"
+									}
+								});
+							}, 5000);
+						}else if(PromType === '5' && CouuuGroupSID){//通过别人的团进入的凑团
+							this.$toast("订单正在处理中...");
+							setTimeout(() => {
+								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+									// GroupSID:this.currentItem[0].GroupSID
+									GroupSID:CouuuGroupSID
+								}})
+							}, 3000);	
+						}else{
+							//微卡支付
+							this.$toast("订单正在处理中...");							
+							setTimeout(() => {
+								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
+								this.$Router.push({
+									path:"/pages/vip/allMyOrder",
+									query:{
+										id:'0'
+									}
+								})
+							}, 5000);
+						}
 						this.payTypePop = false;
 						this.$refs.payTypePop.close();
+						
 					} else {
 						// 微信支付
 						this.testData = Data;
 						try {
 							if(Data.PaySuccess){
 								this.$toast("订单正在处理中...");
-								setTimeout(() => {
-									this.$Router.push({
-										path: "/pages/vip/allMyOrder",
-										query: {id: '0'}
-									})
-								}, 5000);
+								if(PromType === '5'){//如果不是单独购买的话直接跳到拼团详情页									
+									setTimeout(() => {
+										this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+											GroupSID:this.currentItem[0].GroupSID
+										}})
+									}, 3000);	
+								}else{									
+									setTimeout(() => {
+										this.$Router.push({
+											path: "/pages/vip/allMyOrder",
+											query: {id: '0'}
+										})
+									}, 5000);
+								}
 							}else{
 								weChatPayment(this, Data, false);
 							}

@@ -138,7 +138,13 @@
 				default () {
 					return "";
 				}
-			}
+			},
+			isAgain:{
+				type: String,
+				default () {
+					return "";
+				}
+			},
 		},
 		data() {
 			return {
@@ -290,7 +296,7 @@
 		},
 		methods: {
 			async onClickButton(bool) {
-				
+				console.log(bool)
 				if (this.isBrowse) {
 					return;
 				}
@@ -337,7 +343,6 @@
 						}
 						defaultParamInfo= defaultParamInfo.substring(0, defaultParamInfo.length - 1)
 					}
-					
 					paramsArr[0] = {
 						ProdNo:this.goodsInfo.SpecType =='2' || this.goodsInfo.SpecType =='3' ? this.currentNorms.ProdNo : this.goodsInfo.ProdNo,
 						SpecType:this.goodsInfo.SpecType,
@@ -349,27 +354,37 @@
 						PartsList:PartsArr ? JSON.stringify(PartsArr) : "",//配件数组
 						ParamInfo:this.currentTastArr.length>0?this.currentTastArr:defaultParamInfo, //商品口味
 						PromotionItemSID: this.PromWhereFlag=='aloneBuy'?'':this.goodsInfo.PromotionItemSID,//活动SID
-						GroupSID:this.GroupSID?this.GroupSID:''
+						GroupSID:this.GroupSID?sessionStorage.getItem('GroupSID'):''
 					};
 					obj.ProdList = JSON.stringify(paramsArr);
 					let currentItemSeckill = obj.ProdList;
 						// 立即购买
 					let currentItem = [paramsArr[0]];
-					if(this.PromWhereFlag=='aloneBuy'){//
-						sessionStorage.setItem('PromWhereFlag',this.PromWhereFlag)
-					}
 					if(this.goodsInfo.ProdType==='1'){
-							if (currentItemSeckill.length > 0) {
-								this.$store.commit("SET_CURRENT_CARD", currentItemSeckill);
+						if (currentItemSeckill.length > 0) {
+							this.$store.commit("SET_CURRENT_CARD", currentItemSeckill);
+							
+							if(this.PromWhereFlag=='promptlyBuy'){
+								this.$Router.push({path:"/pages/shoppingMall/order/confirmOrderTic",query:{
+									PromQuery:"promptlyBuy"
+								}})
+							}else{									
 								this.$Router.push("/pages/shoppingMall/order/confirmOrderTic");
 							}
-						}else{
-							if (currentItem.length > 0) {
-								// console.log(currentItem)
-								this.$store.commit("SET_CURRENT_CARD", currentItem);
+						}
+					}else{
+						if (currentItem.length > 0) {
+							// console.log(currentItem)
+							this.$store.commit("SET_CURRENT_CARD", currentItem);
+							if(this.PromWhereFlag=='promptlyBuy'){
+								this.$Router.push({path:"/pages/shoppingMall/order/confirmOrder",query:{
+									PromQuery:"promptlyBuy"
+								}})
+							}else{									
 								this.$Router.push("/pages/shoppingMall/order/confirmOrder");
 							}
 						}
+					}
 					// }
 				} catch (e) {
 					this.$toast.error(e);
@@ -512,12 +527,18 @@
 					this.TotalSurplusQty = skuDataInfo.TotalSurplusQty//活动剩余数量
 					this.goodsInfo = skuDataInfo.ProdInfo; //商品详情
 					console.log(this.goodsInfo,'watch监听')
-					if(this.skuDataInfo.GroupList){
-						for (let s of this.skuDataInfo.GroupList) {
-							this.GroupSID = s.GroupSID;
-						}
+					if(this.PromWhereFlag == 'promptlyBuy' || this.isAgain === '重新开团'){
+						this.GroupSID = ''
+					}else{
+						this.GroupSID = sessionStorage.getItem('GroupSID')
 					}
-					
+					// else{
+						// if(this.skuDataInfo.GroupList){
+						// 	for (let s of this.skuDataInfo.GroupList) {
+						// 		this.GroupSID = s.GroupSID;
+						// 	}
+						// }
+					// }
 					this.normsList = []; //规格
 					this.PartsList = []; //配件
 					this.attributeList = []; //属性

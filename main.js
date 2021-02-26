@@ -26,7 +26,8 @@ import richText from "@/components/autoComponents/richText/"
 import goods from "@/components/autoComponents/goods/"
 import goodsGroup from "@/components/autoComponents/goodsGroup/"
 import titleBox from "@/components/autoComponents/titleBox/"
-import seckillGoods from "@/components/autoComponents/seckillGoods"
+import seckillGoods from "@/components/autoComponents/seckillGoods"//秒杀活动
+import groupActivity from "@/components/autoComponents/groupActivity"//拼团活动
 import interests from "@/components/autoComponents/interests"
 import vconsole from 'vconsole' // 引入vconsole
 
@@ -51,6 +52,7 @@ Vue.component('goods', goods)
 Vue.component('goodsGroup', goodsGroup)
 Vue.component('titleBox', titleBox)
 Vue.component('seckillGoods',seckillGoods)
+Vue.component('groupActivity',groupActivity)
 Vue.component('interests',interests)
 //挂载公用组件结束
 
@@ -60,7 +62,7 @@ App.mpType = 'app'
 Vue.prototype.$store = store
 Vue.prototype.$VUE_APP_PREFIX = dataConfig.VUE_APP_PREFIX
 Vue.prototype.$VUE_APP_PREFIX2 = dataConfig.BASE_URL_OnLine2 //用于图片路径
-// Vue.prototype.$vconsole = new vconsole() // 使用vconsole
+Vue.prototype.$vconsole = new vconsole() // 使用vconsole
 
 Vue.prototype.$toast = (val) => {
 	uni.showToast({

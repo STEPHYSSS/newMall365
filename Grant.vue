@@ -26,7 +26,7 @@
 		},
 		created() {
 			if( window.location.hostname == "localhost" ) 	{
-				window.location.href =this.redirect_uri + "&code=11111"
+				window.location.href =this.redirect_uri + "&code=1"
 			}else  if(this.UserMACPhone){
 				uni.navigateTo({
 				   url: '/pages/home'

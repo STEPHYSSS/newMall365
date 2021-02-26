@@ -20,8 +20,10 @@
 			<view :class="{'uni-tab__right':fill}" class="flex uni-tab__cart-sub-right">
 				<view v-for="(item,index) in buttonGroup" :key="index" :style="{backgroundColor:item.backgroundColor,color:item.color,'border-radius':item.borderRadius}"
 				 class="flex uni-tab__cart-button-right" @click="buttonClick(index,item)">
-					<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
-					<text>{{item.Price}}</text>
+					<!-- <p v-if="item.text=='已达团上限'"> -->
+						<text class="uni-tab__cart-button-right-text">{{ item.text }}</text>
+						<text>{{item.Price}}</text>
+					<!-- </p> -->
 				</view>
 			</view>
 		</view>
@@ -109,13 +111,17 @@
 				})
 			},
 			buttonClick(index, item) {
-				if (uni.report) {
-					uni.report(item.text, item.text)
-				}
-				this.$emit('buttonClick', {
-					index,
-					content: item
-				})
+				// if(item.disable=='true'){
+					
+					if (uni.report) {
+						uni.report(item.text, item.text)
+					}
+					this.$emit('buttonClick', {
+						index,
+						content: item
+					})
+				// }
+				
 			}
 		}
 	}
@@ -275,5 +281,8 @@
 
 	.uni-tab__color-r {
 		background-color: #ff0000;
+	}
+	.active{
+		background-color: red;
 	}
 </style>

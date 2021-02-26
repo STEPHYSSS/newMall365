@@ -63,14 +63,14 @@
 					<div class="orderTime">
 						<div class="orderTime_label priceName">实付金额</div>
 						<span class="priceSpan priceColor">¥{{OrderInfo.PayAmt}}</span>
-					</div>
+					</div>					
 				</div>
 			</div>			
 			<div class="orderData">
 				<div class="orderTime" v-if="OrderInfo.OrderType&&OrderInfo.OrderType>0&&OrderInfo.OrderType!=='2'">
 					<div class="orderTime_label">商品类型：</div>
 					<span>{{OrderInfo.OrderType |orderType}}</span>
-				</div>
+				</div>				
 				<div class="orderTime">
 					<div class="orderTime_label">支付状态：</div>
 					<span>{{OrderInfo.State |orderState}}</span>
@@ -78,6 +78,10 @@
 				<div class="orderTime">
 					<div class="orderTime_label">支付方式：</div>
 					<span>{{OrderInfo.PayType | payTypeOrder}}</span>
+				</div>
+				<div class="orderTime" v-if="refundAllow!=='2'&&OrderInfo.OrderType!=='4'">
+					<div class="orderTime_label">退款状态：</div>
+					<span>{{OrderInfo.RefundState |RefundState}}</span>
 				</div>
 				<div class="orderTime">
 					<div class="orderTime_label">订单编号：</div>
@@ -101,7 +105,7 @@
 				<div class="orderTime">
 					<div class="orderTime_label">提货时间：</div>
 					<span>{{OrderInfo.PickTime}}</span>
-				</div>
+				</div>				
 				<div class="orderTime">
 					<div class="orderTime_label">下单备注：</div>
 					<span>{{OrderInfo.UserRemarks}}</span>

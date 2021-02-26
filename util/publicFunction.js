@@ -168,6 +168,7 @@ export function setUrlDelCode() {
 	// Cookies.set('currentUrl', currentUrl)
 	// this.$store.commit("SET_SEARCH_URL", url);	
 	console.log(url,'url---')
+	Cookies.set('GroupUrl', url)
 	if (!url) {
 		return url
 	}

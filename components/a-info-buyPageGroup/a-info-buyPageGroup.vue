@@ -29,16 +29,19 @@
 			<div class="wu-cell" style="display: block;">
 				<div class="goodCoupon-title">
 					{{ goods.Name }}
-					<span style="float: right;font-size: 13px;">分享</span>
+					<!-- <span style="float: right;font-size: 13px;" @click="share">分享</span> -->
 				</div>
 				<!-- v-if="skuDataInfo.IsBuy === '0'" -->
-				<div class="goodCoupon-express" style="padding:0">
+				<div class="goodCoupon-express" style="padding:0">					
 					<span v-if="goods.BuyTime" style="display: block;">商品购买时间：<span class="timeSty">{{goods.BuyTime|setBuyTime}}</span></span>					
 					<span v-if="goods.StartTime">商品购买时间段：<span class="timeSty">{{goods.StartTime}}至{{goods.EndTime}}</span></span>
 				</div>
 			</div>
 			<div class="wu-cell goodCoupon-express lineTop">
-				<div style="flex:1">剩余库存：{{stockNum}}</div>
+				<div style="flex:1">剩余库存：{{stockNum}}<br/>
+				<span class="timeSty" v-if="goods.PickTime">提货时间：{{goods.PickTime.split(',')[0]}}至{{goods.PickTime.split(',')[1]}}</span>
+				</div>
+				
 			</div>
 			<div class="ImportantNotes-cell-group">
 				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>
@@ -47,9 +50,9 @@
 		</div>
 		<div>
 			<!-- 拼团人数列表 拼团玩法 -->
-			<view style="background-color: #fff;margin: 8px 0;" v-if="skuDataInfo.GroupList.length>0">
+			<view class="GroupNum" v-if="skuDataInfo.GroupList.length>0">
 				<adCell text="以下小伙伴正在发起拼团,可直接参与"  :showBottomLine="false"></adCell>
-				<view style="display: flex;box-sizing: border-box;padding-bottom: 10px;" v-for="(item,index) in skuDataInfo.GroupList" :key="index">
+				<view class="listBox" v-for="(item,index) in skuDataInfo.GroupList" :key="index">
 					<p style="flex: 1;margin-left: 10px;display: flex;">
 						<image :src="item.Headimgurl" style="width: 35px;height: 35px;border-radius: 50%;background-color: orange;margin-right: 8px;"></image>
 						<view style="flex: 1;">
@@ -65,8 +68,9 @@
 				</view>
 			</view>
 			<view style="background-color: #fff;margin: 8px 0;padding-bottom: 15px;">
-				<adCell text="拼团玩法"  detail="详细规则" :showBottomLine="false" @click="toGroupPlay"></adCell>
-				<p style="width: 96%;margin: 0 13px;">支付开团邀请1人参团，人数不足自动退款</p>
+				<adCell text="拼团玩法"  detail="详细规则" :showBottomLine="false" @click="toGroupPlay"></adCell>								
+				<p style="width: 96%;margin: 0 13px;" v-if="skuDataInfo.GroupInfo.GroupNum =='1'">支付开团，人数不足自动退款</p>
+				<p style="width: 96%;margin: 0 13px;" v-else>支付开团邀请{{skuDataInfo.GroupInfo.GroupNum - 1}}人参团，人数不足自动退款</p>
 			</view>
 		</div>
 		<div>
@@ -103,7 +107,7 @@
 		<!-- 底部占位 -->
 		<div class="goods-action">
 			<!-- <navSeckill :options="options" :buttonGroup="buttonGroup" :skuDataInfo = "skuDataInfo" @buttonClick="addCart" :IsTimeObj = "IsTimeObj"></navSeckill> -->
-			<navGroup  :buttonGroup="buttonGroup" @buttonClick="addCart" :skuDataInfo = "skuDataInfo" @click="jumpCart"></navGroup>
+			<navGroup :buttonGroup="buttonGroup" @buttonClick="addCart" :skuDataInfo = "skuDataInfo" @click="jumpCart"></navGroup>
 		</div>
 		<!-- 商品弹窗 -->
 		<showSkuSeckill :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :PromWhereFlag="PromWhereFlag"></showSkuSeckill>
@@ -224,7 +228,7 @@
 				IsBuy:IsBuy,
 				IsStart:IsStart
 			}			
-			console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
+			// console.log(IsEndDate+'日期',IsSeckillTime+'时间段',IsPromWeeks,IsPromWeeks,IsPromDate,IsGoodBuyTime)
 			this.buttonGroup.push({
 				text: '单独购买',
 				backgroundColor: '#FA895D',
@@ -232,11 +236,13 @@
 				Price:'￥'+this.goods.OldPrice,
 				borderRadius: '25px 0 0 25px',
 			},{
-				text: this.skuDataInfo.GroupInfo.MyGroup === '1'?'查看我的团':'立即开团',
+				// text: this.skuDataInfo.GroupInfo.MyGroup === '1'?'查看我的团':'立即开团',
+				text: this.skuDataInfo.GroupInfo.MyGroup === '1'?'查看我的团':this.skuDataInfo.GroupInfo.MaxGroup === '1'?'已达团上限':'立即开团',
 				backgroundColor: '#fe5252',
-				Price:this.skuDataInfo.GroupInfo.MyGroup === '1'?'':'￥'+this.goods.SalePrice,
+				Price:this.skuDataInfo.GroupInfo.MyGroup === '1'?'':this.skuDataInfo.GroupInfo.MaxGroup === '1'?'':'￥'+this.goods.SalePrice,
 				color: '#fff',
-				borderRadius: '0 25px 25px 0',
+				borderRadius: '0 25px 25px 0'
+				// disable:this.skuDataInfo.GroupInfo.MaxGroup === '1'?'false':'true'
 			})
 				
 			// 判断当商品库存状态为0的时候同时判断活动库存是否大于0，大于的话就展示
@@ -259,6 +265,7 @@
 			// #endif			
 		},
 		methods: {
+			share(){},
 			getWeekDate(Prweek) {
 			   var now = new Date();
 			   var day = now.getDay();
@@ -330,10 +337,14 @@
 				// 	this.isAddCart = false;
 				// }
 				if(val.content.text === '单独购买'){
-					this.PromWhereFlag = 'aloneBuy'
+					this.PromWhereFlag = 'aloneBuy';
+					this.show = true;
+					this.isAddCart = false;
 				}
 				if(val.content.text === '立即开团'){
-					this.PromWhereFlag = 'promptlyBuy'
+					this.PromWhereFlag = 'promptlyBuy';
+					this.show = true;
+					this.isAddCart = false;
 				}
 				if(val.content.text === '查看我的团'){
 					// this.$Router.pushTab({
@@ -343,19 +354,29 @@
 					// 	// }
 					// });
 					this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
-						GroupSID:this.skuDataInfo.GroupInfo.GroupSID
+						GroupSID:this.skuDataInfo.GroupInfo.GroupSID,
+						info:this.skuDataInfo.ProdInfo.PromotionItemSID
 					}})
-				}	
-				this.show = true;
-				this.isAddCart = false;
+					sessionStorage.setItem('GroupSID',this.skuDataInfo.GroupInfo.GroupSID)				
+					this.show = true;
+					this.isAddCart = false;
+				}
+				if(val.content.text === '已达团上限'){
+					this.show = false;
+					this.isAddCart = false;
+				}
+				// this.show = true;
+				// this.isAddCart = false;
 			},
 			toPoolGroup(info){//去凑团
 				this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
-					GroupSID:info.GroupSID
-				}})
+					GroupSID:info.GroupSID,
+					info:info.PromotionItemSID
+				}});
+				sessionStorage.setItem('GroupSID',info.GroupSID);
 			},
 			jumpCart() {
-				if (this.isBrowse) {
+				if (this.isBrowse) { 
 					return;
 				}
 				this.$Router.pushTab({
@@ -709,6 +730,17 @@
 		.oldPrice1{
 			font-size: 8pt;
 			color:#f9f3f3;
+		}
+		.GroupNum{
+			background-color: #fff;
+			margin: 8px 0;
+			max-height: 180px;
+			overflow-y: scroll;
+		}
+		.listBox{
+			display: flex;
+			box-sizing: border-box;
+			padding-bottom: 10px;
 		}
 	}
 </style>

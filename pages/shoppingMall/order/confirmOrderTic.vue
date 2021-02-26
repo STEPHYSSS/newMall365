@@ -257,7 +257,8 @@
 					return;
 				}
 				let currentCard = JSON.parse(localStorage.getItem('currentCard'));
-				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');
+				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');//立即开团
+				let couGroupFlag = sessionStorage.getItem('couGroup');//立即凑团
 				let PromType = sessionStorage.getItem("PromType")
 				try {
 					let {Data} = await vipCard(
@@ -272,14 +273,24 @@
 					  }, "UOrderOpera")
 					  if (this.radioPayType === "1") {
 					  	//微卡支付
-						// && PromWhereFlag != 'aloneBuy'
-						if(PromType === '5' ){//如果不是单独购买的话直接跳到拼团详情页
+						if(PromType === '5' && currentCard[0].GroupSID){//如果不是单独购买的话直接跳到拼团详情页
 							this.$toast("订单正在处理中...");
 							setTimeout(() => {
 								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
 								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
 									GroupSID:currentCard[0].GroupSID
 								}})
+							}, 3000);
+						}else if(PromType === '5' && !currentCard[0].GroupSID){
+							setTimeout(() => {
+								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
+								this.$Router.push({
+									path: "/pages/shoppingMall/list/infoGood",
+									query: {
+										SID: currentCard[0].PromotionItemSID,
+										isGroup: "true"
+									}
+								});
 							}, 3000);
 						}else{
 							this.$toast("订单正在处理中...");

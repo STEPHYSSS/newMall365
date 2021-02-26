@@ -21,7 +21,7 @@
 		<div v-if="seckill&&!startIS" class="oneBoxTitleSell">总共{{itemData.StoreQty|setMoney}}件</div>
 		<!-- 拼团的进度条文字展示 -->
 		<div v-if="isGroup"  class="oneBoxTitleSell">
-			已抢{{Number(itemData.StoreQty)-Number(itemData.SurplusQty)}}件
+			已抢{{robbedNum}}件
 		</div>
 		<div class="oneBoxMoney">
 			<span v-if="isIntegral">{{itemData.Score}}积分</span>
@@ -64,7 +64,8 @@
 				timeCountDown: "",
 				btnTitle: "马上抢",
 				activeTimeMy: {},
-				startIS:false
+				startIS:false,
+				robbedNum:0
 			};
 		},
 		props: {
@@ -74,6 +75,7 @@
 			if (this.itemData.StartDate && this.seckill|| this.itemData.StartDate && this.isGroup) {
 				this.getTimeout()
 			}
+			this.robbedNum = Number(this.itemData.StoreQty)-Number(this.itemData.SurplusQty)<0?0:Number(this.itemData.StoreQty)-Number(this.itemData.SurplusQty);			
 		},
 		methods: {
 			addCart() {

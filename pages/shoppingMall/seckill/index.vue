@@ -34,6 +34,7 @@
 				list: [],
 				loading: true,
 				seckillSID:'',
+				grourSID:'',
 				queryType:this.$Route.query.Type,
 			};
 		},
@@ -46,9 +47,16 @@
 			        this.seckillSID = getQueryString2("SID", url);
 				}
 			}
+			if(url!=null&&url.indexOf('FlagGroup')>-1){
+				if(url!=null&&url.lastIndexOf("?")){
+					let index = url.lastIndexOf("?");
+			        url = url.slice(index);
+			        this.grourSID = getQueryString2("SID", url);
+				}
+			}
 			if(this.$Route.query.Type === '1' || this.seckillSID){
 				this.title = "秒杀活动"
-			}else {
+			}else if(this.$Route.query.Type === '5' ||this.grourSID){
 				this.title = "拼团活动 "
 			}
 		},
@@ -57,7 +65,7 @@
 			this.imgHeight = (uni.getSystemInfoSync().windowWidth - 22) / 2 + "px";
 			if(this.queryType === "1" || this.seckillSID){
 				this.getlist();
-			}else {
+			}else if(this.$Route.query.Type === '5' || this.grourSID){
 				this.getGrouplist();
 			}
 			
@@ -73,7 +81,7 @@
 							Action: "GetPromotionList",
 							Type: 1,
 							ShopSID:currentStore?currentStore.data.SID:'',
-							SID:this.seckillSID?this.seckillSID:''
+							SID:this.seckillSID?this.seckillSID:'',
 						}, "UPromotionOpera")
 					]);
 					this.list = res[0].Data.ProdList;
@@ -89,6 +97,7 @@
 						vipCard({
 							Action: "GetPromotionList",
 							ShopSID:currentStore?currentStore.data.SID:'',
+							SID:this.grourSID?this.grourSID:'',
 							Type: 5
 						}, "UPromotionOpera")
 					]);
