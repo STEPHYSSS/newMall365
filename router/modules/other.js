@@ -146,6 +146,12 @@ const other = [
 			title: '商品评价列表',
 		}
 	},{
+		path: '/pages/shoppingMall/evaluation/publishComments',
+		name: 'publishComments',
+		meta: {
+			title: '发表评价',
+		}
+	},{
 		path: '/pages/shoppingMall/seckill/index',
 		name: 'seckill',
 		meta: {
@@ -235,6 +241,42 @@ const other = [
 		meta: {
 			title: '购买记录',
 		}
-	}
+	},{ // 每日签到
+		path:"/pages/vip/signIn/signIn",
+		name:'signIn',
+		meta:{
+			title:'每日签到'
+		}
+	},{//签到规则
+		path:"/pages/vip/signIn/signRule",
+		name:'signRule',
+		meta:{
+			title:'签到规则'
+		}
+	},{//自定义链接页面
+		path:"/pages/shoppingMall/autoLinkIndex/autoLinkIndex",
+		name:'autoLinkIndex',
+		meta:{
+			title:'自定义页面'
+		}
+	},{//扫码领券
+		path:"/pages/scanCoupons/scanCoupons",
+		name:"scanCoupons",
+		meta:{
+			title:'扫码领券'
+		}
+	},{
+		path:"/pages/vip/markPromotion/markPromotion",
+		name:"markPromotion",
+		meta:{
+			title:'我的推广中心'
+		}
+	},{
+		path:"/pages/vip/markPromotion/returnRecord",
+		name:"markPromotion",
+		meta:{
+			title:'返佣记录'
+		}
+	},	
 ]
 export default other

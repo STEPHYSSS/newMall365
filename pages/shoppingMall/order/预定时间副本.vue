@@ -92,7 +92,7 @@
 					</view>					
 				</view>
 				<view class="">
-					<view  v-show="TicketPrice>0" class="onlySty Discount">
+					<view  v-show="TicketPrice>='0'" class="onlySty Discount">
 						<view style="flex: 1;">
 							<span style="">{{UserTicketName}}</span>
 						</view>
@@ -440,6 +440,7 @@
 			};
 		},
 		async created() {
+			console.log(this.$Route.query.PromQuery,'PromQuery')
 			if (
 				!this.$store.state.currentCard ||
 				this.$store.state.currentCard.length === 0
@@ -637,37 +638,27 @@
 							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
 							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间							
 							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
-							// jka
-							// console.log(new Date().getMinutes().toString(),'系统时间')
 							/*
 								1、判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天并且加上提前的时间
 								3、如果当前系统时间加上提前时间不大于结束时间的话，就在当前时间上加上提前时间 
 							*/
 							//FinTypeCun为2的时候代表是提前小时，1是提前天数
 							let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间
-							let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间 
-							console.log(dayTime,'one day')
-							if(FinTypeCun==='2'){//提前小时
-								if(cutTime>endTime){ //判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天就加上提前的时间
-									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
+							let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间
+							if(FinTypeCun==='2'){//提前小时	
+								if(cutTime>endTime){//判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天就加上提前的时间
+									FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数
 									tAdvance = Number(FinTypeHour);//提前小时
-								}else if((acTime + cutTime).toFixed(2) > endTime){//如果当前时间+提前小时大于商城结束时间 例：现在一点半 提前23小时 这里是2天3个小时									
-									if(cutTime>endTime){//当前时间大于结束时间，就直接到第二天开始算 如果提前时间大于商城结束时间那就直接加上一天
-										FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数
-										tAdvance = Number(FinTypeHour);//提前小时
+								}else{//反之 如果当前时间不大于结束时间的话 就要分情况了 还剩下多少提前小时
+									let abc = endTime-cutTime;
+									let mouTime = (acTime-(endTime - cutTime)) 	
+									if(abc>=mouTime){//如果剩余时间大于提前剩余时间
+										FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
+										tAdvance = FinTypeHour;
 									}else{
-										if(endTime-cutTime<acTime){
-											FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
-											tAdvance = Number(FinTypeHour);//提前小时	
-										}else{
-											FinTypeDay=(parseInt(dayAdvance))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
-											tAdvance = Number(FinTypeHour);//提前小时	
-										}
-											
-									}
-								}else{
-									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
-									tAdvance = FinTypeHour;
+										FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time);
+										tAdvance = Number(FinTypeHour);//提前小时
+									}									
 								}
 							}else{//提前天数
 								// 如果当前时间大于结束时间 那么就应该提前天数+1  如果当前时间不大于结束时间 那么就应该是第二天的当前时间
@@ -999,6 +990,7 @@
 					return;
 				}
 				this.radioPayType = item;
+				console.log(item)
 				this.Discount(item, 2)
 			},
 			changeSider(index) {//左侧日期选择
@@ -1217,10 +1209,18 @@
 				// if(this.allck === true){//判断是否勾选积分抵扣
 				// 	// true代表选中，false代表未选中
 				// }
-				let currentStore = this.$store.state.currentStoreInfo || {}
-				let splitTime= this.RecordTime.radioTime.split("-")
+				
+				let CouuuGroupSID = JSON.parse(this.currentItem)[0].GroupSID;//凑团GroupSID
+				let currentStore = this.$store.state.currentStoreInfo || {};
+				let splitTime= this.RecordTime.radioTime.split("-");
+				let Action = "";
+				if(this.$Route.query.PromQuery||CouuuGroupSID){
+					Action = "GroupOrderPay"
+				}else{
+					Action = "OrderPay"
+				}
 				let obj = {
-					Action: "OrderPay",
+					Action: Action,
 					DeliveryType: DeliveryType,
 					UserName: this.radioModes === 2 ? this.currentArea.Name : this.name_user,
 					Mobile: this.radioModes === 1 ? this.phone_user : this.currentArea.Mobile,
@@ -1243,15 +1243,21 @@
 					PassWord: this.password ? this.password : '',
 					ScoreDeduction: this.allck === true ? this.ScoreDeduction : ''
 				};
-				// console.log(obj,'支付的对象')
+				let PromotionItemSID = ''
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("PromotionItemSID")) {
 					// 活动
 					obj.PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID;
+					PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID
 				}
+				// console.log(this.$store.state.currentCard,'this.$store.state.currentCard')
+				// console.log(JSON.parse(this.currentItem)[0].GroupSID,'JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")')
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")) {
 					// 活动
 					obj.GroupSID = JSON.parse(this.currentItem)[0].GroupSID;
 				}
+				// else if(sessionStorage.getItem('GroupSID')){
+				// 	obj.GroupSID = sessionStorage.getItem('GroupSID');
+				// }
 				if (this.$Route.query.isIntegral) {
 					let currentItems = JSON.parse(this.currentItem);
 					obj = currentItems[0];
@@ -1265,6 +1271,9 @@
 						return;
 					}
 				}
+				let PromType = sessionStorage.getItem("PromType")//活动类型
+				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');//立即开团
+				let couGroupFlag = sessionStorage.getItem('couGroup');//立即凑团
 				let Opera = this.$Route.query.isIntegral ?
 					"UIntOrderOpera" :
 					"UOrderOpera";
@@ -1279,31 +1288,69 @@
 					this.$store.commit("SET_CURRENT_CARD", []); //清掉购物车
 					uni.removeStorageSync("alreadyPaid"); //清点之前标记的已经下单的字段
 					if (this.radioPayType === "1") {
-						//微卡支付
-						this.$toast("订单正在处理中...");
-						setTimeout(() => {
-							// this.$Router.push("/pages/shoppingMall/order/paySuccess");
-							this.$Router.push({
-								path:"/pages/vip/allMyOrder",
-								query:{
-									id:'0'
-								}
-							})
-						}, 5000);
+						uni.showToast({
+							title: '订单正在处理中...',
+							duration: 3000,
+							icon: 'none'
+						});
+						if(PromType === '5'&& this.$Route.query.PromQuery){//如果有PromQuery 就代表是自己开团，开团之后跳转到商品详情页											
+							setTimeout(() => {
+								this.$Router.push({
+									path: "/pages/shoppingMall/list/infoGood",
+									query: {
+										SID: PromotionItemSID,
+										isGroup: "true"
+									}
+								});
+							}, 5000);
+						}else if(PromType === '5' && CouuuGroupSID){//通过别人的团进入的凑团
+							// this.$toast("订单正在处理中...");
+							setTimeout(() => {
+								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+									// GroupSID:this.currentItem[0].GroupSID
+									GroupSID:CouuuGroupSID
+								}})
+							}, 3000);	
+						}else{
+							//微卡支付
+							// this.$toast("订单正在处理中...");							
+							setTimeout(() => {
+								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
+								this.$Router.push({
+									path:"/pages/vip/allMyOrder",
+									query:{
+										id:'0'
+									}
+								})
+							}, 3000);
+						}
 						this.payTypePop = false;
 						this.$refs.payTypePop.close();
+						
 					} else {
 						// 微信支付
 						this.testData = Data;
 						try {
 							if(Data.PaySuccess){
-								this.$toast("订单正在处理中...");
-								setTimeout(() => {
-									this.$Router.push({
-										path: "/pages/vip/allMyOrder",
-										query: {id: '0'}
-									})
-								}, 5000);
+								uni.showToast({
+									title: '订单正在处理中...',
+									duration: 3000,
+									icon: 'none'
+								});
+								if(PromType === '5'){//如果不是单独购买的话直接跳到拼团详情页									
+									setTimeout(() => {
+										this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
+											GroupSID:this.currentItem[0].GroupSID
+										}})
+									}, 3000);	
+								}else{									
+									setTimeout(() => {
+										this.$Router.push({
+											path: "/pages/vip/allMyOrder",
+											query: {id: '0'}
+										})
+									}, 5000);
+								}
 							}else{
 								weChatPayment(this, Data, false);
 							}
@@ -1363,14 +1410,12 @@
 		return arrData;
 	}
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
-	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')		
-		// debugger
+		console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')	
 		let arr = [];
 		let arrToday = [];//一天的时间段数组
 		let dayM = 60 * 60; //秒值
 		let a = 60 * Number(ShopBase.IntervalMinute); //求秒值 间隔时长
 		let acTime = Number(tAdvance) * 60 * 60;//提前小时
-		console.log(acTime,'actime')
 		let startTime = Number(countDown(ShopBase.StartTime));//商城开始时间
 		let endTime = countDown(ShopBase.EndTime);//商城结束时间
 		let cutTime = countDown(getTime(false, false, true));//当前时间
@@ -1385,13 +1430,15 @@
 			cutMinutes = cutTime2+(3600-cutMinutes*60);//当前的秒
 		}
 		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
+			
 			/*
 				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
 				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算			
 			*/
 			let mallTime = 0;
-			if(endTime-cutTime>0){
-				let mouTime = (acTime-(endTime - cutTime))
+			if(endTime-cutTime>0){//结束时间减去当前时间大于0
+				let mouTime = (acTime-(endTime - cutTime)) //提前时间减去结束时间减去当前时间 提前小时减去一天的时间
+				// let mouTime = acTime-endTime;
 				// 提前的时间还剩下几个小时
 				mallTime = 	(Number(mouTime/60/60)%dayTime)* 60 * 60
 			}else{
@@ -1401,6 +1448,10 @@
 				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
 				startTime += a;			
 			}
+			// while (Number(startTime) <= endTime+a) {
+			// 	arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
+			// 	startTime += a;			
+			// }
 			arrToday = arr;	
 		}else{		
 			// while (startTime <= endTime) {
@@ -1415,14 +1466,14 @@
 					cutTime += a;
 				}
 			}else {
-				while (startTime <= endTime) {
-					arr.push(changeCountDown(startTime+acTime));
-					startTime += a;
-				}
-				// while (startTime+acTime <= endTime) {
+				// while (startTime <= endTime) {
 				// 	arr.push(changeCountDown(startTime+acTime));
 				// 	startTime += a;
 				// }
+				while (startTime+acTime <= endTime) {
+					arr.push(changeCountDown(startTime+acTime));
+					startTime += a;
+				}
 			}
 			if (dayAdvance == 0) {
 				arr.forEach(DATA => {

@@ -169,7 +169,7 @@
 			width: 100%;
 			padding-left: 5px;
 			padding-right: 5px;
-
+			letter-spacing: 2px;
 			text-align: center;
 			overflow: hidden;
 			box-sizing: border-box;

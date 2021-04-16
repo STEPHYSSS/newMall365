@@ -12,37 +12,24 @@
 				 :class="['cap-image-ad',currentObj.imgShadow==='1'?'cap-image-ad--img-shadow':'',
           currentObj.imgRadius==='1'?'cap-image-ad--fillet':'']">
 					<ul v-if="currentObj.changeMode==1" class="cap-image-ad__top2end">
-						<li class="cap-image-ad__content" :style="{'height': changeClientWidth+'px', 'margin-bottom': currentObj.imgGap+'px'}"
+						<li class="cap-image-ad__content" :style="{ 'margin-bottom': currentObj.imgGap+'px'}"
 						 v-for="(item,index) in currentObj.imgList" :key="index" @click="clickLink(item)">
 							<h3 class="cap-image-ad__title" v-if="item.name&&item.name!==' '">{{item.name}}</h3>
-
 							<div class="cap-image-ad__image-wrapper">
-								<!-- #ifndef H5-->
-								<image style="width:100%;" class="cap-image-ad__image" :src="item.img " alt="loaded" />
-								<!-- #endif -->
 								<!-- #ifdef H5 -->
-								<img style="width:100%;" class="cap-image-ad__image" :src="item.img " alt="loaded" />
+								<img class="cap-image-ad__image" :src="item.img " alt="loaded" />
 								<!-- #endif -->
 							</div>
 						</li>
 					</ul>
-					<swiper v-if="currentObj.changeMode==2" class="cap-image-ad__image_swipe" :style="{'height':changeClientWidth+'px','width':changeClientWidth+'px'}"
-					 @change="onChange" :indicator-dots="currentObj.indicator==1&&currentObj.imgList.length>1">
-						<swiper-item v-for="(image, index) in currentObj.imgList" :key="index" @click="clickLink(image)">
-							 <!--  -->
-							<!-- <navigator v-for="(url,index2) in image.urlObj" :key="index2" :url = "url.url"> -->
-								
-							<!-- #ifndef H5-->
-							<image :src="image.img" style="width:100%;"/>
-							<!-- <a :href = "image.urlObj.url"></a> -->
-							<!-- #endif -->
-							<!-- #ifdef H5 -->
-							<img :src="image.img " style="width:100%;" />
-							<!-- #endif -->
-							<h3 class="cap-image-ad__title" v-if="image.name&&image.name!==' '">{{image.name}}</h3>
-							<!-- </navigator> -->
-						</swiper-item>
-					</swiper>
+					 <view class="page-section-spacing" v-if="currentObj.changeMode==2" >
+						<swiper class="swiper" :style="{height:imgHeight+'px'}" @change="onChange" :indicator-dots="currentObj.indicator==1&&currentObj.imgList.length>1">
+							<swiper-item v-for="(image, index) in currentObj.imgList" :key="index" @click="clickLink(image)">
+								<!-- <img :src="image.img " :style="{ 'height': imgInfo.height+'px','width':'100%'}" @load="onloadImg" /> -->
+								<image :src="image.img"  alt="loaded" @load="onloadImg" mode="widthFix" style="width:100%;"/>
+							</swiper-item>
+						</swiper>
+					</view>
 					<div v-if="currentObj.indicator!=1&&currentObj.imgList.length>1&&currentObj.changeMode==2">
 						<div :class="['cap-indicator','cap-indicator--'+ currentObj.indicator]" :style="{'right': currentObj.indicator!=2?'15px':''}">
 							<span v-for="(image, i) in currentObj.indicator!=2?1:currentObj.imgList" :key="i" :class="['cap-indicator__dot', i===current?'cap-indicator__dot--active':'']">{{current+1}}</span>
@@ -61,9 +48,8 @@
 							<!-- #ifndef H5-->
 							<image :src="image.img" style="width:100%;height:100%" alt="loaded" />
 							<!-- #endif -->
-							<!-- #ifdef H5 -->
 							<img :src="image.img" style="width:100%;height:100%" alt="loaded" />
-							<!-- #endif -->
+							
 							<h3 class="cap-image-ad__title" v-if="image.name&&image.name!==''">{{image.name}}</h3>
 						</div>
 					</div>
@@ -105,7 +91,10 @@
 				clientWidth: 0,
 				boxWidth: 0,
 				current: 0,
-				changeClientWidth: ""
+				changeClientWidth: "",
+				 imgInfo: {},
+				 imgWidth:{},
+				 imgHeight:'',
 				// currentObj: {
 				//   changeMode: this.propsObj.changeMode,
 				//   pageGap: this.propsObj.pageGap,
@@ -120,25 +109,36 @@
 		},
 		mounted() {
 			this.clientWidth = uni.getSystemInfoSync().windowWidth;
-			this.clientWidth = (this.clientWidth - this.currentObj.pageGap * 2).toFixed(
-				2
-			);
+			// this.clientWidth = (this.clientWidth - this.currentObj.pageGap * 2).toFixed(
+			// 	2
+			// );
 			this.changeClientWidth = this.clientWidth;
 			this.currentObj.changeMode = Number(this.currentObj.changeMode);
 			this.currentObj.imgNum = Number(this.currentObj.imgNum);
+			let img = new Image();
+			let arr = []
 			this.currentObj.imgList.forEach(D => {
 				if (D.img) {
 					// D.img = this.$VUE_APP_PREFIX2 + D.img
 					D.img = GetBaseImgUrl() + D.img;
-					// D.img = 'http://192.168.0.105:8001/'+D.img
+					// D.img = 'http://192.168.0.105:8001/'+D.img					
 				}
-
+				
 			})
-
 			this.setImgWidth();
+
 			// this.changeStyle();
 		},
 		methods: {
+			onloadImg(e){
+				
+                var Height= e.detail.height / (e.detail.width / this.clientWidth);
+	
+                if(this.imgHeight < Height )this.imgHeight = Height;
+							// console.log(Height,'-----'+this.imgHeight);
+				
+			},
+			
 			changeStyle() {
 				// bus.$on("pictureAdsFun", obj => {
 				//   this.currentObj = obj;
@@ -186,7 +186,7 @@
 		watch: {
 			"currentObj.pageGap"(n) {
 				n = Number(n);
-				this.changeClientWidth = (this.clientWidth - n * 2).toFixed(2);
+				this.changeClientWidth = (this.clientWidth - n * 2).toFixed(2);				
 			},
 			"currentObj.imgList"(){
 				this.currentObj.imgList.forEach(D => {
@@ -208,11 +208,10 @@
 		height: 0;
 		width: 0;
 	}
-
 	.pictureAds {
 		/deep/.uni-swiper-dots-horizontal {
 			bottom: 35px;
-		}
+		}	
 	}
 
 	.rc-design-component-default-preview {
@@ -362,7 +361,6 @@
 
 	.cap-image-ad__top2end .cap-image-ad__image {
 		width: 100%;
-
 	}
 
 	.cap-image-ad--img-shadow .cap-image-ad__top2end .cap-image-ad__content,
@@ -387,6 +385,7 @@
 	.cap-image-ad--img-shadow .cap-image-ad__image_swipe {
 		margin-top: 15px;
 		margin-bottom: 15px;
+		height: auto;
 	}
 
 	.cap-image-ad--fillet .cap-image-ad__top2end img,
@@ -411,5 +410,8 @@
 
 	.cap-image-ad--img-shadow .cap-image-ad__slide>div:first-child {
 		margin-left: 15px;
+	}
+	.swiper{
+		height: 270px;
 	}
 </style>

@@ -11,7 +11,6 @@
 						<span>¥{{item.TakeMoney}}</span>
 						<div style="float: right;width: 61%;margin-top: 12px;">
 							<p style="font-weight: 800;font-size: 14px;">{{item.TypeName}}</p>
-							<!-- <p>{{item.TakeDisc}}</p> -->
 							<p style="position: absolute;bottom: 15px;">{{item.StartTime|fomartData}}-{{item.ValidTime|fomartData}}</p>
 						</div>
 					</div>
@@ -19,11 +18,6 @@
 				<p class="receive" @click="close">立即使用</p>
 			</div>
 		</div>
-		<!-- <popup-layer type="center" :show-pop="cartPopupVisible">
-			<template slot="content" type="center">
-				进店送券活动弹窗
-			</template>
-		</popup-layer> -->
 	</view>
 </template>
 

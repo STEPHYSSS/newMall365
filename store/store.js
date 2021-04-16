@@ -8,7 +8,8 @@ import dataConfig from '@/config/index'
 Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
-		orderType: 'takein', // 0外卖  1自取
+		// orderType: 'takein', // 0外卖  1自取
+		orderType:Cookies.get('orderType') || 'takein',
 		// 加入购物车商品信息
 		currentCard: Cookies.get('currentCard') || [],
 		// 当前定位的位置
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
 		['SET_ORDER_TYPE'](state, type) {
 			state.orderType = type
 			Cookies.set('orderType', type)
+			sessionStorage.setItem('mealMode',type)////存外卖状态
 		},
 		['SET_CURRENT_LOCATION'](state, data) {
 			state.currentLocation = data
@@ -43,28 +45,23 @@ const store = new Vuex.Store({
 			Cookies.set('historyUrl', data)
 		}
 	},
+	getters:{
+		
+	},
 	actions: {		
-		// 获取appId 和 保存UserMAC     obj={BusinNo:newBusinNo,code:code} 登录的时候获取
+		// 获取appId 和 保存UserMAC     obj={AppNo:newAppNo,code:code} 登录的时候获取
 		get_user({
 			commit
 		}, obj) {
 			return new Promise(async (resolve, reject) => {
 				try {
 					let response = await vipCard(obj, 'UserSign')
-					console.log(response,'登录')
-					if (response.Data.hasOwnProperty('UserMAC')) {						
-						// let seconds = 7200000 //两小时 秒
-						// let expires = new Date(new Date() * 1 + seconds * 1000)
-						// let errorMac = response.Data.UserMAC+'000'
-						Cookies.set('UserMACPhone', response.Data.UserMAC)
-						
-					}
 					if(response.Data.hasOwnProperty('ShopRadio')){
 						// 1代表商城模式,2代表自定义模式
 						Cookies.set('ShopRadio', response.Data.ShopRadio)
 						sessionStorage.setItem('ShopRadio', response.Data.ShopRadio)
 					}
-					
+					sessionStorage.setItem('mealMode','takein')////存外卖状态
 					if(response.Message == '未授权'){
 						this.$Router.push({
 							path: "/pages/error/index",

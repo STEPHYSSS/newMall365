@@ -52,6 +52,7 @@
 			white-space: nowrap;
 			flex: 1;
 			margin-left: 8px;
+			font-size: 14px;
 		}
 	}
 </style>

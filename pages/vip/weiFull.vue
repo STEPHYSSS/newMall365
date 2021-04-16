@@ -25,10 +25,10 @@
 		</div>
 		<div class="leaderBox" v-if="IncomeList.length>0">
 			<uni-grid :column="3">
-			    <uni-grid-item class="Imglist" v-for="(item,index) in IncomeList" :key="index" style="height: 65px;">
+			    <uni-grid-item class="Imglist" v-for="(item,index) in IncomeList" :key="index" style="height: 75px;">
 			        <div @click="showPopup(index)" :class="{weiFullBox:true,backColor:index === currentIndex&&show,backBorder:index === currentIndex&&show}" v-if="item.IncomeName !='自定义充值'">
 						<p><span style="display: inline-block;font-size: 14px;">¥&nbsp;</span><span>{{item.IncomeAmt}}</span></p>
-						<p >{{item.IncomeName}}</p>
+						<p class="wordOver">{{item.IncomeName}}</p>
 					</div>
 			    </uni-grid-item>
 				<div class="Imglist2" v-if="IsOpenRecharge=='1'">
@@ -38,8 +38,6 @@
 							<span style="width: 20px;text-align: center;font-size: 15px;line-height: 59px;">¥</span>
 							<input v-model="inputVal" ref="moneyInput" :focus="searchFocus" type="number" autofocus="autofocus" style="display: inline-block;width: 65px;height: 4.5em;flex: 1;"
 								 @blur="blurInput" maxlength="5" >
-							<!-- <span style="font-size: 15px;position: absolute;left: 6px;top: 17px;">¥</span>
-							 -->
 						</div>
 					</div>
 				</div>
@@ -63,22 +61,10 @@
 						<p style="display: inline-block;width: 50%;">充值送好礼<span class="iconfont icon-jiantou"></span></p>
 						<p style="display: inline-block;width: 50%;text-align: center;">充值金额<span style="font-weight: 800;color: #B2C119;font-size: 20px;padding: 0 5px;">{{IncomeList[currentIndex].IncomeAmt}}</span>元</p>
 					</div>
-					<div style="width: 92%;margin: 0 auto;" v-if="IncomeList[currentIndex]">
-						<p v-if="Number(IncomeList[currentIndex].DonateAmt)">
-							<span style="display: inline-block;width: 7px;height: 7px;border-radius: 50%;border: 1px solid #B2C119;background: rgb(178, 193, 25);"></span>
-							<span style="font-size: 16px;padding-left: 8px;">赠送金额：<span style="font-size: 16px;color: #B2C119;font-weight: 800;">{{IncomeList[currentIndex].DonateAmt}}元</span></span>
-						</p>
-						<p v-if="Number(IncomeList[currentIndex].DonateMonth)">
-							<span style="display: inline-block;width: 7px;height: 7px;border-radius: 50%;border: 1px solid #B2C119;background: rgb(178, 193, 25);"></span>
-							<span style="font-size: 16px;padding-left: 8px;">赠送分月返还：<span style="font-size: 16px;color: #B2C119;font-weight: 800;">{{IncomeList[currentIndex].DonateMonth}}元</span></span>
-						</p>
-						<p v-if="Number(IncomeList[currentIndex].DonateScore)">
-							<span style="display: inline-block;width: 7px;height: 7px;border-radius: 50%;border: 1px solid #B2C119;background: rgb(178, 193, 25);"></span>
-							<span style="font-size: 16px;padding-left: 8px;">赠送积分：<span style="font-size: 16px;color: #B2C119;font-weight: 800;">{{IncomeList[currentIndex].DonateScore}}元</span></span>
-						</p>
-						<p v-if="Number(IncomeList[currentIndex].DonateProd)">
-							<span style="display: inline-block;width: 7px;height: 7px;border-radius: 50%;border: 1px solid #B2C119;background: rgb(178, 193, 25);"></span>
-							<span style="font-size: 16px;padding-left: 8px;">赠送商品：<span style="font-size: 16px;color: #B2C119;font-weight: 800;">{{IncomeList[currentIndex].DonateProd}}元</span></span>
+					<div class="pop" v-if="IncomeList[currentIndex]">
+						<p >
+							<span class="dot"></span>
+							<span class="dotName">{{IncomeList[currentIndex].IncomeName}}</span>
 						</p>
 					</div>
 				</div>
@@ -99,7 +85,8 @@
 		checkMobile,
 		weChatPayment,
 		setUrlDelCode,
-		GetBaseImgUrl
+		GetBaseImgUrl,
+		GetAppNo
 	} from "@/util/publicFunction";
 	export default {
 		components: {},
@@ -129,7 +116,7 @@
 				UserPhoto:'',
 				CardBase:{},
 				CardImg:"",
-				IsOpenRecharge:''
+				IsOpenRecharge:'',
 			}
 		},
 		async created() {
@@ -165,7 +152,7 @@
 					}else{
 						this.$Router.push({path:'/pages/vip/bind/index'})
 					}
-					this.IsOpenRecharge = data.Data.ShopBase.IsOpenRecharge;
+					this.IsOpenRecharge = data.Data.ShopBase.IsOpenRecharge;					
 					// if(IsOpenRecharge == '1'){
 					// 	let auto={
 					// 		IncomeName:'自定义充值'
@@ -177,6 +164,11 @@
 					// }
 					this.loading = false
 				} catch (e) {
+					if(e=='微卡信息错误'){
+						setTimeout(()=>{
+							window.location.href = "http://manage.bak365.cn/WebApp/WXCard/?Type=ApplyCard&AppNo=" + GetAppNo()
+						},1000)
+					}
 					this.loading = false
 				}
 			},
@@ -195,6 +187,7 @@
 				}
 			},
 			async clickSubmit(bool) {
+				this.isActive = true;
 				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'));
 				let customMoney = '' // 是否是自定义金额  1=>是  0=>不是
 				let obj = {}					
@@ -230,21 +223,19 @@
 						PayAmt: this.submitMoney
 					})
 					this.btnLoading = true
-					this.isActive = true;
 					let Data = await vipCard(obj, 'UCardTransOpera')
 					this.testData = Data;
 					try {
 						weChatPayment(this, this.testData.Data, false);
 					} catch (e) {
-						that.$toast.fail(e);
+						this.$toast(e);
 						this.isActive = false;
 						this.loading = false;
 						uni.hideLoading();
 					}
 					this.btnLoading = false
 				} catch (e) {
-					that.$toast(e);
-					that.$toast.fail(e);
+					this.$toast(e);
 					this.isActive = false;
 					this.btnLoading = false
 				}
@@ -273,13 +264,27 @@
 		background-color: #CCCCCC !important;
 	}
 	.weiFull {
-		margin-bottom: 65px;
+		// margin-bottom: 65px;
 		height: 100vh;
 		background-color: #fff;
 		.popup-income {
 			// height: 300px;
 			background-color: #fff;
 			padding-bottom: 10px;
+			.pop{
+				width: 92%;margin: 0 auto;
+				p{
+					display: flex;
+					.dot{
+						margin-top: 7px;
+						display: inline-block;width: 7px;height: 7px;border-radius: 50%;border: 1px solid #B2C119;background: rgb(178, 193, 25);
+					}
+					.dotName{
+						flex: 1;
+						font-size: 16px;padding-left: 8px;width: inherit;display: block; white-space: normal;
+					}
+				}
+			}
 		}
 
 		.titleDialog {
@@ -503,6 +508,8 @@
 		width: 95%;
 		margin: 10px auto;
 		background-color: #fff;	
+		max-height: 400px;
+		overflow: scroll;
 		.Imglist{
 			color: #939393;
 			width: 28.5% !important;
@@ -510,6 +517,7 @@
 			border: 1px solid #CCCCCC;
 			border-radius: 5px;
 			box-sizing: border-box;
+			height: auto;
 			p{
 				text-align: center;
 			}
@@ -518,6 +526,12 @@
 				padding-left: 4px;
 				font-size: 30px;
 			}
+		}
+		.wordOver{
+			max-width: 110px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	}
 	/deep/.uni-input-input{

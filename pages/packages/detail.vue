@@ -2,7 +2,7 @@
 	<view class="w-100 h-100">
 		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo"  title="购买权益" :status-bar="true" :shadow="false"></uni-nav-bar>
 		<div class="imgWidth">
-			<image src="@/static/img/bgQuanyi.jpg" ></image>
+			<image :src="BeneInfo.PlanImg?BeneInfo.PlanImg:imgUrl" ></image>
 		</div>
 		<view class="infoBox">
 			<div class="PlanName">
@@ -107,7 +107,8 @@ export default {
 	},
 	data() {
 		return {
-			imgUrl:require("@/static/img/quanyi.jpg"),
+			// imgUrl:require("@/static/img/quanyi.jpg"),
+			imgUrl:require("@/static/img/bgQuanyi.jpg"),
 			coupon: {
 				detail: {}
 			},

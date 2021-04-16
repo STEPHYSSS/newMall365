@@ -1,16 +1,25 @@
 <template>
 	<div class="spreadList">
-		<uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo" title="我的分享" :status-bar="true" :shadow="false"></uni-nav-bar>
-		<div class="leaderBox" >
+		<!-- <uni-nav-bar :fixed="true" left-icon="back" @clickLeft="clickGo" title="我的分享" :status-bar="true" :shadow="false"></uni-nav-bar> -->		
 			<!-- 推广图片， 推广链接 商品名称 -->
-			<div class="good_card_box" style="margin-bottom:10px">
-				<div v-for="(item,index) in spreadArr" :key="index" class="shareImg">
-					<image :src="item.Img | fmtImgUrl"></image>
-					<p>{{item.Name}}</p>
-				</div>
-			</div>
-		</div>
-		
+		<view class="myFanIcon">
+			<image :src="imgUrl" style="width: 20px;height: 20px;"></image>
+			<text>我的分享</text>
+		</view>
+		<view v-if="spreadArr.length>0">
+			<view class="d-flex boxList" v-for="(item, index) in spreadArr" :key="index" @click="toGoodsInfo(item.ProdSID)">
+				<image :src="item.Img|setImgPrex"></image>
+				<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
+					<view class="font-size-lg">{{ item.Name }}</view>
+					<view class="font-size-sm fontColor">时间：{{ item.AddTime}}</view>
+					<view class="d-flex justify-content-between align-items-center">
+						<view class="font-size-sm fontColor2">￥{{ item.SalePrice }}</view>
+						<view class="font-size-sm fontColor2">详情 ></view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<a-nodeData stringVal="暂无数据" v-if="!loading&&spreadArr.length==0"></a-nodeData>
 	</div>
 </template>
 
@@ -25,7 +34,8 @@
 		data() {
 			return {
 				loading: true,
-				spreadArr:[]
+				spreadArr:[],				
+				imgUrl:require("@/static/img/shareIcon.png"),
 			}
 		},
 		async onLoad(option) {
@@ -46,7 +56,7 @@
 					let data = await vipCard({
 						Action: "GetSpreadList"
 					}, "UMemberOpera");
-					this.spreadArr =data.Data.SpreadList;
+					this.spreadArr =data.Data.List;
 					this.loading = false;
 				} catch (e) {
 					this.loading = false;
@@ -57,26 +67,53 @@
 				this.$Router.pushTab({
 					path: "/pages/home"
 				});
+			},
+			toGoodsInfo(item){
+				this.$Router.push({path:"/pages/shoppingMall/list/infoGood",query:{
+					SID:item
+				}})
 			}
 		}
 	}
 </script>
-haod
 <style scoped lang="less">
-	.shareImg{
-		display: inline-block;
-		float: left;
-		margin: 10px;
-		background-color: #FFFFFF;
-		width: 27%;
-		height: 30%;
+	@import '@/assets/css/packages.css';
+	.spreadList{
+		height: 100vh;
+		background-color: #fff;
+	}
+	.myFanIcon{
+		height: 55px;
+		display: flex;
+		border-bottom: 1px solid #f9f9f9;
 		image{
-			width: 100%;
-			height: 80px;
+			display: inline-block;
+			margin: 17px 10px 15px 10px;
 		}
-		p{
-			text-align: center;
-			margin: 5px 0px;
+		text{
+			display:inline-block;
+			font-size: 16px;
+			letter-spacing: 1px;
+			margin: 16px 0;
+		}
+	}
+	.boxList{
+		box-sizing: border-box;
+		border-bottom: 1px solid #eeeeee;
+		background-color: #ffffff;
+		width: 94%;
+		margin: 17px auto;
+		padding-bottom: 13px;
+		.fontColor{
+			color: #ccc;
+		}
+		.fontColor2{
+			font-size: 16px ;
+			color: #F95E51;
+		}
+		image{
+			border-radius: 5px;
+			width: 160rpx; height: 160rpx; margin-right: 20rpx;
 		}
 	}
 </style>

@@ -26,10 +26,9 @@
 					  <div class="date" v-if="activeUser=='1'">使用时间:{{item.SaleTime}}</div>
 			    </div>
 			</div>
-			
 		</div>
-		<no-data v-if="dataList.length===0">
-		</no-data>
+		<!-- <no-data v-if="dataList.length===0">
+		</no-data> -->
 	</view>
 </template>
 
@@ -223,7 +222,6 @@
 		margin: 0 auto;
 		display: flex;
 		color:#fff;
-		margin-bottom: 20px;
 		padding:10px;
 		box-sizing: border-box;
 	}

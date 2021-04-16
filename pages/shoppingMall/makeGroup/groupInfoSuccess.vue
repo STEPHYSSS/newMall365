@@ -94,8 +94,7 @@
 	import adCell from '@/node_modules/adcell/ADCell.vue';
 	import Cookie from '@/config/cookie-my/index.js';
 	import Mixins from '@/pages/shoppingMall/mixins.js'
-	import {GetBaseImgUrl} from "@/util/publicFunction";
-	import {getQueryString2} from '@/util/publicFunction.js'
+	import {GetBaseImgUrl,getQueryString2,GetAppNo} from "@/util/publicFunction";
 	import wx from 'weixin-js-sdk'
 	import showSkuSeckill from '@/components/a-shopping-showSku/a-shopping-showSkuSeckill';
 	export default {
@@ -151,7 +150,7 @@
 					
 				}
 			}
-			console.log(url,this.GroupSID,this.promtionSID,'---created---')
+			// console.log(url,this.GroupSID,this.promtionSID,'---created---')
 			if(this.promtionSID){
 				this.getWxConfig();
 				this.getShopList();
@@ -435,17 +434,16 @@
 				}
 				this.$store.commit("SET_CURRENT_STORE",currentStoreInfo)
 				localStorage.setItem("localShop",JSON.stringify(currentStoreInfo))
-				console.log(JSON.parse(localStorage.getItem('currentStoreInfo')),'diefjefjei')
+				// localStorage.setItem(GetAppNo()+"_"+ "localShop",JSON.stringify(this.currentStoreInfo))
 			},
 			async wxRegister() { //data是微信配置信息，option是分享的配置内容
 				let link = window.location.href;
 				let shareInfo = {
 					link:link,
-					desc:this.ProdInfo.Name,
 					title:this.ProdInfo.PromName,
 					Img:GetBaseImgUrl()+this.ProdInfo.Img
 				}
-				console.log(shareInfo,'分享')
+				// console.log(shareInfo,'分享')
 				try{
 					let {
 						Data
@@ -453,7 +451,7 @@
 						Action: "GetJSSDK",
 						Url: window.location.href
 					}, "UProdOpera");
-					console.log(Data,'----')
+					// console.log(Data,'----')
 					wx.config({
 						debug: false, // 开启调试模式
 						appId: Data.SDK.appId, // 必填，公众号的唯一标识
@@ -488,10 +486,10 @@
 	// 						}
 	
 	// 					});
-						console.log(shareInfo.title,'readay----6986')
+						// console.log(shareInfo.title,'readay----6986')
 						wx.onMenuShareTimeline({//分享到朋友圈
 							title:shareInfo.title,
-							desc: shareInfo.desc,
+							desc: '快把参团链接分享给好友或朋友圈，邀请好友参团吧！',
 							link: shareInfo.link,
 							imgUrl:shareInfo.Img,
 							success:function(){
@@ -501,7 +499,7 @@
 						});
 						wx.onMenuShareAppMessage({//分享给朋友
 							title:shareInfo.title,
-							desc:shareInfo.desc,
+							desc:'快把参团链接分享给好友或朋友圈，邀请好友参团吧！',
 							link:shareInfo.link,
 							imgUrl:shareInfo.Img,
 							success:function(){

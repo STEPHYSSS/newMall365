@@ -92,7 +92,7 @@
 					</view>					
 				</view>
 				<view class="">
-					<view  v-show="TicketPrice>='0'" class="onlySty Discount">
+					<view  v-show="TicketPrice>'0'" class="onlySty Discount">
 						<view style="flex: 1;">
 							<span style="">{{UserTicketName}}</span>
 						</view>
@@ -173,11 +173,28 @@
 						<span class="cancel" @click="$refs.showAreaList.close()">取消</span>
 						<span>选择地址</span>
 					</div>
-					<radio-group class="bottom-area" ref="checkboxAreaRef" @change="changeGroup">
+					<scroll-view scroll-y="true" class="shopList">
+						<view class="shopCon">
+							<radio-group class="bottom-area" ref="checkboxAreaRef" @change="changeGroup">
+								<div v-for="(item,index) in areaList" :key="index" class="bottom-area__box" @click="changeArea(item,index)">
+									<radio :value="item.SID" class="checkbox-my" :checked="item.SID === showSID"></radio>
+									<div class="bottom-area__info">
+										<div>{{item.Address}}&nbsp;{{item.House}}</div>
+										<div class="bottom-area__phone">
+											{{item.Name}}
+											<span v-if="item.Sex">{{item.Sex | setSex2}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+											<span>{{item.Mobile?item.Mobile:item.Tel}}</span>
+										</div>
+									</div>
+									<span v-if="radioModes===2" class="icon iconfont icon-bianji bottom-area__icon" @click.stop="clickEdit(item)"></span>
+								</div>
+							</radio-group>
+						</view>
+					</scroll-view>
+			
+					<!-- <radio-group class="bottom-area" ref="checkboxAreaRef" @change="changeGroup">
 						<div v-for="(item,index) in areaList" :key="index" class="bottom-area__box" @click="changeArea(item,index)">
-							<!-- <radio :value="item.SID" class="checkbox-my" :checked="showAreaList == item.SID"></radio> -->
 							<radio :value="item.SID" class="checkbox-my" :checked="item.SID === showSID"></radio>
-							<!-- <radio :value="item.PrefNo" :checked="item.PrefNo === radioDiscount" /> -->
 							<div class="bottom-area__info">
 								<div>{{item.Address}}&nbsp;{{item.House}}</div>
 								<div class="bottom-area__phone">
@@ -188,7 +205,7 @@
 							</div>
 							<span v-if="radioModes===2" class="icon iconfont icon-bianji bottom-area__icon" @click.stop="clickEdit(item)"></span>
 						</div>
-					</radio-group>
+					</radio-group> -->
 					<div class="bottom-area__add" v-if="radioModes===2" @click="areaSet">
 						<uni-icons type="plus" style="vertical-align: middle;font-size: 18px;margin-right: 6px" class="colorStyle" />
 						<span style="vertical-align: middle">新增收货地址</span>
@@ -228,10 +245,29 @@
 			</div>
 		</uni-popup>
 		<!-- 优惠方案弹窗 -->
-		<uni-popup ref="discountProgram" type="bottom" style="max-height:50%">
+		<uni-popup ref="discountProgram" type="bottom">			
+			<div class="confirm-order-popup">
+				<scroll-view scroll-y="true" class="shopList">
+					<view class="shopCon">
+						<radio-group @change="setDiscountClick" class="bottom-area">
+							<ad-cell text="暂不使用" @click="DiscountClick('undefined')" showArrow="false">
+								<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioDiscount" />
+							</ad-cell>
+							<div v-for="(item,index) in DiscountList" :key="index">
+								<adCell :text="item.PrefName" showArrow="false" showBottomLine="false" @click="DiscountClick(item,1)">
+									<radio :value="item.PrefNo" :checked="item.PrefNo === radioDiscount" />
+								</adCell>
+							</div>
+						</radio-group>
+					</view>
+				</scroll-view>
+			</div>
+		</uni-popup>
+		
+		<!-- <uni-popup ref="discountProgram" type="bottom" style="max-height:50%">
 			<div>
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
-					<radio-group @change="setDiscountClick" style="max-height: 300px;">
+					<radio-group @change="setDiscountClick" style="max-height: 300px;overflow-y: scroll;">
 						<ad-cell text="暂不使用" @click="DiscountClick('undefined')" showArrow="false">
 							<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioDiscount" />
 						</ad-cell>
@@ -243,9 +279,28 @@
 					</radio-group>
 				</scroll-view>			
 			</div>
-		</uni-popup>
+		</uni-popup> -->
 		<!-- 电子券弹窗 -->
-		<uni-popup ref="ticketProgram" type="bottom" style="max-height:50%">
+		<uni-popup ref="ticketProgram" type="bottom">
+			<div class="confirm-order-popup">
+				<scroll-view scroll-y="true" class="shopList">
+					<view class="shopCon">
+						<radio-group @change="setTicketClick" class="bottom-area">
+							<ad-cell text="暂不使用" @click="ticketClick('undefined')" showArrow="false">
+								<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioTicket" />
+							</ad-cell>
+							<view v-for="(item,index) in TicketList" :key="index">
+								<adCell :text="item.TicketName" showArrow="false" showBottomLine="false" @click="ticketClick(item,1)">
+									<radio :value="item.TicketNo" :checked="item.TicketNo === radioTicket" />
+								</adCell>
+							</view>
+						</radio-group>
+					</view>
+				 </scroll-view>
+			</div>
+		 </uni-popup>
+		
+		<!-- <uni-popup ref="ticketProgram" type="bottom" style="max-height:50%">
 			<div style="max-height: 300px;">
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
 					<radio-group @change="setTicketClick" style="max-height:50%">
@@ -260,9 +315,27 @@
 					</radio-group>
 				</scroll-view>
 			</div>		
-		</uni-popup>
+		</uni-popup> -->
 		<!-- 权益弹窗 radioBene-->
 		<uni-popup ref="interestProgram" type="bottom" style="max-height:50%">
+			<div class="confirm-order-popup">
+				<scroll-view scroll-y="true" class="shopList">
+					<view class="shopCon">
+						<radio-group @change="setBeneClick" class="bottom-area">
+							<ad-cell text="暂不使用" @click="beneClick('undefined')" showArrow="false">
+								<radio style="display: inline-block;vertical-align: middle;margin-left:20px" value="undefined" :checked="'undefined' === radioBene" />
+							</ad-cell>
+							<div v-for="(item,index) in BeneList" :key="index">
+								<adCell :text="item.BeneName" showArrow="false" showBottomLine="false" @click="beneClick(item,1)">
+									<radio :value="item.BeneSID" :checked="item.BeneSID === radioBene" />
+								</adCell>
+							</div>
+						</radio-group>
+					</view>
+				</scroll-view>
+			</div>
+		</uni-popup>		
+		<!-- <uni-popup ref="interestProgram" type="bottom" style="max-height:50%">
 			<div>
 				<scroll-view class="menus" :scroll-into-view="menuScrollIntoView" scroll-with-animation scroll-y>
 					<radio-group @change="setBeneClick" style="max-height: 300px;">
@@ -277,7 +350,7 @@
 					</radio-group>
 				</scroll-view>
 			</div>		
-		</uni-popup>
+		</uni-popup> -->
 		<!-- 微卡支付弹窗 -->
 		<uni-popup ref="payTypePop" type="center">
 			<view style="width: 300px;background-color: #FFFFFF;height: auto;border-radius: 5x;">
@@ -294,7 +367,7 @@
 						<div class="label" style="text-indent:10px;">本次支付</div>
 						<span style="padding-left:10px;">{{total}}</span>
 					</div>
-					<div class="block-item" v-if="CardInfo.IsPass==='1'&&radioPayType==='1'">
+					<div class="block-item" v-if="IsPass=='1' && radioPayType == '1'">
 						<div class="label" style="text-indent:10px;">微卡密码</div>
 						<input type="password" style="padding-left:10px;width: 160px;" placeholder="请输入密码" name="password" v-model="password" />
 					</div>
@@ -328,7 +401,6 @@
 		name: "confirmOrder",
 		// mixins: [Mixins],
 		components: {
-			// receiveAddress
 			adCell,
 			lineBoxConfirm
 		},
@@ -436,11 +508,14 @@
 				radioBene:"",//选中权益sid
 				objPrice:{},//用于传递数据
 				FloatList:[],//用于展示优惠明细
-				ShopBase:{},//商城基础信息
+				ShopBase:{},//商城基础信息			
+				shopLong : "",
+				shopLat : "",
+				mealMode:"",
+				ShopSID:"",//外卖的时候要把这个值传给后台
 			};
 		},
 		async created() {
-			console.log(this.$Route.query.PromQuery,'PromQuery')
 			if (
 				!this.$store.state.currentCard ||
 				this.$store.state.currentCard.length === 0
@@ -448,15 +523,7 @@
 				this.$Router.back(2)
 				this.$Router.back(100)
 				// window.history.go(-1);
-			}
-			// if (this.isMember === '0' || this.isMember == undefined || this.isMember == null) {
-			// 	this.radioPayType = "2"
-			// }
-			if(this.CardType === '0'){
-				this.radioPayType = "2"
-			}
-			// 获取授权地址
-			await this.getWxConfig();
+			}	
 			let item = this.$store.state.currentCard || [];
 			item.forEach(D => {
 				if (D.SID) {
@@ -471,24 +538,36 @@
 					D.PartsNo = arr.join(",");
 				}
 			});
-			this.ProdJsonList = JSON.stringify(item);
+			this.ProdJsonList = JSON.stringify(item);			
 			this.currentItem = JSON.stringify(item);
 			this.cardSids = this.cardSids ? this.cardSids.join(",") : "";
-			if (this.$Route.query.isIntegral) {
-				await this.getInfoIntegral();
-			} else {
-				await this.getInfo();
-			}
 		},
-		mounted() {
-			if (this.$store.state.orderType === 'takein') {
+		mounted() {		
+			this.mealMode = sessionStorage.getItem('mealMode')
+			if(this.mealMode==null||this.mealMode == 'takein'){
+				this.$store.commit("SET_ORDER_TYPE", 'takein');
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 				this.radioModes = 1;
 				this.takeDeliveryTpey = '1'
 				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))
 				this.currentArea = currentStore.data;
-			} else {
+				this.shopLong = this.$store.state.currentLocation.longitude ? this.$store.state.currentLocation.longitude : '';
+				this.shopLat = this.$store.state.currentLocation.latitude ? this.$store.state.currentLocation.latitude : '';
+				this.getWxConfig();
+			}else if(this.mealMode == 'takeout'){
+				this.$store.commit("SET_ORDER_TYPE", 'takeout');
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 				this.takeDeliveryTpey = '2'
 				this.currentArea = JSON.parse(sessionStorage.getItem('takeOutAddress'))
+				this.shopLong = this.currentArea.Longitude ? this.currentArea.Longitude : '';
+				this.shopLat = this.currentArea.Latitude ? this.currentArea.Latitude : '';
+			}
+			if (this.$Route.query.isIntegral) {
+				this.getInfoIntegral();
+			} else {
+				// console.log(new Date().getTime(),'开始调用')
+				this.getInfo();
+				// console.log(new Date().getTime(),'结束调用')
 			}
 		},
 		methods: {
@@ -505,27 +584,24 @@
 					// 	throw "地址获取失败";
 					// }
 					let currentItems = JSON.parse(this.currentItem);
-					let shopLong = "";
-					let shopLat = "";
-					if (this.$store.state.orderType === 'takein') {
-						shopLong = this.$store.state.currentLocation.longitude ? this.$store.state.currentLocation.longitude : '';
-						shopLat = this.$store.state.currentLocation.latitude ? this.$store.state.currentLocation.latitude : '';
-					}
 					let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))
 					// 自取的时候传递的经纬度是授权的经纬度，如果是外卖的时候传递的经纬度就是收货地址的经纬度
 					let obj = {
 						Action: "SettlePay",
 						ProdList: this.currentItem,
-						Longitude: this.$store.state.orderType === 'takein' ? shopLong : this.currentArea.Longitude,
-						Latitude: this.$store.state.orderType === 'takein' ? shopLat : this.currentArea.Latitude,
-						DeliveryType: this.takeDeliveryTpey,
+						Longitude: this.shopLong,
+						Latitude: this.shopLat,
+						DeliveryType: this.takeDeliveryTpey?this.takeDeliveryTpey:'1',
 						ShopSID: currentStore?currentStore.data.SID:'',
-						PayType: this.radioPayType //传给后台来判断优惠方案的
-						// DeliveryType: this.currentDeliveryType						
+						PayType: this.radioPayType ,//传给后台来判断优惠方案的	
 					};
 					if (currentItems[0].hasOwnProperty("PromotionItemSID")) {
 						// 活动
 						obj.PromotionItemSID = currentItems[0].PromotionItemSID;
+					}
+					if (currentItems[0].hasOwnProperty("LeaderSID")) {
+						// 团长SID
+						obj.LeaderSID = currentItems[0].LeaderSID?currentItems[0].LeaderSID:'';
 					}
 					if(currentItems[0].hasOwnProperty("GroupSID")){
 						obj.GroupSID = currentItems[0].GroupSID
@@ -547,7 +623,7 @@
 							this.currentDeliveryType = Data.ProdList[0].DeliveryType; //选择第一个商品的配送方式
 							this.NewPayType = Data.ProdList[0].PayType;
 							if (this.radioModes === 1) {
-								this.areaList = Data.ShopInfoList;
+								this.areaList = Data.ShopInfoList;								
 							} else {
 								this.areaList = Data.AddressList
 							}
@@ -563,6 +639,7 @@
 							});						
 							if (Data.hasOwnProperty('CardInfo')) {
 								this.IsPass = Data.CardInfo.IsPass ? Data.CardInfo.IsPass : ''
+								// this.IsPass = '1'
 							}
 							this.ShopBase = Data.ShopBase,//商城基础信息
 							this.ScoreDeduction = Data.ScoreDeduction; //可用积分
@@ -598,10 +675,13 @@
 								this.FloatList = Data.FloatList;
 							}
 							this.CardInfo = Data.hasOwnProperty("CardInfo") ? Data.CardInfo : {};
+							this.ShopSID = Data.hasOwnProperty('ShopSID') ? Data.ShopSID:''
 							if (JSON.stringify(this.CardInfo) !== "{}") {
 								if (Number(Data.CardInfo.Balance) < Number(Data.SumTotal)) {
 									//余额不足默认微信支付
 									this.radioPayType = "2";
+								}else {
+									this.radioPayType = "1";
 								}
 							} else {
 								this.radioPayType = "2";
@@ -610,7 +690,8 @@
 							// 提前预约时间
 							let FinTypeDay = '';//时间 当FinType==2&&FinHour>0就代表这有提前时间
 							let FinTypeHour = '';//时间 当FinType==2&&FinHour>0就代表这有提前时间 FinHour小时或者天数
-							let FinTypeCun =""
+							let FinTypeCun ="";
+							let maxTime;
 							if (this.prodList.length > 0) {
 								this.prodList.forEach((D, index) => {
 									if (D.DeliveryType && D.DeliveryType !== "") {
@@ -620,14 +701,15 @@
 										FinTypeDay = Math.max.apply(Math, this.prodList.map(item => {
 											return Number(item.FinHour)
 										}))
+										maxTime = FinTypeDay
 										 FinTypeCun = D.FinType
 									}else{
 										FinTypeHour = Math.max.apply(Math, this.prodList.map(item => {
 											return Number(item.FinHour)
 										}))
+										maxTime = FinTypeHour
 										FinTypeCun = D.FinType
 									}
-									
 								});
 							}
 							let num = Number(Data.ShopBase.ScopeDay);//获取商城的提货期限 后台默认7天
@@ -637,49 +719,65 @@
 							let startTime = countDown(Data.ShopBase.StartTime);//商城开始时间秒数
 							let endTime = countDown(Data.ShopBase.EndTime); //商城结束时间秒数
 							let cutTime = countDown(getTime(false, false, true));//获取当前电脑时间							
-							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时 get
-							// jka
-							// console.log(new Date().getMinutes().toString(),'系统时间')
-							/*
-								1、判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天并且加上提前的时间
-								3、如果当前系统时间加上提前时间不大于结束时间的话，就在当前时间上加上提前时间 
-							*/
-							//FinTypeCun为2的时候代表是提前小时，1是提前天数
-							let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间
-							let time = Number(FinTypeHour)/dayTime;//先算出这提前的时间中有没有大于一天的营业时间 
-							console.log(dayTime,'one day')
-							if(FinTypeCun==='2'){//提前小时
-								if(cutTime>endTime){ //判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天就加上提前的时间
-									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
-									tAdvance = Number(FinTypeHour);//提前小时
-								}else if((acTime + cutTime).toFixed(2) > endTime){//如果当前时间+提前小时大于商城结束时间 例：现在一点半 提前23小时 这里是2天3个小时									
-									if(cutTime>endTime){//当前时间大于结束时间，就直接到第二天开始算 如果提前时间大于商城结束时间那就直接加上一天
-										FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数
-										tAdvance = Number(FinTypeHour);//提前小时
-									}else{
-										if(endTime-cutTime<acTime){
-											FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
-											tAdvance = Number(FinTypeHour);//提前小时	
-										}else{
-											FinTypeDay=(parseInt(dayAdvance))+parseInt(time); //算出超出营业时间的提前天数 例：现在三点四十 提前23小时 这里大于2天3个小时
-											tAdvance = Number(FinTypeHour);//提前小时	
-										}
-											
-									}
-								}else{
-									FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
-									tAdvance = FinTypeHour;
+							let acTime = Number(FinTypeHour) * 60 * 60;//提前小时							
+							// console.log(acTime,'acTime',FinTypeHour)
+							let dayTime = parseInt(Data.ShopBase.EndTime) - parseInt(Data.ShopBase.StartTime)//一天营业时间 12个小时
+							// console.log(dayTime,'day')
+							let duoTian = parseInt(Number(FinTypeHour)/dayTime);//先算出这提前的时间中有没有大于一天的营业时间 例如18/10 = 1.8
+							// console.log(duoTian,'tian')
+							let duoHour = parseInt(Number(FinTypeHour)%dayTime)
+							// console.log(duoHour,'duoHour')
+							/* 预定提货时间流程梳理
+								1、算出商城营业时间
+								2、判断预定提货时间类型 （FinTypeCun为2的时候代表是提前小时，1是提前天数）
+								3、判断从当前时间开始买商品的话提货时间是否大于商城营业结束时间，如果大于的话自动加一天，从第二天早上营业时间开始算
+								   否则的话，就从当前时间开始算提货时间是否大于商城结束时间								   
+							*/ 
+							if(FinTypeCun ==='2'|| maxTime){//提前小时	
+								let a = 60 * Number(Data.ShopBase.IntervalMinute); //求秒值 间隔时长
+								// debugger
+								if(cutTime >= endTime){
+									FinTypeDay = (Number(dayAdvance+1))+parseInt(duoTian); //算出超出营业时间的提前天数 和 小时
+									tAdvance = duoHour;//取余得到的提前小时  当前时间是2点 提前七个小时
+								}else if(FinTypeHour > dayTime || cutTime+acTime+a>= endTime){
+									FinTypeDay = (Number(dayAdvance+1))+parseInt(duoTian); //算出超出营业时间的提前天数 和 小时
+									tAdvance = duoHour;//取余得到的提前小时 
+								}else { 
+									tAdvance = duoHour
 								}
-							}else{//提前天数
-								// 如果当前时间大于结束时间 那么就应该提前天数+1  如果当前时间不大于结束时间 那么就应该是第二天的当前时间
-								if(cutTime>endTime){
+							}else { // 不管几点下单，都要在提前的天数上加一天
+								if(cutTime >= endTime){
 									FinTypeDay = Number(FinTypeDay)+1
-								}							
-							}							
+								}else{
+									FinTypeDay = Number(FinTypeDay)
+								}
+								// FinTypeDay = Number(FinTypeDay)
+							}
+							// if(FinTypeCun==='2'){//提前小时	
+							// 	if(cutTime>endTime){//判断当前时间是否大于结束时间 如果当前时间大于结束时间的话就往后加一天再加上提前的时间
+							// 		FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time); //算出超出营业时间的提前天数
+							// 		tAdvance = Number(FinTypeHour);//提前小时
+							// 	}else{//反之 如果当前时间不大于结束时间的话 就要分情况了 还剩下多少提前小时
+							// 		let abc = endTime-cutTime;
+							// 		let mouTime = (acTime-(endTime - cutTime)) 	
+							// 		if(abc>=mouTime){//如果剩余时间大于提前剩余时间
+							// 			FinTypeDay=(parseInt(dayAdvance))+parseInt(time)
+							// 			tAdvance = FinTypeHour;
+							// 		}else{
+							// 			FinTypeDay=(parseInt(dayAdvance+1))+parseInt(time);
+							// 			tAdvance = Number(FinTypeHour);//提前小时
+							// 		}									
+							// 	}
+							// }else{//提前天数
+							// 	// 如果当前时间大于结束时间 那么就应该提前天数+1  如果当前时间不大于结束时间 那么就应该是第二天的当前时间
+							// 	if(cutTime>endTime){
+							// 		FinTypeDay = Number(FinTypeDay)+1
+							// 	}							
+							// }							
 							// 拿到天数之后调用setChangeData方法算出列表
 							this.sidebarList = setChangeData(num, FinTypeDay); //左侧的天数
 							let { arr, arrToday } = setChangeTime( Data.ShopBase, tAdvance, FinTypeDay );
-							console.log(arrToday,this.sidebarList)
+							// console.log(arr,arrToday,this.sidebarList)
 							this.allTimeSlot = arr; //总的右侧时间间隔
 							let arrTime = [];
 							for (let i = 0; i < arrToday.length-1; i++) {
@@ -695,7 +793,7 @@
 								radioTime: arrTime[0],
 								index: 0
 							};
-							this.UserTime = this.sidebarList[this.activeKey] + " " + this.radioTime;
+							// this.UserTime = this.sidebarList[this.activeKey] + " " + this.radioTime;
 							this.loading = false;
 							uni.hideLoading()
 						})
@@ -708,26 +806,7 @@
 					this.loading = false;
 					uni.hideLoading()
 				}
-			},
-			 formateSeconds(endTime){
-				 // 如果当前时间的分钟大于30 ，那么就应该从16：00开始算，否则从15：30算
-			      let secondTime = parseInt(endTime)//将传入的秒的值转化为Number
-			      let min = 0// 初始化分
-			      let h =0// 初始化小时
-			      let result=''
-			      if(secondTime>60){//如果秒数大于60，将秒数转换成整数
-			        min=parseInt(secondTime/60)//获取分钟，除以60取整数，得到整数分钟
-			        secondTime=parseInt(secondTime%60)//获取秒数，秒数取佘，得到整数秒数
-			        if(min>60){//如果分钟大于60，将分钟转换成小时
-			          h=parseInt(min/60)//获取小时，获取分钟除以60，得到整数小时
-			          min=parseInt(min%60) //获取小时后取佘的分，获取分钟除以60取佘的分
-					  
-			        }
-					
-			      }
-				  result=`${h.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`
-			      return result 
-			    } ,       
+			},      
 			async getInfoIntegral() { //积分活动商品信息
 				try {
 					uni.showLoading()
@@ -765,12 +844,6 @@
 					this.total = parseFloat((Number(this.total) + Number(this.ScoreAmt)).toFixed(2))
 				}
 			},
-			// changeTips(){//点击优惠修改样式
-			// 	if(this.FloatList.length>0){
-			// 		this.isActive = !this.isActive;
-			// 		this.hideFloat = !this.hideFloat;
-			// 	}
-			// },
 			orderArea() {},
 			async getWxConfig() {
 				try {
@@ -786,33 +859,8 @@
 						timestamp: Data.SDK.timestamp,
 						nonceStr: Data.SDK.noncestr,                                                                                                                                                                                                                                             
 						signature: Data.SDK.signature,
-						jsApiList: ["getLocation", "openAddress", "scanQRCode"]
+						jsApiList: ["openAddress"]
 					});
-					wx.ready(res => {
-						let _this = this;
-						wx.getLocation({
-							type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-							success: function(res) {
-								// alert(JSON.stringify(res))
-								// _this.location.latitude = res.latitude;// 纬度，浮点数，范围为90 ~ -90
-								// _this.location.longitude = res.longitude;// 经度，浮点数，范围为180 ~ -180。
-								_this.location = {
-									longitude: res.longitude,
-									latitude: res.latitude
-								}
-								_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
-								sessionStorage.setItem('location', JSON.stringify(_this.location))
-							},
-							cancel: function(res) {
-								this.$toast.fail(res);
-							}
-						});
-						wx.error(function(res) {
-							this.$toast.fail(res);
-							// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-							console.log("调用微信接口获取当前位置失败", res);
-						});
-					})
 				} catch (e) {
 					this.$toast.fail(e);
 				}
@@ -893,13 +941,14 @@
 						ProdTotal: this.ProdTotal,
 						TicketPrice: this.TicketPrice,
 						// PayType: this.radioPayType,
-						ProdList: JSON.stringify(this.currentItem),
+						// ProdList: JSON.stringify(this.currentItem),
+						ProdList:this.ProdJsonList,
 						ScoreAmt: this.allck === true ? this.ScoreAmt : '' //判断积分抵扣是否选中
 						// ProdList:this.currentItem
 					}
 					let {
 						Data
-					} = await vipCard(obj, "UProdOpera");
+					} = await vipCard(obj, "UProdOpera");					
 					// 把选择的地址赋值到页面上
 					if (this.radioModes === 1) {
 						this.currentArea = val;
@@ -909,6 +958,7 @@
 						this.currentArea = val;
 						this.freight = Data.Freight;
 						this.total = Data.SumTotal;
+						this.ShopSID = Data.hasOwnProperty('ShopSID') ? Data.ShopSID:''
 						this.totalCurrent = parseFloat(Number(Data.SumTotal).toFixed(2));
 						sessionStorage.setItem('takeOutAddress', JSON.stringify(this.currentArea));
 					}
@@ -1000,7 +1050,7 @@
 					return;
 				}
 				this.radioPayType = item;
-				console.log(item)
+				// console.log(item)
 				this.Discount(item, 2)
 			},
 			changeSider(index) {//左侧日期选择
@@ -1021,7 +1071,9 @@
 					arrTime2.push(changeCountDown(startTime));
 					startTime += a;
 				}
+				
 				let allTimeSlotStart = arrTime2;
+				console.log(allTimeSlotStart,'allTimeSlotStart')
 				if (index !== 0) {
 					for (let i = 0; i < allTimeSlotStart.length - 1; i++) {
 						arrTime.push(allTimeSlotStart[i] + '-' + allTimeSlotStart[i + 1])
@@ -1103,14 +1155,18 @@
 					let obj = {
 						Action: "SelectDisc",
 						// SelectType: SelectType, //按钮类型
+						ShopSID:this.ShopSID,
 						ProdList: this.ProdJsonList,
-						PayType: type === 2 ? item : 1,
+						PayType: this.radioPayType,
 						Freight: this.freight, //运费
-						ProdTotal: this.ProdTotal, //商品总价						
+						ProdTotal: this.ProdTotal, //商品总价	
+						DeliveryType: this.takeDeliveryTpey,					
 						BeneSID:this.radioBene==='undefined'?'暂不使用':this.radioBene,
 						PrefNo: this.radioDiscount==='undefined'?'暂不使用':this.radioDiscount,
 						TicketNo: this.radioTicket==='undefined'?'暂不使用':this.radioTicket,
 						ScoreAmt: this.allck === true ? this.ScoreAmt : '' ,//判断积分抵扣是否选中
+						Longitude: this.$store.state.orderType === 'takein' ? this.shopLong : this.currentArea.Longitude,
+						Latitude: this.$store.state.orderType === 'takein' ? this.shopLat : this.currentArea.Latitude,
 						// TicketPrice: type != 3 ? this.TicketPrice : '', //type为1和2的时候传，电子券金额
 						// DiscPrice: type === 3 ? this.DiscPrice : '', //type 为3的时候传,优惠金额
 					}
@@ -1160,43 +1216,58 @@
 				this.$refs.addEditArea.open()
 			},
 			submitMoney() { //点击结算按钮，展示弹窗
+				if(this.UserTime == ''){
+					this.$toast("请选择提货时间");
+					return;
+				}
 				if (JSON.stringify(this.currentArea) === "{}" && !this.$Route.query.isIntegral) {
 					this.$toast("请选择地址");
 					return;
 				}
-				if (this.radioModes === 1) {
-					if (!this.phone_user || this.phone_user === "") {
-						this.$toast("请填写手机号码");
-						return;
-					} else {
-						if (!checkMobile(this.phone_user)) {
-							this.$toast("手机号格式错误");
-							return;
-						}
-					}
-				
-					if (!this.name_user || this.name_user === "") {
-						this.$toast("请填写收件名字");
-						return;
-					}
-				}
-				if (this.password === "" && this.IsPass === "1") {
-					this.$toast("请填写密码");
-					return;
-				}
-				if (this.radioPayType === "1") {
+				if(this.IsPass == '1' && this.radioPayType == "1"){
 					this.payTypePop = true;
 					this.$refs.payTypePop.open()
-				} else {
+				}else{
 					this.OrderCardPay();
-				}
+				}				
+				
+				// if (this.radioPayType == "1") {
+				// 	this.payTypePop = true;
+				// 	this.$refs.payTypePop.open()
+				// } else {
+				// 	this.OrderCardPay();
+				// }
+				// if (this.radioModes === 1) {
+				// 	if (!this.phone_user || this.phone_user === "") {
+				// 		this.$toast("请填写手机号码");
+				// 		return;
+				// 	} else {
+				// 		if (!checkMobile(this.phone_user)) {
+				// 			this.$toast("手机号格式错误");
+				// 			return;
+				// 		}
+				// 	}
+				
+				// 	if (!this.name_user || this.name_user === "") {
+				// 		this.$toast("请填写收件名字");
+				// 		return;
+				// 	}
+				// }
+				// if (this.password == "" && this.IsPass == "1") {
+				// 	this.$toast("请填写密码");
+				// 	return;
+				// }
+				
 			},
 			async OrderCardPay() { // 支付
 				this.isDisabled = true;
 				setTimeout(() => {
 				  this.isDisabled = false;
 				}, 5000)
-				// debugger
+				if (this.password == "" && this.IsPass == "1") {
+					this.$toast("请填写密码");
+					return;
+				}
 				let DeliveryType = this.radioModes; //2、1       //获取当前配送方式
 				if (this.radioModes === 2) {
 					if (this.currentDeliveryType.indexOf("2") > -1) {
@@ -1219,19 +1290,28 @@
 				// if(this.allck === true){//判断是否勾选积分抵扣
 				// 	// true代表选中，false代表未选中
 				// }
-				let currentStore = this.$store.state.currentStoreInfo || {}
-				let splitTime= this.RecordTime.radioTime.split("-")
+				
+				let CouuuGroupSID = JSON.parse(this.currentItem)[0].GroupSID;//凑团GroupSID
+				let currentStore = this.$store.state.currentStoreInfo || {};
+				let splitTime= this.RecordTime.radioTime.split("-");
+				let Action = "";
+				if(this.$Route.query.PromQuery||CouuuGroupSID){
+					Action = "GroupOrderPay"
+				}else{
+					Action = "OrderPay"
+				}
 				let obj = {
-					Action: "OrderPay",
-					DeliveryType: DeliveryType,
+					Action: Action,
+					DeliveryType: DeliveryType,					
 					UserName: this.radioModes === 2 ? this.currentArea.Name : this.name_user,
 					Mobile: this.radioModes === 1 ? this.phone_user : this.currentArea.Mobile,
 					Address: this.radioModes === 2 ? this.currentArea.Address : "",
 					ProdList: this.ProdJsonList,
+					LeaderSID:JSON.parse(this.ProdJsonList)[0].LeaderSID?JSON.parse(this.ProdJsonList)[0].LeaderSID:'',
 					Longitude: this.$store.state.orderType === 'takein' ? shopLong : this.currentArea.Longitude,
 					Latitude: this.$store.state.orderType === 'takein' ? shopLat : this.currentArea.Latitude,
 					Province: this.currentArea.Province || "",
-					ShopSID: this.radioModes === 1 ? currentStore.SID : "",
+					ShopSID: this.radioModes === 1 ? currentStore.SID : this.ShopSID,
 					UserRemarks: this.UserRemarks,
 					PayType: this.radioPayType,
 					PickDate: this.sidebarList[this.RecordTime.index],
@@ -1251,15 +1331,10 @@
 					obj.PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID;
 					PromotionItemSID = JSON.parse(this.currentItem)[0].PromotionItemSID
 				}
-				// console.log(this.$store.state.currentCard,'this.$store.state.currentCard')
-				// console.log(JSON.parse(this.currentItem)[0].GroupSID,'JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")')
 				if (JSON.parse(this.currentItem)[0].hasOwnProperty("GroupSID")) {
 					// 活动
 					obj.GroupSID = JSON.parse(this.currentItem)[0].GroupSID;
 				}
-				// else if(sessionStorage.getItem('GroupSID')){
-				// 	obj.GroupSID = sessionStorage.getItem('GroupSID');
-				// }
 				if (this.$Route.query.isIntegral) {
 					let currentItems = JSON.parse(this.currentItem);
 					obj = currentItems[0];
@@ -1289,10 +1364,13 @@
 					uni.hideLoading();
 					this.$store.commit("SET_CURRENT_CARD", []); //清掉购物车
 					uni.removeStorageSync("alreadyPaid"); //清点之前标记的已经下单的字段
-					let CouuuGroupSID = JSON.parse(this.currentItem)[0].GroupSID
 					if (this.radioPayType === "1") {
+						uni.showToast({
+							title: '订单正在处理中...',
+							duration: 3000,
+							icon: 'none'
+						});
 						if(PromType === '5'&& this.$Route.query.PromQuery){//如果有PromQuery 就代表是自己开团，开团之后跳转到商品详情页											
-							this.$toast("订单正在处理中...");
 							setTimeout(() => {
 								this.$Router.push({
 									path: "/pages/shoppingMall/list/infoGood",
@@ -1303,7 +1381,7 @@
 								});
 							}, 5000);
 						}else if(PromType === '5' && CouuuGroupSID){//通过别人的团进入的凑团
-							this.$toast("订单正在处理中...");
+							// this.$toast("订单正在处理中...");
 							setTimeout(() => {
 								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
 									// GroupSID:this.currentItem[0].GroupSID
@@ -1312,7 +1390,7 @@
 							}, 3000);	
 						}else{
 							//微卡支付
-							this.$toast("订单正在处理中...");							
+							// this.$toast("订单正在处理中...");							
 							setTimeout(() => {
 								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
 								this.$Router.push({
@@ -1321,7 +1399,7 @@
 										id:'0'
 									}
 								})
-							}, 5000);
+							}, 3000);
 						}
 						this.payTypePop = false;
 						this.$refs.payTypePop.close();
@@ -1331,7 +1409,11 @@
 						this.testData = Data;
 						try {
 							if(Data.PaySuccess){
-								this.$toast("订单正在处理中...");
+								uni.showToast({
+									title: '订单正在处理中...',
+									duration: 3000,
+									icon: 'none'
+								});
 								if(PromType === '5'){//如果不是单独购买的话直接跳到拼团详情页									
 									setTimeout(() => {
 										this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
@@ -1392,7 +1474,7 @@
 		},
 	};
 	function setChangeData(num, FinTypeDay) {//商城提货天数，传进来的天数
-	// console.log(num, FinTypeDay,'这里是左侧天数')
+	console.log(num, FinTypeDay,'这里是左侧天数')
 		let arrData = []; //日期
 		let toDay = "";
 		num = Number(num);
@@ -1405,73 +1487,78 @@
 		return arrData;
 	}
 	function setChangeTime(ShopBase, tAdvance, dayAdvance) {//商城对象，提前小时，超过的天数
-	// console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')		
-		// debugger
+		console.log(ShopBase, tAdvance, dayAdvance,'这里是右侧时间')	
 		let arr = [];
 		let arrToday = [];//一天的时间段数组
 		let dayM = 60 * 60; //秒值
 		let a = 60 * Number(ShopBase.IntervalMinute); //求秒值 间隔时长
 		let acTime = Number(tAdvance) * 60 * 60;//提前小时
-		console.log(acTime,'actime')
 		let startTime = Number(countDown(ShopBase.StartTime));//商城开始时间
-		let endTime = countDown(ShopBase.EndTime);//商城结束时间
+		let endTime = Number(countDown(ShopBase.EndTime));//商城结束时间
 		let cutTime = countDown(getTime(false, false, true));//当前时间
-		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间	
-		
+		let dayTime = parseInt(ShopBase.EndTime) - parseInt(ShopBase.StartTime)//一天营业时间
 		let nowTime= new Date();
 		let cutMinutes=nowTime.getMinutes();
 		let cutTime2 = countDown2(getTime(false, false, true));//当前时间
-		if(cutMinutes<30){
-			cutMinutes = cutTime2-cutMinutes*60;//当前的秒
+
+		if(tAdvance==0||tAdvance=='0'){
+			if(cutMinutes<30){
+				cutMinutes = cutTime2+(1800-cutMinutes*60);//当前的秒				
+			}else{
+				cutMinutes = cutTime2+(3600-cutMinutes*60)+1800;//当前的秒
+			}
 		}else{
 			cutMinutes = cutTime2+(3600-cutMinutes*60);//当前的秒
 		}
-		if((acTime + cutTime).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间	
-			/*
-				1、先用商城结束时间减去当前系统时间-->剩下营业几个小时
-				2、用 商品提前时间减去剩下营业时间-->就能知道剩下多长时间，以便于从第二天商城营业时间开始算			
-			*/
-			let mallTime = 0;
-			if(endTime-cutTime>0){
-				let mouTime = (acTime-(endTime - cutTime))
-				// 提前的时间还剩下几个小时
-				mallTime = 	(Number(mouTime/60/60)%dayTime)* 60 * 60
-			}else{
-				mallTime = (Number(tAdvance)%dayTime) * 60 * 60
-			}
-			while (Number(startTime)+Number(mallTime) <= endTime+a) {
-				arr.push(changeCountDown(Number(startTime)+Number(mallTime)));
+		// 这里已经算好还剩下几个小时 直接遍历 
+		// 现在是两点 提前7个小时
+		
+		// 2、如果当前时间+提货 超过营业结束时间就第二天
+		if((acTime + cutMinutes).toFixed(2)> endTime){//提前小时+当前时间>商城结束时间				
+			while (Number(startTime)+Number(acTime) <= endTime) {
+				arr.push(changeCountDown(Number(startTime)+Number(acTime)));
 				startTime += a;			
 			}
 			arrToday = arr;	
-		}else{		
-			// while (startTime <= endTime) {
-			// 	arr.push(changeCountDown(startTime));
-			// 	startTime += a;
+		}else{
+			/*
+				1、早上营业时间以前下单 
+				3、如果当前时间+提前时间 小于营业结束时间 就可以提货
+			*/ 
+			// if(cutTime+acTime<startTime){//
+			// 	while (startTime+acTime <= endTime) {
+			// 		arr.push(changeCountDown(cutMinutes+acTime));
+			// 		cutMinutes += a;
+			// 	}
+			// }else{
+			// 	while (cutTime +acTime <= endTime) {
+			// 		arr.push(changeCountDown(cutMinutes+acTime));
+			// 		cutMinutes += a;
+			// 	}
 			// }
-			// 如果是提前天数的话，现在是六点，那么就要从明天六点开始提货
-			let tomorrow = endTime - cutTime;			//结束时间 - 当前时间 = 剩余时间	
 			if(cutTime>=startTime){//如果当前时间大于开始时间，那么就从当前时间一直循环到结束时间
-				while (cutTime+acTime <= endTime+a) {
-					arr.push(changeCountDown(cutTime+acTime));
-					cutTime += a;
+				while (cutMinutes+acTime <= endTime) {
+					arr.push(changeCountDown(cutMinutes+acTime));
+					cutMinutes += a;					
+				}
+				if(cutMinutes - a <= endTime){
+					arr.push(changeCountDown(endTime));
 				}
 			}else {
-				while (startTime <= endTime) {
+				while (startTime+acTime <= endTime) {
 					arr.push(changeCountDown(startTime+acTime));
 					startTime += a;
 				}
-				// while (startTime+acTime <= endTime) {
-				// 	arr.push(changeCountDown(startTime+acTime));
-				// 	startTime += a;
-				// }
 			}
+			// while (startTime+acTime <= endTime) {
+			// 	arr.push(changeCountDown(startTime+acTime));
+			// 	startTime += a;
+			// }
 			if (dayAdvance == 0) {
 				arr.forEach(DATA => {
 					DATA = countDown(DATA);
 					// 当前时间+提前小时
 					if ( dayAdvance == 0 && DATA > countDown(getTime(false, false, true)) + Number(tAdvance) * dayM ) {
-						// arrToday.push(changeCountDown(DATA));
 						arrToday = arr
 					}else{
 						arrToday = arr;
@@ -1533,6 +1620,27 @@
 	@import "../../../assets/css/radioModes";
 	.setADcell {
 		margin: 5px 0;
+	}
+	.shopList{
+		width: 100%;
+		min-height: 300px;
+		// max-height: calc(100vh - 380px);
+		max-height: 50vh;
+		// padding:15px 15px 0 15px;
+		box-sizing: border-box;
+		
+		.shopCon{
+			width: 100%;
+			height:100%;
+			overflow: hidden;
+			.item{
+				padding:15px;
+				background-color: #fff;
+				border-radius: 8px;
+				margin-bottom: 15px;
+				justify-content: space-between;
+			}
+		}
 	}
 	.onlySty{
 		background-color: rgb(255, 255, 255);
@@ -1663,8 +1771,7 @@
 			}
 		}
 		.bottom-area {
-			max-height: 60vh;
-			overflow: scroll;
+			padding-bottom: 25px;
 			&__box {
 				display: flex;
 				padding: 8px 12px;
@@ -1875,6 +1982,7 @@
 		.menus {
 			height: 100%;
 			overflow: hidden;
+			width: 100%;
 		}
 		.couponBox{
 			background-color: #fff;

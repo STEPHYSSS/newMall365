@@ -8,6 +8,13 @@
 					<span class="order-area-info iconfont icon-dianpu" />
 					<span style="vertical-align: middle;">提货门店</span>
 				</div>
+				<div class="order-area-delivery" v-if="OrderInfo.DeliveryType === '2'&&JSON.stringify(currentArea) !== '{}'">
+					<span class="order-area-info iconfont icon-dianpu" />
+					<span style="vertical-align: middle;">门店信息</span>
+					<view class="storeInfo">
+						<text>门店名称：{{shopinfo.Name}}</text><br/><text @click="call(shopinfo.Tel)">门店电话：{{shopinfo.Tel}}</text><br/><text>门店地址：{{shopinfo.Address}}</text>
+					</view>
+				</div>
 				<div class="order-area">
 					<div class="order-area-icon">
 						<image src="/static/img/weizhi.png" alt />
@@ -15,7 +22,9 @@
 					<div v-if="JSON.stringify(currentArea) !== '{}'" style="flex: 1">
 						<div>
 							<span>{{currentArea.hasOwnProperty('UserName')?currentArea.UserName:currentArea.Name}}{{currentArea.Sex |setSex}}</span>
-							<span class="order-area-phone">{{currentArea.Mobile?currentArea.Mobile:currentArea.Tel}}</span>
+							<span class="order-area-phone" v-if="currentArea.Mobile">{{currentArea.Mobile}}</span>
+							<span class="order-area-phone" v-else="currentArea.Tel" @click.stop="call(currentArea.Tel)">{{currentArea.Tel}}</span>
+							<!-- <span class="order-area-phone" @click.stop="call(shopinfo.Tel)">{{currentArea.Mobile?currentArea.Mobile:currentArea.Tel}}</span> -->
 						</div>
 						<div class="order-area-location">{{currentArea.Address}}</div>
 					</div>
@@ -23,20 +32,13 @@
 			</div>
 			<div class="good_card_box" style="margin-bottom:10px" v-if="OrderInfo.OrderType=='2'">
 				<div v-for="(item,index) in prodList" :key="index" @click="toGoodsInfo(item,2)">
-					<a-good-lineBox :itemData="item" :isOrder="true" :isIntegral="OrderInfo.OrderType==4"></a-good-lineBox>
+					<a-good-lineBox :itemData="item" :OrderInfo="OrderInfo" :isOrder="true" :isIntegral="OrderInfo.OrderType==4"></a-good-lineBox>
 				</div>
 			</div>
 			<div class="good_card_box" style="margin-bottom:10px" v-if="OrderInfo.OrderType=='3'" @click="toGoodsInfo(OrderInfo,3)">
 				<a-good-lineBox :itemData="OrderInfo" :isOrder="true" :isIntegral="OrderInfo.OrderType==4"></a-good-lineBox>
 			</div>
 			<div style="background-color: #fff;">
-				<!-- <adCell detailColor="#969799" text="商品总价" showArrow="false" :detail="OrderInfo.ProdAmt" v-if="Number(OrderInfo.ProdAmt)>0" />
-				<adCell detailColor="#969799" text="方案优惠" showArrow="false" :detail="'-'+OrderInfo.DiscAmt" v-if="Number(OrderInfo.DiscAmt)>0" />
-				<adCell detailColor="#969799" text="电子券优惠" showArrow="false" :detail="'-'+OrderInfo.TicketAmt" v-if="Number(OrderInfo.TicketAmt)>0" />
-				<adCell detailColor="#969799" text="积分抵扣" showArrow="false" :detail="'-'+OrderInfo.ScoreAmt" v-if="Number(OrderInfo.ScoreAmt)>0"/>
-				<adCell detailColor="#969799" text="运费" showArrow="false" :detail="Number(OrderInfo.Freight)?'¥'+OrderInfo.Freight:'免运费'" />
-				<adCell detailColor="#969799" text="实付金额" showArrow="false" :detail="OrderInfo.PayAmt" /> -->
-				<!-- <adCell detailColor="#969799" text="实付金额" showArrow="false" :detail="setScore(OrderInfo)" /> -->
 				
 				<div class="orderData">
 					<div class="orderTime">
@@ -137,7 +139,7 @@
 				<!-- <head-nav title="查看门店位置" :noG0="false" @clickGo="clickGoAddress"></head-nav> -->
 				<uni-nav-bar v-if="showArea" :fixed="true" left-icon="back" @clickLeft="clickGoAddress" title="查看门店位置" :status-bar="true"
 				 :shadow="false"></uni-nav-bar>
-				<iframe id="mapPage" width="100%" height="100%" frameborder="0" :src="`https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:${currentArea.Latitude},${currentArea.Longitude}&key=IB5BZ-HF53W-5KLRH-R3VUL-35KO7-Y2BUT&referer=365商城管理`"></iframe>
+				<iframe id="mapPage" width="100%" height="100%" frameborder="0" :src="`https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:${currentArea.Latitude},${currentArea.Longitude}&key=G6OBZ-426WU-KYRV4-23K2X-U53RV-X6FPY&referer=365商城管理`"></iframe>
 			</uni-popup>
 		</div>
 		<!-- <uni-popup type="bottom" ref="popupPay" style="padding:10px;width:70%;text-align: center">
@@ -167,6 +169,7 @@
 			return {
 				classHome: getApp().globalData.mainStyle,
 				currentArea: {},
+				shopinfo:{},//用于接收外卖时的门店地址
 				prodList: [],
 				OrderInfo: {},
 				loading: true,
@@ -187,7 +190,7 @@
 				// console.log(getDecode)
 				let getDQuery = JSON.parse(getDecode)
 				this.orderId=getDQuery.order_id;
-				this.OrderType = getDQuery.OrderType
+				this.OrderType = getDQuery.OrderType;				
 				this.getInfo();
 			}
 			
@@ -220,6 +223,7 @@
 						this.currentArea = Data.ShopInfo;
 					} else {
 						this.currentArea = Data.OrderInfo;
+						this.shopinfo = Data.ShopInfo;
 					};
 					this.prodList = Data.OrderItem;
 					this.OrderInfo = Data.OrderInfo;
@@ -230,6 +234,7 @@
 					this.Refund = Data.Refund ? Data.Refund : Data.Refund;
 					this.loading = false;
 				} catch (e) {
+					this.$toast(e)
 					this.loading = false;
 				}
 			},
@@ -265,6 +270,24 @@
 			clickGo() {
 				this.$Router.push({
 					path: "/pages/vip/allMyOrder"
+				});
+			},
+			// 拨打电话
+			call(Tel) {
+				uni.makePhoneCall({
+					// 手机号
+					phoneNumber: Tel,
+			
+					// 成功回调
+					success: (res) => {
+						console.log('调用成功!')
+					},
+			
+					// 失败回调
+					fail: (res) => {
+						console.log('调用失败!')
+					}
+			
 				});
 			},
 			copyTextFun(val) {
@@ -308,10 +331,15 @@
 						weChatPayment(this, Data, true);
 					} catch (e) {
 						uni.showToast({
-							title: '微信调起失败',
+							title: e,
 							duration: 2000,
 							icon: 'none'
 						});
+						// uni.showToast({
+						// 	title: '微信调起失败',
+						// 	duration: 2000,
+						// 	icon: 'none'
+						// });
 					}
 				} catch (e) {}
 			},
@@ -418,6 +446,16 @@
 			.order-area-delivery {
 				padding: 8px 8px 0 8px;
 				font-size: 14px;
+				.storeInfo{
+					margin-left: 20px;
+					color: #807e7e;
+					text{
+						display: inline-block;						
+					}
+					.text2{
+						padding-left: 20px;
+					}
+				}
 			}
 		}
 

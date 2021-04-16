@@ -46,9 +46,19 @@
         "setting" : {
             "urlCheck" : true,
             "es6" : true
+        },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : ""
+            }
         }
     },
     "h5" : {
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true //启用摇树优化  
+            }
+        },
         "devServer" : {
             "port" : "9000",
             "https" : false
@@ -57,7 +67,10 @@
             "base" : "./",
             "mode" : "hash"
         },
-        "domain" : "http://dingtalk.bak365.cn/WeixinNew/Dist/",
-        "title" : "商城"
+        "domain" : "http://wx8d4708e1e9895e87.manage.bak365.cn/WebApp/mobile/",
+        "title" : "商城",
+        "sdkConfigs" : {
+            "maps" : {}
+        }
     }
 }

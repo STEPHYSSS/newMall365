@@ -61,6 +61,7 @@
 						<div class="label" style="text-indent:10px;">本次支付</div>
 						<span style="padding-left:10px;">{{SumTotal}}</span>
 					</div>
+					<!-- v-if="CardInfo.IsPass==='1'" -->
 					<div class="block-item" v-if="CardInfo.IsPass==='1'">
 						<div class="label" style="text-indent:10px;">微卡密码</div>
 						<input type="password" style="padding-left:10px;width: 160px;" placeholder="请输入密码" name="password" v-model="password" />
@@ -118,6 +119,7 @@
 			};
 		},
 		async created() {
+			console.log(this.$Route.query,'5555')
 			if (
 				!this.$store.state.currentCard ||
 				this.$store.state.currentCard.length === 0
@@ -260,10 +262,16 @@
 				let PromWhereFlag = sessionStorage.getItem('PromWhereFlag');//立即开团
 				let couGroupFlag = sessionStorage.getItem('couGroup');//立即凑团
 				let PromType = sessionStorage.getItem("PromType")
+				let Action ="";
+				if(this.$Route.query.PromQuery||currentCard[0].GroupSID){
+					Action = "GroupTicketPay"
+				}else{
+					Action = "TicketPay"
+				}
 				try {
 					let {Data} = await vipCard(
 					  {
-						Action: "TicketPay",
+						Action: Action,
 						ShopSID:currentStore?currentStore.data.SID:'',
 						// ProdList:JSON.stringify(this.prodList),
 						ProdList:this.currentItem,
@@ -273,15 +281,19 @@
 					  }, "UOrderOpera")
 					  if (this.radioPayType === "1") {
 					  	//微卡支付
-						if(PromType === '5' && currentCard[0].GroupSID){//如果不是单独购买的话直接跳到拼团详情页
-							this.$toast("订单正在处理中...");
+						uni.showToast({
+							title: '订单正在处理中...',
+							duration: 3000,
+							icon: 'none'
+						});
+						if(PromType === '5' && currentCard[0].GroupSID){//如果不是单独购买的话直接跳到拼团详情页							
 							setTimeout(() => {
 								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
 								this.$router.push({path:"/pages/shoppingMall/makeGroup/groupInfoSuccess",query:{
 									GroupSID:currentCard[0].GroupSID
 								}})
 							}, 3000);
-						}else if(PromType === '5' && !currentCard[0].GroupSID){
+						}else if(PromType === '5'&& this.$Route.query.PromQuery){
 							setTimeout(() => {
 								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
 								this.$Router.push({
@@ -293,7 +305,12 @@
 								});
 							}, 3000);
 						}else{
-							this.$toast("订单正在处理中...");
+							// this.$toast("订单正在处理中...");
+							// uni.showToast({
+							// 	title: '订单正在处理中...',
+							// 	duration: 3000,
+							// 	icon: 'none'
+							// });
 							setTimeout(() => {
 								// this.$Router.push("/pages/shoppingMall/order/paySuccess");
 								this.$Router.push({

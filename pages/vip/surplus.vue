@@ -36,11 +36,19 @@
 							<span>交费明细</span>
 							<div style="float: right" v-if="item.ShopName">{{item.ShopName}}</div>
 						</div>
+						<div v-if="item.Type=='12'">
+							<span>{{item.TypeName}}</span>
+							<div class="custom-time" style="float: right">{{item.Consume}}</div>
+						</div>
 						<div v-if="item.CardPay>0">
 							<span>消费金额</span>
 							<div class="custom-time" style="float: right">-{{item.CardPay}}</div>
 						</div>
-						<div v-if="item.IncomeAmt">
+						<div v-if="item.Type=='11'">
+							<span>{{item.TypeName}}</span>
+							<div class="custom-time" style="float: right">{{item.IncomeAmt}}</div>
+						</div>
+						<div v-if="item.IncomeAmt&&item.Type=='1'">
 							<span class="custom-label">充值金额</span>
 							<div class="custom-time" style="float: right">+{{item.IncomeAmt}}</div>
 						</div>
@@ -110,6 +118,15 @@
 						this.MyCard = data.Data.MyCard
 					}
 					this.DataList = data.Data.OrderList || [];
+					this.DataList.forEach((item,index)=>{
+						if(item.Type == "12"){
+							item.Consume = item.Consume.replace('-','+');
+						}
+						if(item.Type == "11"){
+							item.IncomeAmt = item.IncomeAmt.replace('-','+');
+						}
+						
+					})
 					// this.Balance = data.Data.Balance || 0;
 					// this.Score = data.Data.Score || 0;
 					this.UserPhoto =data.Data.Img;

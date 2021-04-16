@@ -28,13 +28,15 @@
 							</div>
 						</div>
 					</scroll-view>
-				</div>
+				</div>	
+				<a-nodeData stringVal="暂无数据" v-if="!loading&&sidebarList.length===0"></a-nodeData>
 			</div>
 		</div>
 	</view>
 </template>
 <script>
 	import { vipCard } from "@/api/http.js";
+	import {GetBaseUrl} from '@/util/publicFunction.js'
 	export default{
 		data(){
 			return{
@@ -62,7 +64,40 @@
 			await this.getCouponList();
 			this.$store.commit("SET_HISTORY_URL", {path:'/pages/shoppingMall/list/goodsList'})
 		},
+		mounted() {
+			// if (window.history && window.history.pushState) {
+			// 	history.pushState(null, null, document.URL);
+			// 	window.addEventListener('popstate', this.fun, false);//false阻止默认事件
+			//   }
+			if (window.history && window.history.pushState) {
+			 this.pushHistory();
+			  window.addEventListener("popstate", (e)=> {
+			   window.location.href = GetBaseUrl()+"#/pages/shoppingMall/index";
+			  }, false);
+			}
+		},
+		// destroyed(){
+		//   window.removeEventListener('popstate', this.fun, false);//false阻止默认事件
+		// },
+		// onBackPress(e){
+		//   console.log("监听返回按钮事件",e);
+		//   uni.navigateTo({
+		//     url:"/pages/shoppingMall/index"
+		//   })
+		//   // 此处一定要return为true，否则页面不会返回到指定路径
+		//   return true;
+		// },
 		methods:{
+			pushHistory() {
+			 const state = {
+			    title: "title",
+			    url: "#"
+			  };
+			  window.history.pushState(state, "title", "#");
+			},
+			// fun(){
+			// 	window.location.href = GetBaseUrl()+"#/pages/shoppingMall/index";
+			// },
 			// this.prodInfo = this.currentObj._Prod_Data.filter(D=>D.CateSID === item.SID);	
 			async getCouponList(){//获取商品树列表
 				let Name = "";
@@ -81,9 +116,34 @@
 						Name:Name
 					}, "UProdOpera");
 					this.sidebarList = Data.CateList;
-					this.rightGoodsList = this.sidebarList[0].children;
+					this.loading = false;
+					// this.rightGoodsList = this.sidebarList[0].children;
+					if(this.sidebarList.length>0){
+						this.rightGoodsList = this.sidebarList[0].children;
+					}else{
+						this.rightGoodsList = [];
+					}
 				} catch (e) {
 					this.$toast(e)
+					this.loading = false;
+				}
+			},
+			async getCouponList2(){//获取商品树列表				
+				try {
+					let { Data } = await vipCard({
+						Action: "GetTreeProdList",
+						SID:this.$store.state.currentStoreInfo.SID,//门店id
+					}, "UProdOpera");
+					this.sidebarList = Data.CateList;
+					this.loading = false;
+					if(this.sidebarList.length>0){
+						this.rightGoodsList = this.sidebarList[0].children;
+					}else{
+						this.rightGoodsList = [];
+					}
+				} catch (e) {
+					this.$toast(e)
+					this.loading = false;
 				}
 			},
 			clickMenu(index,item){
@@ -101,14 +161,24 @@
 				});
 			},
 			clickLeft(){
+				// let ShopRadio = sessionStorage.getItem('ShopRadio')
+				// if(ShopRadio=='2'){
+				// 	this.$Router.pushTab({
+				// 		path: "/pages/shoppingMall/index"
+				// 	});
+				// }else if(ShopRadio=='1'){
+				// 	this.$Router.pushTab({
+				// 		path: "/pages/shoppingMall/login"
+				// 	});
+				// }
 				this.$Router.pushTab({
 					path: "/pages/shoppingMall/index"
 				});
+				
 			},
 			async addCart(item) {
 				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'));
 				if(item.ProdType == '1'){
-					// console.log('直接进入详情页')
 					this.$Router.push({
 						path: "/pages/shoppingMall/list/infoGood",
 						query:{SID:item.SID,isGoodList:true,title:item.Name}

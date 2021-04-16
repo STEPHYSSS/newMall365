@@ -44,9 +44,9 @@
 		<uni-popup ref="specificArea" class="confirm-area-popup" style="margin-top:50px">
 			<!-- #ifdef H5 -->
 			<iframe style="margin-top:50px" id="mapPage" width="100%" height="100%" frameborder="0"
-			 :src="`https://apis.map.qq.com/tools/locpicker?search=1&type=1&policy=1&coord=30.59035,114.310694&key=IB5BZ-HF53W-5KLRH-R3VUL-35KO7-Y2BUT&referer=365商城管理`"></iframe>
+			 :src="`https://apis.map.qq.com/tools/locpicker?search=1&type=1&policy=1&coord=${location.latitude},${location.longitude}&key=G6OBZ-426WU-KYRV4-23K2X-U53RV-X6FPY&referer=烘焙365-微商城`"></iframe>
 			<!-- <iframe style="margin-top:50px" id="mapPage" width="100%" height="100%" frameborder="0"
-			 :src="`https://apis.map.qq.com/tools/locpicker?search=1&type=1&policy=1&coord=${location.latitude},${location.longitude}&key=IB5BZ-HF53W-5KLRH-R3VUL-35KO7-Y2BUT&referer=365商城管理`"></iframe> -->
+			 :src="`https://apis.map.qq.com/tools/locpicker?search=1&type=1&policy=1&coord=${location.latitude},${location.longitude}&key=G6OBZ-426WU-KYRV4-23K2X-U53RV-X6FPY&referer=365商城管理`"></iframe> -->
 			<!-- coord=40.022964,116.319723 -->
 			<!-- #endif -->
 			<!-- #ifndef H5 -->
@@ -94,24 +94,27 @@
 			}
 		},
 		created() {
-			this.getWxConfig();
+			// this.getWxConfig();
 			this.DeliveryType = this.currentDeliveryType.indexOf("2") > -1 ? 2 : 3;
-			if(this.$Route.query.areaInfo){
+			// if(this.$Route.query.areaInfo){
+			// 	this.form = this.$Route.query.areaInfo;
+			// 	this.form.Defaults = this.form.Defaults === "1" ? true : false;
+			// }
+			if (this.$Route.query.areaInfo) {
+				// this.form = JSON.parse(JSON.stringify(this.areaInfo));
 				this.form = this.$Route.query.areaInfo;
-				this.form.Defaults = this.form.Defaults === "1" ? true : false;
-			}
-			if (JSON.stringify(this.areaInfo) !== "{}") {
-				this.form = JSON.parse(JSON.stringify(this.areaInfo));
 				this.form.Defaults = this.form.Defaults === "1" ? true : false;
 				let Sex = this.form.Sex.replace(/\s*/g, "");
 				this.form.Sex = Sex === "先生" ? "0" : "1";
 				this.location = {
-					latitude: this.areaInfo.Latitude,
-					longitude: this.areaInfo.Longitude
+					latitude: this.form.Latitude,
+					longitude: this.form.Longitude
 				};
 			} else {
-				// this.location
-				// console.log(this.location.latitude)
+				if(this.$store.state.currentLocation.latitude== undefined || this.$store.state.currentLocation.longitude == undefined){
+					this.$store.state.currentLocation.latitude = 39.91667 
+					this.$store.state.currentLocation.longitude = 116.41667
+				}
 				this.location = this.$store.state.currentLocation; //当前的位置
 			}
 		
@@ -157,51 +160,8 @@
 			//             }
 			//             // #endif
 		},
-		methods:{
-			// 进入首页就获取微信地址
-			// async getWxConfig(){
-			// 	try {
-			// 		let {
-			// 			Data
-			// 		} = await vipCard({
-			// 			Action: "GetJSSDK",
-			// 			Url: window.location.href
-			// 		}, "UProdOpera");
-					
-			// 		wx.config({
-			// 			debug: false,
-			// 			appId: Data.SDK.appId,
-			// 			timestamp: Data.SDK.timestamp,
-			// 			nonceStr: Data.SDK.noncestr,
-			// 			signature: Data.SDK.signature,
-			// 			jsApiList: ["getLocation","openAddress","scanQRCode"]
-			// 		});
-			// 		wx.ready(res => {
-			// 			let _this = this;
-			// 		    wx.getLocation({
-			// 		       type: 'gcj02',  // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-			// 		      success: function(res) {
-			// 				_this.location = {
-			// 					longitude: res.longitude,
-			// 					latitude: res.latitude
-			// 				}
-			// 				_this.$store.commit("SET_CURRENT_LOCATION", _this.location);
-			// 				sessionStorage.setItem('location',JSON.stringify(_this.location))							
-			// 		      },
-			// 			  cancel: function(res) {
-			// 				this.$toast.fail(res);
-			// 			  }
-			// 		    });
-			// 		  wx.error(function(res) {
-			// 		     this.$toast.fail('获取当前位置失败');
-			// 		    console.log("调用微信接口获取当前位置失败", res);
-			// 		  });
-			// 		})
-			// 	} catch (e) {
-					
-			// 	}
-			// },
-			getWxAddress(){
+		methods:{			
+			getWxAddress(){//用来获取通讯录
 				let _this = this;
 				wx.openAddress({
 				  success: function (res) {

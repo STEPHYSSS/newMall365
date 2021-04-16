@@ -6,13 +6,14 @@ import store from '../store/store.js'
 import Cookie from '@/config/cookie-my/index.js'
 import {
 	GetQueryString,
-	setUrlDelCode
+	setUrlDelCode,
+	GetAppNo,
+	GetBaseUrl
 } from '../util/publicFunction'
 import dataConfig from '@/config/index'
 
 Vue.use(Router)
 //初始化
-
 // encodeURI: false,
 const router = new Router({
 	routes: [...modules] //路由表
@@ -20,142 +21,92 @@ const router = new Router({
 
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
-	console.log("全局路由前置守卫")
-	next()
-	// uni.getProvider({
-	// 	service: 'oauth',
-	// 	success: async function(res) {
-	// 		let providerNew = res.provider[0]
-	// 		if (Cookie.get('mainColor')) {
-	// 			// 保存主题色
-	// 			getApp().globalData.mainColor = Cookie.get('mainColor')
-	// 		}
-	// 		if (providerNew) {
-	// 			// 小程序
-	// 			getApp().globalData.mainStyle = 'theme2'
-	// 			Cookie.set('mainStyle', 'theme2')
-	// 			next()
-	// 		} else {
-				
-	// 			// h5
-	// 			if (Cookie.get('mainStyle')) {
-	// 				getApp().globalData.mainStyle = Cookie.get('mainStyle')
-	// 			}
-	// 			getApp().globalData.mainStyle = 'theme2'
-	// 			Cookie.set('mainStyle', 'theme2')
+	uni.getProvider({
+		service: 'oauth',
+		success: async function(res) {
+			let providerNew = res.provider[0]
+			if (Cookie.get('mainColor')) {
+				// 保存主题色
+				getApp().globalData.mainColor = Cookie.get('mainColor')
+			}
+			if (providerNew) {
+				// 小程序
+				getApp().globalData.mainStyle = 'theme2'
+				Cookie.set('mainStyle', 'theme2')
+				next()
+			} else {
+				// h5
+				if (Cookie.get('mainStyle')) {
+					getApp().globalData.mainStyle = Cookie.get('mainStyle')
+				}
+				let locationUrl = window.location.href;
+				if (locationUrl.indexOf('Flag') > -1) { //秒杀href
+					sessionStorage.setItem('searchUrl', locationUrl)
+				}
+				if (locationUrl.indexOf('FlagIndex') > -1) { //首页href
+					sessionStorage.setItem('searchUrl', locationUrl)
+				}
+				getApp().globalData.mainStyle = 'theme2'
+				Cookie.set('mainStyle', 'theme2')
+				let Code = GetQueryString("code");
+				let newAppNo = GetAppNo();
+				let newAppUrl = GetBaseUrl();
+				let UserMACPhone = Cookie.get("UserMACPhone")
+				// let UserMACPhone = '8247569c1631da6216cd72a2b4a8c33au'
+				UserMACPhone = UserMACPhone == 'undefined' ? '' : UserMACPhone
+				UserMACPhone = UserMACPhone == 'null' ? '' : UserMACPhone
+				let currentUrl = setUrlDelCode();
+				let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : newAppUrl) +
+					'#/GrantMiddle?AppNo=' + newAppNo //调回到固定页面
+				// 判断加载地址是否为 /Grant开头的
+				console.log(to.path, '路径')
+				Cookie.set('currentUrl', currentUrl)
+				// if(to.path !== '/pages/error/index' && to.path !== '/Grant' && to.path !== '/GrantMiddle' && !UserMACPhone){
+				// 	console.log(to.path,'000')
 
-	// 			let GetQuery = GetQueryString('AppNo')
-	// 			// let newAppNo = GetQuery ? GetQuery : Cookie.get('AppNo')
-	// 			let newAppNo = ''
-	// 			if(dataConfig.Bak365_Dev===0)
-	// 			{
-	// 				newAppNo='001';
-	// 			}
-	// 			else
-	// 			{
-	// 				let domain = window.location.host;
-	// 				newAppNo=domain.split('.')[0];
-	// 			}
-	// 			let UserMACPhone = Cookie.get('UserMACPhone')//暂时注释
-	// 			// let UserMACPhone = '926fb63385232ec49043749cdb3145d0u';
-	// 			UserMACPhone = UserMACPhone == 'undefined' ? '' : UserMACPhone
-	// 			UserMACPhone = UserMACPhone == 'null' ? '' : UserMACPhone
-	// 			console.log(to.query,'to.query')
-	// 			if (!to.query.hasOwnProperty('AppNo') && newAppNo && to.path !== '/GrantMiddle' && to.path !== '/Grant') {
-	// 				// 给每个页面加?BusinNo
-	// 				let obj = {}
-	// 				Object.assign(obj, to.query)
-	// 				Object.assign(obj, {
-	// 					AppNo: newAppNo
-	// 				})
-	// 				next({
-	// 					path: to.path,
-	// 					query: obj
-	// 				})
-	// 			}
-	// 			// if (!to.query.hasOwnProperty('AppNo') && newAppNo && to.path !== '/GrantMiddle' && to.path !== '/Grant') {
-	// 			// 	// 给每个页面加?AppNo
-	// 			// 	let obj = {}
-	// 			// 	Object.assign(obj, to.query)
-	// 			// 	Object.assign(obj, {
-	// 			// 		AppNo: '001'					
-	// 			// 	})
-	// 			// 	next({
-	// 			// 		path: to.path,
-	// 			// 		query: obj
-	// 			// 	})
-	// 			// }
-
-	// 			let currentUrl = setUrlDelCode()
-	// 			 // let domain = window.location.host;
-	// 			 // console.log(domain,'-----domain-----')
-	// 			 // newAppNo = domain;//获取域名存放给AppNo,暂时注释
-	// 			if (newAppNo) {
-	// 				Cookie.set('AppNo', newAppNo)
-	// 				if (to.path !== '/pages/error/index' && to.path !== '/Grant' && to.path !== '/GrantMiddle' && !UserMACPhone) {
-	// 					currentUrl = setUrlDelCode()
-	// 					Cookie.set('currentUrl', currentUrl)
-	// 					let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : dataConfig.BASE_URL_OnLine) +
-	// 						'#/GrantMiddle?AppNo=' + newAppNo //调回到固定页面
-	// 					if (UserMACPhone && UserMACPhone !== null && UserMACPhone !== undefined && UserMACPhone !== '') {
-	// 						next()
-	// 					} else {
-	// 						// uni.clearStorageSync();
-	// 						//重新登录清除缓存
-	// 						store.commit("SET_HISTORY_URL", {})
-	// 						try {
-	// 							let appId = await store.dispatch('get_user', {
-	// 								AppNo: newAppNo,
-	// 								Code:''
-	// 							})
-	// 							if (appId) {
-	// 								next({
-	// 									path: '/Grant',
-	// 									query: {
-	// 										appId: appId,
-	// 										redirect_uri: headUrl
-	// 									}
-	// 								})
-	// 							} else {
-	// 								uni.showToast({
-	// 									title: '获取appId失败',
-	// 									icon: 'none'
-	// 								});
-	// 							}
-	// 						} catch (e) {
-	// 							// 		//获取 获取appId 失败，加一个按钮，让用户手动重新获取这个接口
-	// 							if (to.path === '/pages/error/index') {
-	// 								next()
-	// 							} else {
-	// 								next({
-	// 									path: '/pages/error/index',
-	// 									query: {
-	// 										redirect_uri: currentUrl,
-	// 										title: '获取appId 失败'
-	// 									}
-	// 								})
-	// 							}
-	// 						}
-	// 					}
-	// 				} else {
-	// 					next()
-	// 				}
-	// 			} else if (to.path === '/pages/error/index') {
-	// 				next()
-	// 			} else {
-	// 				// 没有商户编号
-	// 				next({
-	// 					path: '/pages/error/index',
-	// 					query: {
-	// 						redirect_uri: currentUrl,
-	// 						title: '商户编号有误'
-	// 					}
-	// 				})
-	// 			}
-	// 		}
-	// 	}
-	// })
+				// 	if(UserMACPhone){
+				// 		// next()
+				// 		console.log('有token')
+				// 	}else {
+				// 		console.log('没有token',headUrl)
+				// 	}
+				// }else {
+				// 	console.log(to.path,'000')
+				// 	// 不是Grant、GrantMiddle开头的地址 就放行
+				// 	// next()
+				// }
+				/*登录流程
+					新用户授权
+					1、先判断有没有Mac
+					2、如果没有mac 就去调用GetPlatform   获取APPID，拿到APPID之后去请求微信授权
+					3、获取微信授权code  再调用登录接口UserSign
+					
+					老用户登录
+					1、先判断有没有Mac
+					2、如果Mac过期的话 后端返回“请登录”和 APPID 拿到APPID之后去请求微信授权
+					3、获取微信授权code  再调用登录接口UserSign*/
+				// -----------------------------
+				if (UserMACPhone && UserMACPhone !== null && UserMACPhone !== undefined && UserMACPhone !== '') { // 如果已经登录，那我不干涉你，让你随便访问				    
+					next()
+				} else { //没有登录
+					if (to.path !== '/pages/error/index' && to.path !== '/Grant' && to.path !== '/GrantMiddle' && !UserMACPhone) {
+						// 如果没有登录，但你访问其他需要登录的页面，那我就让你跳到登录页面去
+						next({
+							path: '/Grant',
+							query: {
+								redirect_uri: headUrl
+							}
+						})
+					} else {
+						// 如果没有登录，但你访问的login，那就不干涉你，让你访问
+						next()
+					}
+				}
+			}
+		}
+	})
 })
 // 全局路由后置守卫
 router.afterEach((to, from) => {})
+
 export default router;

@@ -1,21 +1,22 @@
 <template>
-	<div>
+	<div style="height: auto;">
 		<!-- 魔方 -->
-		<div style="background-color: rgb(249, 249, 249)">
+		<div style="background-color: rgb(249, 249, 249);height: auto;" >
 			<div v-if="currentObj.imgList.length===0" class="rc-design-react-preview rc-design-component-default-preview">
 				<div class="rc-design-component-default-preview__text">点击编辑魔方</div>
 			</div>
-			<div class="cap-cube-wrap" v-else>
-				<div class="cap-cube" :style="{'margin': -(currentObj.imgGap/2).toFixed(2)+'px','height': bigBoxH+'px','width':bigBoxW+'px'}">
-					<div v-for="(item,index) in listBox" :key="index" class="cap-cube__item" :style="{'left': item.Dleft+'px','top': item.Dtop+'px','height': item.Dheight+'px','width': item.Dwidth+'px',
+			<!-- ,'background-image':`url(${setImgPrex(item.img)})` -->
+			<div class="cap-cube-wrap" v-else >
+				<div class="cap-cube" :style="{'margin': -(currentObj.imgGap/2).toFixed(2)+'px','height': bigBoxH === 'auto'?'100%': bigBoxH+'px','width':bigBoxW+'px','display':bigBoxH != 'auto'?'flex':'','flex-wrap':bigBoxH != 'auto'? 'wrap':''}">
+					<div v-for="(item,index) in listBox" :key="index" :style="{'left': item.Dleft+'px','top': item.Dtop+'px','height': item.Dheight === 'auto' ? '100%' : item.Dheight + 'px','width': item.Dwidth+'px',
               'margin': (currentObj.imgGap/2).toFixed(2)+'px'
-            ,'background-image':`url(${setImgPrex(item.img)})`}"
-					 @click="clickLink(item)">
+            }" @click="clickLink(item)" :class="{'posRight':item.right==0}" >
+			<!-- :style="{'flex':item.Dheight!='auto'?'1':'0'}" -->
 						<!-- #ifndef H5-->
-						<image class="cap-cube__table-image--invisible" :src="item.img |fmtImgUrl" alt="loaded" />
+						<image class="cap-cube__table-image--invisible" :src="item.img |fmtImgUrl" />
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
-						<img class="cap-cube__table-image--invisible" :src="item.img |fmtImgUrl" alt="loaded" />
+						<img class="cap-cube__table-image--invisible" :src="item.img |fmtImgUrl" />
 						<!-- #endif -->
 						<!-- <a :href="item.urlObj.url">超链接</a> -->
 					</div>
@@ -95,22 +96,9 @@
 				}
 			},
 			clickLink(item) {
-				console.log(item.urlObj.url,'自定义页面')
-				// 点击跳转
-				
+				// 点击跳转				
 				if (item.urlObj && item.urlObj.url) {
-					// let url = item.urlObj.url.split('#');
-					// let b = url[1].split('=')					
-					// if(url!=url[0]){
-					   window.location.href = item.urlObj.url
-					   
-					// }else
-					// {
-						// let path = url[1];
-						// uni.reLaunch({
-						// 	url: path
-						// })
-					// }
+					window.location.href = item.urlObj.url   
 				}
 			},
 			changeBox() {
@@ -128,8 +116,7 @@
 					switch (m) {
 					           case 1:
 					            arr = [
-					              { pageX: 0, pageY: 0, pWidth: 4, pHeight: 1.72},
-					              { pageX: 0, pageY: 0, pWidth: 0, pHeight: 0 }
+					              { pageX: 0, pageY: 0, pWidth: 4, pHeight: 1.72}
 					            ];
 					            break;
 					          case 2:
@@ -140,8 +127,8 @@
 					            break;
 					          case 3:
 					            arr = [
-					              { pageX: 0, pageY: 0, pWidth: 1.33, pHeight: 1.33 },
-					              { pageX: 1.33, pageY: 0, pWidth: 1.33, pHeight: 1.33 },
+					              { pageX: 0, pageY: 0, pWidth: 1.32, pHeight: 1.33 },
+					              { pageX: 1.33, pageY: 0, pWidth: 1.32, pHeight: 1.33 },
 					              { pageX: 2.66, pageY: 0, pWidth: 1.33, pHeight: 1.33 }
 					            ];
 					            break;
@@ -165,7 +152,7 @@
 					            arr = [
 					              { pageX: 0, pageY: 0, pWidth: 2, pHeight: 4 },
 					              { pageX: 2, pageY: 0, pWidth: 2, pHeight: 2 },
-					              { pageX: 2, pageY: 2, pWidth: 2, pHeight: 2 }
+					              { pageX: 2, pageY: 2, pWidth: 2, pHeight: 2 ,right:0}
 					            ];
 					            break;
 					          case 7:
@@ -185,6 +172,7 @@
 					            break;
 					        }
 					this.listBox.forEach((D, index) => {
+						
 						if (arr[index]) {
 							Object.assign(arr[index],D)
 						}
@@ -223,16 +211,18 @@
 					let b = Number(D2.pWidth) + Number(D2.pageX);
 					return a > b ? a : b;
 				});
-				this.bigBoxH = (mostH * averageW).toFixed();
+				// this.bigBoxH = (mostH * averageW).toFixed();
+				this.bigBoxH = m === 1 ? 'auto' : (mostH * averageW).toFixed();
 				this.bigBoxW = (mostW * averageW).toFixed();
 				
 				newList.forEach((D, index) => {
-					this.listBox[index].Dwidth =
-						Number(D.pWidth) * averageW - this.currentObj.imgGap;
-					this.listBox[index].Dheight =
-						Number(D.pHeight) * averageW - this.currentObj.imgGap;
-					this.listBox[index].Dleft =
-						Number(D.pageX) * averageW + this.currentObj.pageGap;
+					let Dheight = Number(D.pHeight) * averageW  - this.currentObj.imgGap;
+					if(m===1) Dheight = 'auto'
+					
+					this.listBox[index].Dwidth = Number(D.pWidth) * averageW - this.currentObj.imgGap;
+					// this.listBox[index].Dheight = Number(D.pHeight) * averageW - this.currentObj.imgGap;
+					this.listBox[index].Dheight = Dheight
+					this.listBox[index].Dleft = Number(D.pageX) * averageW + this.currentObj.pageGap;
 					this.listBox[index].Dtop = Number(D.pageY) * averageW;
 				});
 
@@ -265,31 +255,40 @@
 	}
 
 	.cap-cube-wrap {
-		user-select: none;
+		/* user-select: none; */
 		width: 100%;
-		overflow: hidden;
+		height: 100%;
+		/* overflow: hidden; */
 	}
 
 	.cap-cube {
+		box-sizing: border-box;
 		position: relative;
+		/* display: flex; */
 	}
 
 	.cap-cube__item {
-		box-sizing: border-box;
-		/* border: 1px solid rgb(209, 207, 207); */
+		/* box-sizing: border-box;
 		position: absolute;
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: 50%;
-		overflow: hidden;
+		overflow: hidden; */
 	}
 
 	.cap-cube__table-image--invisible {
-		position: absolute;
+		/* position: absolute;
 		left: 0;
-		top: 0;
-		width: 100%;
+		top: 0; */
 		height: 100%;
-		opacity: 0;
+		flex-wrap:wrap;
+		width: 100%;
+		/* height: 100%; */
+		/* opacity: 0; */
+	}
+	.posRight{
+		position: absolute;
+		right: 0;
+		bottom: 0;
 	}
 </style>

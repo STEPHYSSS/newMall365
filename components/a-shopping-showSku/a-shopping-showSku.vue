@@ -141,7 +141,13 @@
 				}
 			},
 			isGroup:Boolean,
-			skuDataInfo: Object
+			skuDataInfo: Object,
+			LeaderSID: {
+				type: String,
+				default () {
+					return "";
+				}
+			},
 		},
 		data() {
 			return {
@@ -345,6 +351,12 @@
 						}
 						defaultParamInfo= defaultParamInfo.substring(0, defaultParamInfo.length - 1)
 					}
+					let LeaderSID = "";
+					if(this.LeaderSID == this.skuDataInfo.LeaderSID){
+						LeaderSID = "";
+					}else{
+						LeaderSID = this.LeaderSID;
+					}
 					// 当我吧上面的if注释掉之后,他就可以加入购物车了
 					paramsArr[0] = {
 						ProdNo:this.goodsInfo.SpecType =='2' || this.goodsInfo.SpecType =='3' ? this.currentNorms.ProdNo : this.goodsInfo.ProdNo,
@@ -356,7 +368,9 @@
 						PartsNo:PartsNoArr,//配件编号
 						PartsList:PartsArr ? JSON.stringify(PartsArr) : "",//配件数组
 						ParamInfo:this.currentTastArr.length>0?this.currentTastArr:defaultParamInfo, //商品口味
-						PromotionSID: this.currentNorms.hasOwnProperty("PromotionSID") ?this.currentNorms.PromotionSID : ""
+						PromotionSID: this.currentNorms.hasOwnProperty("PromotionSID") ?this.currentNorms.PromotionSID : "",
+						// LeaderSID:this.skuDataInfo.LeaderSID?this.skuDataInfo.LeaderSID:''
+						LeaderSID:LeaderSID?LeaderSID:''
 					};
 					obj.ProdList = JSON.stringify(paramsArr);
 					// return;

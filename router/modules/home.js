@@ -48,6 +48,12 @@ const home = [{
 			title: '授权页面',
 		}
 	}, {
+		path: '/WxGrant',
+		name: 'WxGrant',
+		meta: {
+			title: '授权页面',
+		}
+	}, {
 		path: '/GrantMiddle',
 		name: 'GrantMiddle',
 		meta: {
@@ -59,7 +65,7 @@ const home = [{
 		name: 'homePage',
 		aliasPath: '/', //对于h5端你必须在首页加上aliasPath并设置为/
 		meta: {
-			title: '授权页面',
+			title: '首页',
 		}
 	}
 ]

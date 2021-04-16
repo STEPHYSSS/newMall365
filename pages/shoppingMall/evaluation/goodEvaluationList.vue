@@ -13,12 +13,12 @@
 				</div>
 				<div>
 					<div class="content-Details">{{item.Details}}</div>
-					<div style="margin-bottom:5px;display: flex; flex-wrap:wrap">
+					<!-- <div style="margin-bottom:5px;display: flex; flex-wrap:wrap">
 						<div v-for="(img,indexImg) in item.ImgList" style="display: inline-block;" @click="clickImg(item.ImgList,indexImg)"
 						 :key="indexImg">
-							<a-up-img :width="'80px'" :height="'80px'" :url="img" style="margin-right:5px" />
+							<a-up-img :width="'80px'" :height="'80px'" :url="img|fmtImgUrl" style="margin-right:5px" />
 						</div>
-					</div>
+					</div> -->
 				</div>
 				<div class="reply-style" v-if="item.Reply">
 					<span style="font-weight:700">商家回复：</span>
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<a-nodeData v-if="lists.length===0"></a-nodeData>
+		<!-- <a-nodeData v-if="lists.length===0"></a-nodeData> -->
 
 		<div class="imgPopup">
 			<uni-popup ref="imgPopup">
@@ -83,7 +83,8 @@
 					// this.lists = [];
 					let data = await vipCard({
 							Action: "GetAppraisement",
-							ProdSID: this.$Route.query.id
+							ProdSID: this.$Route.query.id,
+							Top:'10'
 						},
 						"UProdOpera"
 					);
@@ -111,12 +112,17 @@
 			},
 			clickLeft() {
 				// this.$Router.back(2) 
-				this.$Router.push({
-					path: '/pages/shoppingMall/list/infoGood',
-					query: {
-						SID: this.$Route.query.id
-					}
-				})
+				if(this.$Route.query.eva == 'true'){
+					this.$Router.back(1) 
+				}else{
+					this.$Router.push({
+						path: '/pages/shoppingMall/list/infoGood',
+						query: {
+							SID: this.$Route.query.id
+						}
+					})
+				}
+				
 			},
 			clickswiper(){
 				this.$refs.imgPopup.close()

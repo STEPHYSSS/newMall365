@@ -5,26 +5,15 @@
 			<div v-if="currentObj.navStyle=='image'">
 				<div ref="imageWrapper" class="image-wrapper" v-for="(item,index) in currentObj.listNav" :key="index">
 					<a href="javascript:;"  @click="clickUrl(item)" :style="{'color':currentObj.fontColor}" class="cap-image-ad__link--image-nav cap-image-ad__link">
-						<!-- <div class="cap-image-ad__image" :style="'background-image':`url(${setImgPrex(item.url)})`}"></div> -->
-						<!-- <image :src="setImgPrex(item.url)"></image> -->
 						<div class="boxTitle">
 							<img src="@/static/img/interestTip.jpg">
 							<span>{{item.name}}</span>
 						</div>
 						<p style="text-align: center;background-color: #fff;">
-							<!-- <image :src="setImgPrex(item.url)"></image> -->
-							<!-- <span v-if="item.url === ''">没有图片的时候</span> -->
-							<!-- quanyiTop.png -->
 							<image style="width: 100%;height: 180px;display: inline-block;" src="@/static/img/quanyiTop.png" v-if="item.url === ''"></image>
-							<image :src="setImgPrex(item.url)" v-else></image>
+							<!-- <image :src="setImgPrex(item.url)" v-else  style="width: 100%;height: 100%;"></image> -->
+							<img class="cap-image-ad__image" :src="setImgPrex(item.url)" v-else />
 						</p>
-						<!-- <div>
-							<img v-if="item.url" class="cap-image-ad__image" :style="{'width':currentObj.isScroll==1?widthBox+'px':'100%'}" 
-							:src="setImgPrex(item.url)" />
-						 </div>    -->
-						  <!-- <image :src="`http://192.168.0.107:8001/`+item.url" style="width: 100%;height: 161px;"></image> -->
-						<!-- <image :src="setImgPrex(item.url)" style="width: 100%;height: 161px;"></image> -->						
-						<!-- <h3 class="cap-image-ad__nav-title">{{item.name}}</h3> -->
 					</a>
 				</div>
 			</div>
@@ -151,6 +140,7 @@
 			display: block;
 			margin: 0 auto;
 			border: 0;
+			opacity: 1;
 		}
 
 		.cap-image-ad__link {
@@ -212,41 +202,14 @@
 		      display: inline-block;
 		    }
 		  }	
-		.cap-image-ad__image-nav .cap-image-ad__image {
-			background-size: cover;
-			background-position: 50%;
-		}
-
-		.cap-image-ad__image-nav .cap-image-ad__nav-title {
-			// padding-bottom: 9px;
-			// height: 33px;
-			line-height: 35px;
-		}
-
-		.cap-image-ad__text-nav .text-nav-wrapper {
-			display: inline-block;
-			padding: 15px 0;
-		}
-
-		.cap-image-ad__text-nav .cap-image-ad__nav-title {
-			position: relative;
-			font-size: 12px;
-			text-align: center;
-			margin-bottom: 0;
-		}
-
-		.cap-image-ad__text-nav .cap-image-ad__nav-title:after {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			/* width: 200%; */
-			height: 200%;
-			transform: scale(0.5);
-			transform-origin: 0 0;
-			pointer-events: none;
-			box-sizing: border-box;
-			border-right: 1px solid #eee;
-		}
+		  .cap-image-ad__image {
+		  	display: block;
+		  	height: auto;
+		  	margin: 0 auto;
+		  	border: 0;
+			width: 100%;
+			height: 100%;
+		  }
+		
 	}
 </style>

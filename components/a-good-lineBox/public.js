@@ -25,6 +25,12 @@ export let Mixin = {
 		seckill: {
 			type: Boolean,
 			default: false
+		},
+		OrderInfo:{
+			type: Object,
+			default() {
+				return {}
+			}
 		}
 	},
 	data() {

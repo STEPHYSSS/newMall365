@@ -5,7 +5,7 @@
 			<view class="">
 				<view class="d-flex boxList"
 					v-for="(item, index) in BeneList" :key="index"  @click="pay(item.PlanNo)">
-					<image src="@/static/img/quanyi.jpg" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
+					<image :src="item.PlanImg?item.PlanImg:imgUrl" style="width: 200rpx; height: 160rpx; margin-right: 20rpx;"></image>
 					<view class="d-flex flex-fill flex-column justify-content-between" style="height: 160rpx;">
 						<view class="font-size-lg">{{ item.PlanName }}</view>
 						<view class="font-size-sm fontColor">购买时间：{{ item.StartTime | setTime}}~{{item.EndTime | setTime}}</view>
@@ -33,7 +33,7 @@
 	export default {
 		data() {
 			return {
-				// imgUrl:require("@/static/img/quanyi.jpg"),	
+				imgUrl:require("@/static/img/quanyi.jpg"),	
 				loading: true,
 				packages: {},
 				BeneList:[],//列表
@@ -71,7 +71,7 @@
 	@import '@/assets/css/packages.css';
 	.container {
 		padding-bottom: -150rpx;
-		background-color: #f1f4f5;
+		// background-color: #f1f4f5;
 	}
 	.boxList{
 		padding: 15px;

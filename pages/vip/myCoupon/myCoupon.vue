@@ -6,7 +6,7 @@
 			 :select-class="'btnMy'+colorIndex"></wuc-tab>
 			<view>
 				<coupon-box v-if="dataList.length>0" :dataList="fromData" :activeUser="TabCur" @viewMore="viewMore"></coupon-box>
-				<a-nodeData v-if="(dataList.length===0)"></a-nodeData>
+				<!-- <a-nodeData v-if="(dataList.length===0)"></a-nodeData> -->
 			</view>
 		</view>
 
@@ -33,6 +33,7 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import WucTab from '@/components/wuc-tab/wuc-tab.vue';
 	import noData from '@/components/nodeData/index.vue';
+	import {GetBaseUrl} from '@/util/publicFunction.js'
 	export default {
 		components: {
 			WucTab,
@@ -80,6 +81,21 @@
 		created() {
 			this.getGetTicketList();
 		},
+		mounted() {
+			// if (window.history && window.history.pushState) {
+			// 	history.pushState(null, null, document.URL);
+			// 	window.addEventListener('popstate', this.fun, false);//false阻止默认事件
+			//   }
+			if (window.history && window.history.pushState) {
+			 this.pushHistory();
+			  window.addEventListener("popstate", (e)=> {
+			  window.location.href = GetBaseUrl()+"#/pages/home";
+			  }, false);
+			}
+		},
+		// destroyed(){
+		//   window.removeEventListener('popstate', this.fun, false);//false阻止默认事件
+		// },
 		methods: {
 			async getGetTicketList(){
 				// uni.showLoading({
@@ -125,7 +141,17 @@
 			},
 			clickGo(){
 				this.$Router.push('/pages/home')
-			}
+			},
+			// fun(){
+			// 	window.location.href = GetBaseUrl()+"#/pages/home";
+			// }
+			pushHistory() {
+			 const state = {
+			    title: "title",
+			    url: "#"
+			  };
+			  window.history.pushState(state, "title", "#");
+			},
 		},
 		onReachBottom: function() {
 			if (this.dataList.length > 0) {

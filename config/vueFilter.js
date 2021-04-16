@@ -20,7 +20,7 @@ Vue.filter('spliceNum', (num) => {
 
 Vue.filter('orderState', (num) => {
 	if (num === '') {
-		return '已作废'
+		return '已退款'
 	}
 	num = Number(num)
 	switch (num) {
@@ -39,8 +39,8 @@ Vue.filter('orderState', (num) => {
 		case 3:
 			return '已提货';
 		case 4:
-			return '已作废';
-		default: '已作废'
+			return '已退款';
+		default: '已退款'
 	}
 })
 Vue.filter('orderType', (num) => {

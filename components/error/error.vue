@@ -29,7 +29,7 @@
 		onLoad(option) {},
 		methods: {
 			refreshFun() {
-				// console.log(this.redirect_uri, '-------option.redirect_uri')
+				console.log(this.redirect_uri, '-------option.redirect_uri')
 				window.location.href = this.redirect_uri
 				
 			},

@@ -85,7 +85,8 @@
 	import { vipCard } from "@/api/http.js";
 	// import Mixins from "@/pages/shoppingMall/mixins.js";
 	import Mixins from "@/pages/mixins.js";
-	import modal from '@/components/modal/modal'
+	import modal from '@/components/modal/modal'	
+	import {GetAppNo} from '@/util/publicFunction.js'
 	export default {
 		mixins: [Mixins],
 		name:'myAddress',
@@ -161,23 +162,29 @@
 					"UMemberOpera"
 				);
 				this.areaList = Data.AddressList || [];
-				// 当没有选择地址的时候默认选择第一条
-				for (let i = 0; i < this.areaList.length; i++) {
-					if (this.areaList[i].Defaults == '1') {
-						return sessionStorage.setItem('takeOutAddress', JSON.stringify(this.areaList[i]));
+				if(this.areaList.length==0){
+					this.$store.commit("SET_ORDER_TYPE", 'takein');
+					sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
+				}else{
+					// 当没有选择地址的时候默认选择第一条
+					for (let i = 0; i < this.areaList.length; i++) {
+						if (this.areaList[i].Defaults == '1') {
+							return sessionStorage.setItem('takeOutAddress', JSON.stringify(this.areaList[i]));
+						}
+						let addResses = {
+							Name: this.areaList[0].Name,
+							Address: this.areaList[0].Address,
+							SID: this.areaList[0].SID,
+							Length: this.areaList[0].Length,
+							House: this.areaList[0].House,
+							Latitude:this.areaList[0].Latitude,
+							Longitude:this.areaList[0].Longitude
+						}
+						this.$store.commit("SET_CURRENT_ADDRESS",addResses)
+						sessionStorage.setItem('takeOutAddress', JSON.stringify(addResses));
 					}
-					let addResses = {
-						Name: this.areaList[0].Name,
-						Address: this.areaList[0].Address,
-						SID: this.areaList[0].SID,
-						Length: this.areaList[0].Length,
-						House: this.areaList[0].House,
-						Latitude:this.areaList[0].Latitude,
-						Longitude:this.areaList[0].Longitude
-					}
-					this.$store.commit("SET_CURRENT_ADDRESS",addResses)
-					sessionStorage.setItem('takeOutAddress', JSON.stringify(addResses));
 				}
+				
 			},
 			// 
 			// openCouponDetailModal(coupon) {
@@ -217,12 +224,15 @@
 							this.$store.commit("SET_CURRENT_STORE",currentStoreInfo)
 							sessionStorage.setItem('takeOutAddress', JSON.stringify(currentStoreOut));
 							this.$store.commit("SET_ORDER_TYPE", 'takeout');
+							sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 							if(this.$Route.query.flag == 'AutoWaimai'|| this.ShopRadio ==='2'){
 								return this.$Router.push('/pages/shoppingMall/index')
 							}
 							this.$Router.push({path:'/pages/shoppingMall/menu_naixue/menu/menu'})
 						// }
 					}catch(e){
+						this.$store.commit("SET_ORDER_TYPE", 'takein');
+						sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 						if(e.indexOf('距离超长')>-1){
 							setTimeout(()=>{
 								this.couponDetailModalShow = true
@@ -279,8 +289,10 @@
 			// 返回
 			clickLeft() {
 				if(this.$Route.query.flag == 'AutoWaimai'){
+					// 如果没有选择地址的话，就要提示选择地址
 					if(localStorage.getItem('addressInfo') == null){
 						this.$store.commit("SET_ORDER_TYPE", 'takein');
+						sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 					}
 				}
 				window.history.back(-1)
@@ -347,6 +359,7 @@
 				this.$store.commit("SET_CURRENT_STORE", currentStoreInfo)
 				if(this.$Route.query.flag == 'shopAuto'){
 					localStorage.setItem("localShop",JSON.stringify(currentStoreInfo))
+					// localStorage.setItem(GetAppNo()+"_"+ "localShop",JSON.stringify(this.currentStoreInfo))
 					return this.$Router.push({path:"/pages/shoppingMall/index"})
 				}
 				this.$Router.push({
@@ -361,7 +374,7 @@
 			call(Tel) {
 				uni.makePhoneCall({
 					// 手机号
-					phoneNumber: 'Tel',
+					phoneNumber: Tel,
 
 					// 成功回调
 					success: (res) => {

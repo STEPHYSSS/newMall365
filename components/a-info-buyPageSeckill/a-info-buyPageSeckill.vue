@@ -42,7 +42,9 @@
 				</div>
 			</div>
 			<div class="wu-cell goodCoupon-express lineTop">
-				<div style="flex:1">剩余库存：{{stockNum}}</div>
+				<div style="flex:1">剩余库存：{{stockNum}}<br/>
+					<span class="timeSty" v-if="goods.PickTime">提货时间：{{goods.PickTime.split(',')[0]}}至{{goods.PickTime.split(',')[1]}}</span>
+				</div>
 			</div>
 			<div class="ImportantNotes-cell-group">
 				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>

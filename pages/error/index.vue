@@ -13,6 +13,7 @@
 			}
 		},
 		onLoad(option) {
+			console.log(option.query,'****')
 			if (option.query) {
 				let options = JSON.parse(option.query)
 				this.redirect_uri = options.redirect_uri

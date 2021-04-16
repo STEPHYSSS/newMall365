@@ -33,37 +33,11 @@
 				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
 				<br>
 				<button @click="clickClear" size="mini">去除usermac</button> -->
-				<button type="default" size="mini" @click="seckill">秒杀</button>
-				<button type="default" size="mini" @click="makeUpGroup">拼团</button>
-				<div class="cgwl-form" id="cgwl-kefu" style="background:none" v-if="start === '1'">
-					<p style="width: 60px;height:60px;">						
-						<a :href="kefuUrl"><image src="../../static/img/kefu.png" style="width: 100%;height: 100%;"></image></a>	
-						<!-- <a href="http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=1&groupid=0&special=1">在线咨询</a> -->
-					</p>
-				  
-				</div>
-				
+				<!-- <button type="default" size="mini" @click="seckill">秒杀</button>
+				<button type="default" size="mini" @click="makeUpGroup">拼团</button> -->				
 				<div>
 					<div v-for="(item,index) in listMode" :key="index">
-						<!-- <shopinfoma v-if="item.viewComponets === 'shopinfoma'" :propsObj="item.props"></shopinfoma> -->
-						<enterShops v-if="item.viewComponets === 'enterShops'" :propsObj="item.props"></enterShops>
-						<searchBox v-if="item.viewComponets === 'searchBox'" :propsObj="item.props"></searchBox>
-						<notice v-if="item.viewComponets === 'notice'" :propsObj="item.props"></notice>
-						<guide v-if="item.viewComponets === 'guide'" :propsObj="item.props"></guide>
-						<auxiliaryBlank v-if="item.viewComponets === 'auxiliaryBlank'" :propsObj="item.props"></auxiliaryBlank>
-						<pictureAds v-if="item.viewComponets === 'pictureAds'" :propsObj="item.props"></pictureAds>
-						<magicCube v-if="item.viewComponets === 'magicCube'" :propsObj="item.props"></magicCube>
-						<imgNav v-if="item.viewComponets === 'imgNav'" :propsObj="item.props"></imgNav>
-						<textBox v-if="item.viewComponets === 'textBox'" :propsObj="item.props"></textBox>
-						<switchStores v-if="item.viewComponets === 'switchStores'" :propsObj="item.props"></switchStores>
-						<richText v-if="item.viewComponets === 'richText'" :propsObj="item.props"></richText>
-						<goods v-if="item.viewComponets === 'goods'" :propsObj="item.props"></goods>
-						<goodsGroup v-if="item.viewComponets === 'goodGroup'" :propsObj="item.props"></goodsGroup>
-						<titleBox v-if="item.viewComponets === 'titleBox'" :propsObj="item.props"></titleBox>
-						<seckillGoods v-if="item.viewComponets === 'seckill'" :propsObj="item.props"></seckillGoods>
-						<groupActivity v-if="item.viewComponets === 'groupActivity'" :propsObj="item.props"></groupActivity>
-						<interests v-if="item.viewComponets === 'interests'" :propsObj="item.props"></interests>
-						<!-- <component :is="item.viewComponets" ref="setModeRef" :propsObj="item.props"></component> -->
+						<component :is="item.viewComponets" ref="setModeRef" :propsObj="item.props"></component>
 					</div>
 				</div>
 			</div>
@@ -72,6 +46,7 @@
 				<!-- <a-nodeData v-if="listMode.length===0"></a-nodeData> -->
 			</div>
 		</div>
+		<dragball :kefuUrl="kefuUrl" v-if="start === '1'" :x="widthX" :y="heightY"></dragball>
 		<view>
 			<tabBar :pagePath="'/pages/shoppingMall/index'"></tabBar>
 		</view>			
@@ -87,17 +62,39 @@
 	import msDropdownMenu from "@/components/ms-dropdown/dropdown-menu.vue"
 	import msDropdownItem from "@/components/ms-dropdown/dropdown-item.vue"
 	import ticketPop from "@/components/ticketPopup/ticketPopup.vue"
-	import {getQueryString2,GetCrsInfo,GetCsrStart} from '@/util/publicFunction.js'
+	import {getQueryString2,GetCrsInfo,GetCsrStart,GetAppNo} from '@/util/publicFunction.js'
+	import dragball from "@/components/drag-ball/drag-ball.vue";
 	export default {
 		mixins: [Mixins],
 		components: {
 			msDropdownMenu,
 			msDropdownItem,
-			ticketPop
-			// voice
+			ticketPop,
+			dragball,
+			shopInformation:resolve => require(['@/components/autoComponents/shopInformation'],resolve),
+			enterShops:resolve => require(['@/components/autoComponents/enterShops'],resolve),
+			searchBox:resolve => require(['@/components/autoComponents/searchBox'],resolve),
+			notice:resolve => require(['@/components/autoComponents/notice'],resolve),
+			guide:resolve => require(['@/components/autoComponents/guide'],resolve),
+			auxiliaryBlank:resolve => require(['@/components/autoComponents/auxiliaryBlank'],resolve),
+			
+			pictureAds:resolve => require(['@/components/autoComponents/pictureAds'],resolve),
+			magicCube:resolve => require(['@/components/autoComponents/magicCube'],resolve),
+			imgNav:resolve => require(['@/components/autoComponents/imgNav'],resolve),
+			textBox:resolve => require(['@/components/autoComponents/textBox'],resolve),
+			switchStores:resolve => require(['@/components/autoComponents/switchStores'],resolve),
+			richText:resolve => require(['@/components/autoComponents/richText'],resolve),
+			
+			goods:resolve => require(['@/components/autoComponents/goods'],resolve),
+			goodGroup:resolve => require(['@/components/autoComponents/goodsGroup'],resolve),
+			titleBox:resolve => require(['@/components/autoComponents/titleBox'],resolve),
+			seckill:resolve => require(['@/components/autoComponents/seckillGoods'],resolve),
+			groupActivity:resolve => require(['@/components/autoComponents/groupActivity'],resolve),
+			interests:resolve => require(['@/components/autoComponents/interests'],resolve),
 		},
 		data() {
 			return {
+				compName:this.name,
 				classHome: getApp().globalData.mainStyle,
 				valueSearch: "",
 				value1: 0,
@@ -124,13 +121,16 @@
 				currentStoreInfo:{},//用来接收门店信息
 				addressName: {}, //地址名称
 				SID:'',
+				LeaderSID:"",
 				location:{},
 				kefuUrl:GetCrsInfo(),
-				start:GetCsrStart()
+				start:GetCsrStart(),
+				widthX:document.body.clientWidth-80,
+				heightY:document.body.clientHeight-200
 			};
 		},
 		created() {			
-			this.init()
+			this.init()			
 		},
 		computed:{
 			currentStore(){
@@ -138,50 +138,55 @@
 			},
 			addressInfo(){
 				return this.$store.state.addressInfo
-			}
+			},
+			
 		},
 		watch:{
-			currentStore(val){
-				this.getAutoMode()//切换门店的时候重新获取一遍自定义页面商品
-			},
-			addressInfo(){
-				this.getAutoMode()
-			}
+			// '$store.state.orderType':function(){
+				// console.log(this.$store.state.orderType)
+				// if(this.$store.state.orderType != sessionStorage.getItem('mealMode')){
+				// 	this.$store.commit("SET_ORDER_TYPE", sessionStorage.getItem('mealMode'));
+				// 	sessionStorage.setItem('mealMode',this.$store.state.orderType)//存自取状态
+				// }
+			// }
+			// currentStore(val){
+			// 	// console.log("watch--watch")
+			// 	this.getAutoMode()//切换门店的时候重新获取一遍自定义页面商品
+			// },
+			// addressInfo(){
+			// 	// console.log('2')
+			// 	this.getAutoMode()
+			// }
 		},
 		mounted() {
+			
 			// this.kefuUrl = `http://cs365.bak365.net/index/index/home?visiter_id=&visiter_name=&avatar=&business_id=${this.BusinessID}&groupid=${this.GroupID}&special=${this.SpecialID}`;
 		},
 		methods: {
-			 init(){
+			init(){ //初始化
+				let mealMode = sessionStorage.getItem('mealMode');
+				if(mealMode==null){
+					this.$store.commit("SET_ORDER_TYPE", 'takein');
+					sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
+				}else{
+					if(this.$store.state.orderType != sessionStorage.getItem('mealMode')){
+						this.$store.commit("SET_ORDER_TYPE", 'takeout');
+						sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
+					}
+				}
 				if(!sessionStorage.getItem("IsCoupon")){
 					 this.getCouponInfo();
 				}
-				if(!localStorage.getItem("currentLocation")){
-					this.getWxConfig() // 获取授权地址		
+				let location = Cookie.get(GetAppNo()+'_location')
+				if(!location){
+					this.getWxConfig() // 获取授权地址	
 				}
+				// if(this.$store.state.currentLocation.longitude==undefined||this.$store.state.currentLocation.latitude==undefined){
+				// 	this.getWxConfig() // 获取授权地址		
+				// }
 				uni.showLoading({
 					title: '加载中'
-				});
-				// if(this.$route.query.query){
-				// 	let abc = JSON.parse(this.$route.query.query)
-				// 	let key = Object.keys(abc)
-				// 	if(key=="SID"){
-				// 		this.SID = Object.values(abc)
-				// 	}
-				// }				
-				// if(this.$Route.query.flag =='Deflocation'){
-				// 	let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))
-				// 	this.currentStoreInfo = {
-				// 		Name: currentStore.data.Name,
-				// 		Address: currentStore.data.Address,
-				// 		SID: currentStore.data.SID,
-				// 		Length:currentStore.data.Length
-				// 	}
-				// }else{
-				// 	if(this.$store.state.orderType === 'takein'){
-				// 	    this.getShopList();
-				// 	}
-				// }	
+				});				
 				if(!this.addresses){
 					this.addressName = JSON.parse(sessionStorage.getItem('takeOutAddress'))
 				}else{
@@ -192,14 +197,15 @@
 				}else{
 					this.getShopList();
 				}
-				let url = sessionStorage.getItem('searchUrl');
-				if(url!=null&&url.indexOf('FlagIndex')>-1){
+				let url = Cookie.get('searchUrl')
+				if(url!=null&&url.indexOf('FlagIndex')>-1 || url!=null&&url.indexOf('LeaderSID')>-1){
 					if(url!=null&&url.lastIndexOf("?")){
 						let index = url.lastIndexOf("?");
 				        url = url.slice(index);
 				        this.SID = getQueryString2("SID", url);
+						this.LeaderSID = getQueryString2("LeaderSID", url);
 					}
-				}			
+				}
 				this.getAutoMode();
 			},
 			async getShopList() {//获取门店
@@ -207,8 +213,6 @@
 					Data
 				} = await vipCard({
 						Action: "GetShopList",
-						// DefLongitude: this.location.longitude,
-						// DefLongitude: this.location.latitude
 						Longitude: this.$store.state.currentLocation.longitude,//获取授权的经纬度
 						Latitude: this.$store.state.currentLocation.latitude
 					},
@@ -233,7 +237,7 @@
 				} catch (e) {
 					console.log(e);
 				}
-			},
+			},			
 			clickClear() {
 				Cookie.remove("UserMACPhone");
 			},
@@ -313,6 +317,7 @@
 							Action: "GetDecorate",
 							Type:'0',//
 							SID:this.SID ? this.SID : '',//通过手机二维码扫描的时候需要的SID
+							LeaderSID:this.LeaderSID?this.LeaderSID:'',//通过全民吸粉 二维码扫描的时候团长ID
 							ShopSID:currentStore?currentStore.data.SID:''
 						},
 						"UShopOpera"
@@ -350,6 +355,7 @@
 			},
 			toziqu() {
 				this.$store.commit("SET_ORDER_TYPE", 'takein');	
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)//存自取状态
 				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))				
 				this.currentStoreInfo = {
 					Name: currentStore.data.Name,
@@ -370,6 +376,7 @@
 			toAddress() {
 				// if(this.$store.state.orderType == 'takeout') return
 				this.$store.commit("SET_ORDER_TYPE", 'takeout');
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 				this.$Router.push({
 					path: '/pages/myAddress/myAddress',
 					query: {
@@ -377,6 +384,7 @@
 					}
 				})
 			},
+			
 		}
 	};
 </script>

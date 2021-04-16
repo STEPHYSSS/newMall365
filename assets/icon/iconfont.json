@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3502977",
+      "name": "收益",
+      "font_class": "shouyi",
+      "unicode": "e6dc",
+      "unicode_decimal": 59100
+    },
+    {
+      "icon_id": "8522573",
+      "name": "收益",
+      "font_class": "shouyi1",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "3380536",
+      "name": "上传图片",
+      "font_class": "shangchuantupian",
+      "unicode": "e852",
+      "unicode_decimal": 59474
+    },
+    {
+      "icon_id": "1015458",
+      "name": "签到",
+      "font_class": "qiandao",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
       "icon_id": "1110411",
       "name": "下箭头",
       "font_class": "jiantou9",

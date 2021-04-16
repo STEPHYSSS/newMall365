@@ -1,12 +1,9 @@
 <!-- <script src="https://cdn.bootcss.com/vConsole/3.3.4/vconsole.min.js"></script> -->
 <script>
 	import Cookie from '@/config/cookie-my/index.js'
+	
 	export default {
 		onLaunch: function() {
-			// cgwl.visiter_id='';//访客id
-			// cgwl.visiter_name='';//访客昵称
-			// cgwl.avatar='';//访客头像绝对路径
-			// cgwl.product='{"pid":1,"title":" Apple MacBook Air ","img":"http://www.domain.com/assets/images/pro.jpg","info":"13.3英寸笔记本电脑 银色(2017款Core i5 处理器/8GB内存/128GB闪存 MQD32CH/A)","price":"￥7588.00","url":"http://www.domain.com/demo/index/product1"}';//json数据字符串
 			let mainStyle = getApp().globalData.mainStyle
 			if (mainStyle === 'theme2') {
 				let mainColor = 'rgb(173,184,56)'
@@ -87,16 +84,14 @@
 			mainColor: Cookie.get('mainColor'),
 			ShopRadio: Cookie.get('ShopRadio'),//商城模式
 			
-		}
+		},
 	};
 </script>
 <style>
-	@import url("http://cs365.bak365.net/assets/css/index/cgwl_online.css");
 </style>
 
 <style lang="less">
 	@import "./assets/css/theme.less";
-	// @import '@/assets/css/cgwl_online.css';
 	body {
 		background: #f9f9f9;
 		font-size: 12px;

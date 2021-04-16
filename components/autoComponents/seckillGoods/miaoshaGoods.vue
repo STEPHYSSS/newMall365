@@ -36,7 +36,7 @@
 				<div class="has-title-1 has-subtitle-1 cap-goods-layout__info-title" :class="[currentObj.listStyle]" goods-index="0"
 				 :style="{'text-align': currentObj.textCenter,'margin-top':'0'}">
 					<h3 class="title" :style="{'font-weight': currentObj.fontWeight,'margin-top':'10px'}" v-if="currentObj.showContent.indexOf('1')>-1">{{goods.Name}}</h3>
-					<p v-if="currentObj.showContent.indexOf('2')>-1&&goods.Describe" class="sub-title" style="margin-top:10px;">{{goods.Describe}}</p>
+					<p v-if="currentObj.showContent.indexOf('2')>-1" class="sub-title" style="margin-top:10px;">{{goods.Describe}}</p>
 				</div>
 				<div v-if="currentObj.showContent&&currentObj.showContent.length!==0
 		&&(currentObj.showContent.indexOf('4')>-1||currentObj.showContent.indexOf('3')>-1)"
@@ -211,7 +211,7 @@
 	@import "../../../assets/css/autoComponents/goods.css";
 	// 倒计时样式
 	.title{
-		font-size: 16px !important;
+		font-size: 15px !important;
 	}
 	.cap-goods-layout__item.list .cap-goods__photo {
 	    float: left;
@@ -313,7 +313,7 @@
 		font-size: 14px;
 	}
 	.price-tag{
-		font-size: 20px !important;
+		font-size: 16px !important;
 	}
 	.bgcopacity {
 		position: absolute;

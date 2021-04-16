@@ -22,7 +22,11 @@
 		</div>
 		<div>
 			<div class="wu-cell" style="display: block;">
-				<div class="goodCoupon-title">{{ goods.Name }}</div>
+				<div class="goodCoupon-title">
+					{{ goods.Name }}
+					<!-- <span class="shareTiT" @click="shareGoods(skuDataInfo.LeaderSID,goods)">分享</span>
+					<span class="iconfont icon-fenxiang1"></span> -->
+				</div>
 				<div class="goodCoupon-express" style="padding:0" v-if="skuDataInfo.IsBuy === '0'">
 					可购买时间：
 					<span style="color:#ee0a24;font-size:14px" v-if="goods.BuyTime">{{goods.BuyTime|setBuyTime}}</span>
@@ -30,15 +34,6 @@
 				</div>
 				<div class="goodCoupon-price ">
 					<div v-if="isIntegral!='true'">
-						<!-- <div v-if="maxMemberPrice>0||minMemberPrice>0">
-							<span class="colorStyle">¥{{minMemberPrice}}-{{maxMemberPrice}}</span>
-							<p style="text-decoration: line-through;font-size: 8pt;color:#999;line-height: 10px;font-weight: 100;">
-								¥{{minPrice}}-{{maxPrice}}
-							</p>
-						</div>
-						<div v-else>
-							<span class="colorStyle">¥{{minPrice}}-{{maxPrice}}</span>
-						</div> -->
 						<div v-if="goods.SpecType==='2'">
 							<div v-if="maxMemberPrice>0||minMemberPrice>0">
 								<span class="colorStyle">¥{{minMemberPrice}}-{{maxMemberPrice}}</span>
@@ -68,7 +63,7 @@
 								<span>¥{{goods.SalePrice>0?goods.SalePrice:0}}</span>
 								<span v-if="goods.maxPrice">- ¥{{ goods.SalePriceMaxPrice }}</span>
 							</div>
-						</div>
+						</div>					
 					</div>
 					<div v-else>
 						<span>{{goods.Score}}积分</span>
@@ -80,12 +75,24 @@
 			</div>
 			<div class="wu-cell goodCoupon-express lineTop">
 				<div style="flex:1" v-if="isIntegral!=='true'">销量：{{ goods.SaleCnt |setMoney}}</div>
-				<div style="flex:1" v-if="goods.StockType != 0">剩余库存：{{ Number(goods.StoreQty)}}</div>
+				<div style="flex:1" v-if="goods.StockType != 0">剩余库存：{{ Number(goods.StoreQty)}}</div>				
 				<!--                <div v-if="!isCouponPage">规格：</div>-->
+			</div>
+			<div class="wu-cell" v-if="goods.PickTime">
+				<span class="timeSty">提货时间：{{goods.PickTime.split(',')[0]}}至{{goods.PickTime.split(',')[1]}}</span>
+			</div>
+			<div class="wu-cell" v-if="goods.DeliveryType">
+				<text class="timeSty">配送方式：支持</text>
+				<text class="timeSty" v-if="goods.DeliveryType.split(',')[0]">{{goods.DeliveryType.split(',')[0]|tips}}</text>
+				<text class="timeSty" v-if="goods.DeliveryType.split(',')[1]">和{{goods.DeliveryType.split(',')[1]|tips}}</text>
 			</div>
 			<div class="ImportantNotes-cell-group">
 				<span class="goodCoupon-notice-title titleSize" v-if="goods.Tip">预定提示</span>
 				<span style="margin: 5px 0;display: block;" v-if="goods.Tip">{{goods.Tip}}</span>
+			</div>
+			<div class="ImportantNotes-cell-group" v-if="goods.Describe">
+				<span class="goodCoupon-notice-title titleSize">商品描述</span>
+				<span style="margin: 5px 0;display: block;" v-if="goods.Describe">{{goods.Describe}}</span>
 			</div>
 		</div>
 
@@ -93,10 +100,34 @@
 			<adCell text="商城" icon="/static/img/shangcheng1.png" @click="clickShop" detail="进入店铺" :showBottomLine="false">
 			</adCell>
 		</div>
-		<div v-if="!isIntegral&&!seckill">
+		
+		<div>
 			<adCell detail="查看全部" :text="`用户评价(${goods.CommentCnt&&Number(goods.CommentCnt)!==0?goods.CommentCnt:0})`" @click="userEvaluation(goods)"
 			 :showBottomLine="false">
 			</adCell>
+			<div class="userEvaList" v-for="(item,index) in lists" :key="index">
+				<span>
+					<uni-icons type="person" :style="{'color':mainColor,'margin-right':'4px'}"></uni-icons>
+				</span>
+				<span>{{item.UserName |setName}}</span>
+				<div class="userEvaTime">
+					<span>{{item.AddTime}}</span>&nbsp;
+					<span>产品：{{item.Name}}</span>
+				</div>
+				<div>
+					<div class="content-Details">{{item.Details}}</div>
+					<!-- <div style="margin-bottom:5px;display: flex; flex-wrap:wrap">
+						<div v-for="(img,indexImg) in item.ImgList" style="display: inline-block;" @click="clickImg(item.ImgList,indexImg)"
+						 :key="indexImg">
+							<a-up-img :width="'80px'" :height="'80px'" :url="img|fmtImgUrl" style="margin-right:5px" />
+						</div>
+					</div> -->
+				</div>
+				<div class="reply-style" v-if="item.Reply">
+					<span style="font-weight:700">商家回复：</span>
+					{{item.Reply}}
+				</div>
+			</div>
 		</div>
 		<div style="background-color: #fff" class="lineTop">
 			<view class="goodInfoNewsTitle">
@@ -142,15 +173,17 @@
 			</uni-view>
 		</div>
 		<!-- 购物车详情 -->
-		<a-shopping-showSku :show="show" @hideShow="hideShow" :skuDataInfo="skuDataInfo" :seckill="seckill" :isBrowse="isBrowse"></a-shopping-showSku>
+		<a-shopping-showSku :show="show" @hideShow="hideShow" :LeaderSID="LeaderSID" :skuDataInfo="skuDataInfo" :seckill="seckill" :isBrowse="isBrowse"></a-shopping-showSku>
 		<!-- 电子券弹窗 -->
 		<showTicket :show="showPop" @hideShow="hidePop" :skuDataInfo="skuDataInfo"></showTicket>
 	</div>
 </template>
 <script>
 	// import "@/config/jquery.base64.js";
+	import Mixins from "@/pages/mixins.js";
+	import wx from 'weixin-js-sdk'
 	import {
-		GetBaseImgUrl
+		GetBaseImgUrl,GetBaseUrl 
 	} from "@/util/publicFunction";
 	import {
 		vipCard
@@ -162,6 +195,7 @@
 	import showTicket from '@/components/a-shopping-showSku/a-shopping-showTicket'
 	export default {
 		name: "couponPage",
+		mixins: [Mixins],
 		components: {
 			adCell,
 			showTicket
@@ -211,11 +245,18 @@
 					return "";
 				}
 			},
-			clickUrl: [String]
+			clickUrl: [String],
+			LeaderSID: {
+				type: String,
+				default () {
+					return "";
+				}
+			},
 		},
 		data() {
 			return {
 				classHome: getApp().globalData.mainStyle,
+				mainColor: getApp().globalData.mainColor,
 				active: "",
 				show: false,
 				showPop: false, //电子券弹窗
@@ -235,11 +276,13 @@
 				options: [],
 				buttonGroup: [],
 				activeTimeMy: {},
-				maxPrice: "",
-				minPrice: "",
-				maxMemberPrice: "",
-				minMemberPrice: "",
+				maxPrice: 0,
+				minPrice: 0,
+				maxMemberPrice: 0,
+				minMemberPrice: 0,
 				IsGoodBuyTime: false,
+				lists:[],
+				goodsInfo:{}//分享需要的信息
 			};
 		},
 		created() {
@@ -270,6 +313,7 @@
 					}))
 				}
 			}
+			
 			this.tradeList()
 			if (this.skuDataInfo.ProdInfo.BuyTime) {
 				let BuyTime = this.skuDataInfo.ProdInfo.BuyTime.split(',')
@@ -314,6 +358,8 @@
 					disabled: (this.skuDataInfo.IsBuy === '0' || this.goods.StoreQty == 0 || this.startIS !== true) ? true : false
 				})
 			}
+			this.getList();
+			this.init();//先加载注入的微信分享
 		},
 		mounted() {
 			this.classA = {
@@ -323,6 +369,7 @@
 			// #ifdef H5
 			document.title = this.goods.Name;
 			// #endif
+			
 		},
 		computed: {
 			isCouponPage() {
@@ -332,8 +379,103 @@
 				);
 			}
 		},
-
+		filters:{
+			tips(val){
+				if(val=='2'){
+					return '外卖'
+				}else if(val=='1'){
+					return '自提'
+				}
+			}
+		},
 		methods: {
+			async getList() {
+				try {
+					// this.lists = [];
+					let data = await vipCard({
+							Action: "GetAppraisement",
+							ProdSID: this.goods.SID,
+						},
+						"UProdOpera"
+					);
+					this.lists = data.Data.CommentList || [];
+					if (this.lists.length > 0) {
+						this.lists.forEach(D => {
+							D.ImgList = D.ImgList ? D.ImgList.split(",") : [];
+			
+							D.ImgList.forEach((item, key) => {
+								//加图片前缀
+								D.ImgList[key] = this.$VUE_APP_PREFIX + item;
+							});
+						});
+					}
+					this.loading = false;
+				} catch (e) {
+					this.loading = false;
+				}
+			},			
+			init(){
+				let SID = '';
+				let title = '';
+				if(this.$route.query.query){
+					let getDecode = decodeURIComponent(this.$route.query.query);
+					let getDQuery = JSON.parse(getDecode)
+					SID=getDQuery.SID;
+					title = getDQuery.title;		
+				}
+				let query = {SID:SID,isGoodList:true,title:title,LearderSID:this.skuDataInfo.LeaderSID}	
+				let leaderUrl = encodeURIComponent(JSON.stringify(query))				
+				this.goodsInfo={
+					Img:GetBaseImgUrl() + this.goods.Img,
+					Name:this.goods.Name,
+					LinkUrl:GetBaseUrl()+'#/pages/shoppingMall/list/infoGood?query='+leaderUrl,					
+					ProdSID:this.goods.SID,
+					Describe:this.goods.Describe
+				}
+				console.log(this.goodsInfo,'分享详情')
+				this.wxRegister(this.goodsInfo);
+			},
+			// shareGoods(){//分享商品
+			// 	let _this = this;
+			// 	wx.updateAppMessageShareData({//分享到朋友
+			// 		title: _this.goodsInfo.Name,
+			// 		link: _this.goodsInfo.LinkUrl,
+			// 		imgUrl: _this.goodsInfo.Img,
+			// 		desc: _this.goodsInfo.Describe, // 分享描述
+			// 		success:function(){
+			// 			alert(res,'000');
+			// 			this.getLeaderSpread(_this.goodsInfo)
+			// 		},
+			// 		fail: function (res) {
+			// 			alert(JSON.stringify(res));//这里官网说已经不支持回调了
+			// 		}
+			// 	});	
+			// 	wx.updateTimelineShareData({ 
+			// 		title: _this.goodsInfo.Name,
+			// 		link: _this.goodsInfo.LinkUrl,
+			// 		imgUrl: _this.goodsInfo.Img,
+			// 		desc: _this.goodsInfo.Describe, // 分享描述
+			// 		success:function(){
+			// 			// alert(res,'000');
+			// 			this.getLeaderSpread(_this.goodsInfo)
+			// 		},
+			// 		fail: function (res) {
+			// 			alert(JSON.stringify(res));//这里官网说已经不支持回调了
+			// 		}
+			// 	  })
+				
+			// },
+			// async getLeaderSpread(info){
+			// 	let {
+			// 		Data
+			// 	} = await vipCard({
+			// 			Action: "LeaderSpread",
+			// 			SpreadLink:info.LinkUrl, //推广链接
+			// 			ProdSID:info.ProdSID
+			// 		},
+			// 		"UProdOpera"
+			// 	);
+			// },
 			isDuringDate(beginDateStr, endDateStr) {
 				var date = new Date();
 				var year = date.getFullYear();
@@ -498,6 +640,9 @@
 </script>
 
 <style lang="less">
+	.timeSty{
+		color: #D45134;
+	}
 	.goodCoupon {
 		margin-bottom: 55px;
 		.udStyle{
@@ -541,6 +686,14 @@
 			font-size: 14px;
 			line-height: 24px;
 			background-color: #fff;
+			.shareTiT{
+				display: inline-block;
+				float: right;
+				font-size: 12px;
+			}
+			.iconfont{
+				float: right;
+			}
 		}
 
 		.lineTop {
@@ -719,6 +872,56 @@
 				height: 30px;
 				text-align: center;
 				width: 45px;
+			}
+		}
+		.userEvaList {
+			background: #ffffff;
+			padding: 20px;
+			margin-bottom: 10px;
+		
+			.iconUser {
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+		
+			.userEvaTime {
+				font-size: 12px;
+				color: #999;
+				line-height: 40px;
+			}
+		
+			.showImgs {
+				width: 85%;
+				/*height: 80vh;*/
+		
+				img,image {
+					width: 100%;
+					/*vertical-align: middle;*/
+				}
+			}
+		
+			.vanSwipe {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				background: #ffffff;
+				z-index: 1;
+			}
+		
+			.content-Details {
+				margin-bottom: 10px;
+				word-wrap: break-word;
+				word-break: normal;
+			}
+		
+			.reply-style {
+				background: #fafafa;
+				padding: 5px;
+				font-size: 10px;
+				word-break: break-all;
+				word-wrap: break-word;
 			}
 		}
 	}

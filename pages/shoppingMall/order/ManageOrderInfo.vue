@@ -7,6 +7,13 @@
 					<span class="order-area-info iconfont icon-dianpu" />
 					<span style="vertical-align: middle;">提货门店</span>
 				</div>
+				<div class="order-area-delivery" v-if="OrderInfo.DeliveryType === '2'&&JSON.stringify(currentArea) !== '{}'">
+					<span class="order-area-info iconfont icon-dianpu" />
+					<span style="vertical-align: middle;">门店信息</span>
+					<view class="storeInfo">
+						<text>门店名称：{{shopinfo.Name}}</text><br/><text @click="call(shopinfo.Tel)">门店电话：{{shopinfo.Tel}}</text><br/><text>门店地址：{{shopinfo.Address}}</text>
+					</view>
+				</div>
 				<div class="order-area">
 					<div class="order-area-icon">
 						<image src="/static/img/weizhi.png" alt />
@@ -14,7 +21,9 @@
 					<div v-if="JSON.stringify(currentArea) !== '{}'" style="flex: 1">
 						<div>
 							<span>{{currentArea.hasOwnProperty('UserName')?currentArea.UserName:currentArea.Name}}{{currentArea.Sex |setSex}}</span>
-							<span class="order-area-phone">{{currentArea.Mobile?currentArea.Mobile:currentArea.Tel}}</span>
+							<span class="order-area-phone" v-if="currentArea.Mobile" @click.stop="call(currentArea.Mobile)">{{currentArea.Mobile}}</span>
+							<span class="order-area-phone" v-else="currentArea.Tel" @click.stop="call(currentArea.Tel)">{{currentArea.Tel}}</span>
+							<!-- <span class="order-area-phone" @click.stop="call(shopinfo.Tel)">{{currentArea.Mobile?currentArea.Mobile:currentArea.Tel}}</span> -->
 						</div>
 						<div class="order-area-location">{{currentArea.Address}}</div>
 					</div>
@@ -79,7 +88,7 @@
 					<div class="orderTime_label">支付方式：</div>
 					<span>{{OrderInfo.PayType | payTypeOrder}}</span>
 				</div>
-				<div class="orderTime" v-if="refundAllow!=='2'&&OrderInfo.OrderType!=='4'">
+				<div class="orderTime" v-if="refundAllow!=='2'&&OrderInfo.OrderType!=='4'&&OrderInfo.RefundState!='1'">
 					<div class="orderTime_label">退款状态：</div>
 					<span>{{OrderInfo.RefundState |RefundState}}</span>
 				</div>
@@ -116,7 +125,7 @@
 			<uni-popup ref="showArea" position="bottom" class="confirm-area-popup" @change="showAreaChange">
 				<uni-nav-bar v-if="showArea" :fixed="true" left-icon="back" @clickLeft="clickGoAddress" title="查看门店位置" :status-bar="true"
 				 :shadow="false"></uni-nav-bar>
-				<iframe id="mapPage" width="100%" height="100%" frameborder="0" :src="`https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:${currentArea.Latitude},${currentArea.Longitude}&key=IB5BZ-HF53W-5KLRH-R3VUL-35KO7-Y2BUT&referer=365商城管理`"></iframe>
+				<iframe id="mapPage" width="100%" height="100%" frameborder="0" :src="`https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:${currentArea.Latitude},${currentArea.Longitude}&key=G6OBZ-426WU-KYRV4-23K2X-U53RV-X6FPY&referer=365商城管理`"></iframe>
 			</uni-popup>
 		</div>
 	</div>
@@ -149,7 +158,8 @@
 				infoData: {},
 				orderId:'',
 				OrderType:'',
-				hideTicketInfo:false
+				hideTicketInfo:false,
+				shopinfo:{},//用于接收外卖时的门店地址
 			};
 		},
 		created() {
@@ -200,6 +210,7 @@
 						this.currentArea = Data.ShopInfo;
 					} else {
 						this.currentArea = Data.OrderInfo;
+						this.shopinfo = Data.ShopInfo;
 					};
 					this.prodList = Data.OrderItem;
 					this.OrderInfo = Data.OrderInfo;
@@ -210,6 +221,7 @@
 					this.Refund = Data.Refund ? Data.Refund : Data.Refund;
 					this.loading = false;
 				} catch (e) {
+					this.$toast(e)
 					this.loading = false;
 				}
 			},
@@ -334,7 +346,25 @@
 				this.showArea = false;
 				this.$refs.showArea.close()
 			},
-			pickCode() {}
+			pickCode() {},
+			// 拨打电话
+			call(Tel) {
+				uni.makePhoneCall({
+					// 手机号
+					phoneNumber: Tel,
+			
+					// 成功回调
+					success: (res) => {
+						console.log('调用成功!')
+					},
+			
+					// 失败回调
+					fail: (res) => {
+						console.log('调用失败!')
+					}
+			
+				});
+			},
 		}
 	};
 
@@ -382,6 +412,16 @@
 			.order-area-delivery {
 				padding: 8px 8px 0 8px;
 				font-size: 14px;
+				.storeInfo{
+					margin-left: 20px;
+					color: #807e7e;
+					text{
+						display: inline-block;						
+					}
+					.text2{
+						padding-left: 20px;
+					}
+				}
 			}
 		}
 

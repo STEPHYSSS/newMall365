@@ -1,250 +1,298 @@
 {
-	"pages": [
-	  {
-		"path": "pages/shoppingMall/index",
-		"style": {
-			"navigationBarTitleText": "商城"
-		}
-	  },{
-            "path" : "pages/homePage/homePage",
-            "style" : {}
-        },
-		{
-		"path": "pages/shoppingMall/login",
-		"style": {
+	"pages": [{
+			"path": "pages/homePage/homePage",
 			"navigationBarTitleText": "首页"
-		}
-	}, {
-		"path": "pages/error/index",
-		"style": {
-			"navigationBarTitleText": "错误页面"
-		}
-	}, {
-		"path": "pages/home",
-		"style": {
-			"navigationBarTitleText": "会员中心"
-		}
-	}, {
-		"path": "pages/vip/applyLeader",
-		"style": {
-			"navigationBarTitleText": "申请团长"
-		}
-	}, {
-		"path": "pages/vip/spreadList",
-		"style": {
-			"navigationBarTitleText": "我的分享"
-		}
-	}, {
-		"path": "pages/vip/surplus",
-		"style": {
-			"navigationBarTitleText": "微卡交易记录"
-		}
-	}, {
-		"path": "pages/vip/weiFull",
-		"style": {
-			"navigationBarTitleText": "充值"
-		}
-	}, {
-		"path": "pages/vip/payCode",
-		"style": {
-			"navigationBarTitleText": "付款码"
-		}
-	}, {
-		"path": "pages/vip/allMyOrder",
-		"style": {
-			"navigationBarTitleText": "订单列表"
-		}
-	}, {
-		"path": "pages/vip/bind/index",
-		"style": {
-			"navigationBarTitleText": "绑定卡"
-		}
-	}, 
-	{
-		"path": "pages/shoppingMall/order/orderInfo",
-		"style": {
-			"navigationBarTitleText": "订单详情"
-		}
-	},{
-		"path": "pages/shoppingMall/order/ManageOrderInfo",
-		"style": {
-			"navigationBarTitleText": ""
-		}
-	}, {
-		"path": "pages/shoppingMall/order/refundReason",
-		"style": {
-			"navigationBarTitleText": "申请退款"
-		}
-	}, {
-		"path": "pages/shoppingMall/order/confirmCard",
-		"style": {
-			"navigationBarTitleText": "卡支付"
-		}
-	}, {
-		"path": "pages/shoppingMall/order/confirmOrder",
-		"style": {
-			"navigationBarTitleText": "确定订单"
-		}
-	},{ //有购物车的确认订单页面
-		"path": "pages/shoppingMall/order/confirmOrderCustom",
-		"style": {
-			"navigationBarTitleText": "确定订单"
-		}
-	},{//电子券的订单页
-		"path": "pages/shoppingMall/order/confirmOrderTic",
-		"style": {
-			"navigationBarTitleText": "确定订单"
-		}
-	}, {
-		"path": "pages/shoppingMall/order/paySuccess",
-		"style": {
-			"navigationBarTitleText": "支付成功"
-		}
-	}, {
-		"path": "pages/shoppingMall/shoppingCart/index",
-		"style": {
-			"navigationBarTitleText": "购物车",
-			"enablePullDownRefresh": true
-		}
-	}, {
-		"path": "pages/shoppingMall/list/couponList",
-		"style": {
-			"navigationBarTitleText": "优惠券商城"
-		}
-	}, {
-		"path": "pages/shoppingMall/list/goodsList",
-		"style": {
-			"navigationBarTitleText": "商品列表"
-		}
-	}, {
-		"path": "pages/shoppingMall/list/infoGood",
-		"style": {
-			"navigationBarTitleText": "商品详情"
-		}
-	}, {
-		"path": "pages/shoppingMall/list/infoCoupon",
-		"style": {
-			"navigationBarTitleText": "优惠券详情"
-		}
-	}, {
-		"path": "pages/shoppingMall/evaluation/goodEvaluationList",
-		"style": {
-			"navigationBarTitleText": "商品评价列表"
-		}
-	}, {
-		"path": "pages/shoppingMall/seckill/index",
-		"style": {
-			"navigationBarTitleText": ""
-		}
-	}, {
-		"path": "pages/integralMall/index",
-		"style": {
-			"navigationBarTitleText": "积分商城"
-		}
-	}, {
-		"path": "Grant",
-		"style": {
-			"navigationBarTitleText": "授权页面"
-		}
-	}, {
-		"path": "GrantMiddle",
-		"style": {
-			"navigationBarTitleText": "授权页面"
-		}
-	}, { //我的粉丝
-		"path": "pages/vip/myFans",
-		"style": {
-			"navigationBarTitleText": "我的粉丝"
-		}
-	}, {
-		"path": "pages/vip/rebate",
-		"style": {
-			"navigationBarTitleText": "会员申请提现"
-		}
-	}, {
-		"path": "pages/vip/SpreadOrder",
-		"style": {
-			"navigationBarTitleText": "我的推广订单"
-		}
-	}, {
-		"path": "pages/vip/myEarnings",
-		"style": {
-			"navigationBarTitleText": "我的收益"
-		}
-	}, {
-		"path": "pages/vip/FootPrint",
-		"style": {
-			"navigationBarTitleText": "足迹"
-		}
-	}    ,{
-            "path" : "pages/shoppingMall/menu_naixue/menu/menu",
-            "style" : {"navigationBarTitleText": "点餐"}
-        }
-        ,{
-            "path" : "pages/myAddress/myAddress",
-            "style" : {"navigationBarTitleText": ""}
-        }
-        ,{
-            "path" : "pages/myAddress/add",
-            "style" : {"navigationBarTitleText": ""}
-        }
-        ,{
-            "path" : "pages/shoppingMall/menu_naixue/invite",
-            "style" : {"navigationBarTitleText": "活动助力"}
+		}, {
+			"path": "pages/shoppingMall/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/shoppingMall/login",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		}, {
+			"path": "pages/error/index",
+			"style": {
+				"navigationBarTitleText": "错误页面"
+			}
+		}, {
+			"path": "pages/home",
+			"style": {
+				"navigationBarTitleText": "会员中心"
+			}
+		}, {
+			"path": "pages/vip/applyLeader",
+			"style": {
+				"navigationBarTitleText": "申请团长"
+			}
+		}, {
+			"path": "pages/vip/spreadList",
+			"style": {
+				"navigationBarTitleText": "我的分享"
+			}
+		}, {
+			"path": "pages/vip/surplus",
+			"style": {
+				"navigationBarTitleText": "微卡交易记录"
+			}
+		}, {
+			"path": "pages/vip/weiFull",
+			"style": {
+				"navigationBarTitleText": "充值"
+			}
+		}, {
+			"path": "pages/vip/payCode",
+			"style": {
+				"navigationBarTitleText": "付款码"
+			}
+		}, {
+			"path": "pages/vip/allMyOrder",
+			"style": {
+				"navigationBarTitleText": "订单列表"
+			}
+		}, {
+			"path": "pages/vip/bind/index",
+			"style": {
+				"navigationBarTitleText": "绑定卡"
+			}
+		},
+		{
+			"path": "pages/shoppingMall/order/orderInfo",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		}, {
+			"path": "pages/shoppingMall/order/ManageOrderInfo",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, {
+			"path": "pages/shoppingMall/order/refundReason",
+			"style": {
+				"navigationBarTitleText": "申请退款"
+			}
+		}, {
+			"path": "pages/shoppingMall/order/confirmCard",
+			"style": {
+				"navigationBarTitleText": "卡支付"
+			}
+		}, {
+			"path": "pages/shoppingMall/order/confirmOrder",
+			"style": {
+				"navigationBarTitleText": "确定订单"
+			}
+		}, { //有购物车的确认订单页面
+			"path": "pages/shoppingMall/order/confirmOrderCustom",
+			"style": {
+				"navigationBarTitleText": "确定订单"
+			}
+		}, { //电子券的订单页
+			"path": "pages/shoppingMall/order/confirmOrderTic",
+			"style": {
+				"navigationBarTitleText": "确定订单"
+			}
+		}, {
+			"path": "pages/shoppingMall/order/paySuccess",
+			"style": {
+				"navigationBarTitleText": "支付成功"
+			}
+		}, {
+			"path": "pages/shoppingMall/shoppingCart/index",
+			"style": {
+				"navigationBarTitleText": "购物车",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/shoppingMall/list/couponList",
+			"style": {
+				"navigationBarTitleText": "优惠券商城"
+			}
+		}, {
+			"path": "pages/shoppingMall/list/goodsList",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
+		}, {
+			"path": "pages/shoppingMall/list/infoGood",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
+		}, {
+			"path": "pages/shoppingMall/list/infoCoupon",
+			"style": {
+				"navigationBarTitleText": "优惠券详情"
+			}
+		}, {
+			"path": "pages/shoppingMall/evaluation/goodEvaluationList",
+			"style": {
+				"navigationBarTitleText": "商品评价列表"
+			}
+		},{
+            "path" : "pages/shoppingMall/evaluation/publishComments",
+            "style": {
+            	"navigationBarTitleText": "发表评价"
+            }
         },{
-            "path" : "pages/shoppingMall/makeGroup/makeGroup",
-            "style" : {"navigationBarTitleText": "拼团活动"}
-        }
-        ,{
-            "path" : "pages/vip/myCoupon/myCoupon",
-            "style" : {}
-        },{//已经购买权益页面
-            "path" : "pages/vip/interests/interests",
-            "style" : {}
-        },{//详情
-			"path" : "pages/vip/interests/detail",
-			"style" : {}
-		},{//购买权益列表
-            "path" : "pages/packages/index",
-            "style" : {
+			"path": "pages/shoppingMall/seckill/index",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, {
+			"path": "pages/integralMall/index",
+			"style": {
+				"navigationBarTitleText": "积分商城"
+			}
+		}, {
+			"path": "Grant",
+			"style": {
+				"navigationBarTitleText": "商城"
+			}
+		}, {
+			"path": "GrantMiddle",
+			"style": {
+				"navigationBarTitleText": "授权页面"
+			}
+		}, { //我的粉丝
+			"path": "pages/vip/myFans",
+			"style": {
+				"navigationBarTitleText": "我的粉丝"
+			}
+		}, {
+			"path": "pages/vip/rebate",
+			"style": {
+				"navigationBarTitleText": "会员申请提现"
+			}
+		}, {
+			"path": "pages/vip/SpreadOrder",
+			"style": {
+				"navigationBarTitleText": "我的推广订单"
+			}
+		}, {
+			"path": "pages/vip/myEarnings",
+			"style": {
+				"navigationBarTitleText": "我的收益"
+			}
+		}, {
+			"path": "pages/vip/FootPrint",
+			"style": {
+				"navigationBarTitleText": "我的足迹"
+			}
+		}, {
+			"path": "pages/shoppingMall/menu_naixue/menu/menu",
+			"style": {
+				"navigationBarTitleText": "点餐"
+			}
+		}, {
+			"path": "pages/myAddress/myAddress",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, {
+			"path": "pages/myAddress/add",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}, {
+			"path": "pages/shoppingMall/menu_naixue/invite",
+			"style": {
+				"navigationBarTitleText": "活动助力"
+			}
+		}, {
+			"path": "pages/shoppingMall/makeGroup/makeGroup",
+			"style": {
+				"navigationBarTitleText": "拼团活动"
+			}
+		}, {
+			"path": "pages/vip/myCoupon/myCoupon",
+			"style" : {
+				"navigationBarTitleText": "优惠券"
+			}
+		}, { //已经购买权益页面
+			"path": "pages/vip/interests/interests",
+			"style": {}
+		}, { //详情
+			"path": "pages/vip/interests/detail",
+			"style": {}
+		}, { //购买权益列表
+			"path": "pages/packages/index",
+			"style": {
 				// "navigationBarTitleText": "权益列表",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "enablePullDownRefresh": true
 			}
-        }
-        ,{//购买权益
-            "path" : "pages/packages/detail",
-            "style" : {
+		}, { //购买权益
+			"path": "pages/packages/detail",
+			"style": {
 				// "navigationBarTitleText": "购买权益",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
 				// "enablePullDownRefresh": true
 			}
-        }
-        ,{
-            "path" : "pages/packages/buyRecords",
-            "style" : {
-            	// "navigationBarTitleText": "购买记录",
-            	"navigationBarTextStyle": "black",
-            	"navigationBarBackgroundColor": "#ffffff"
-            	// "enablePullDownRefresh": true
-            }
-        }
-        ,{
-            "path" : "pages/shoppingMall/makeGroup/groupInfoSuccess",
-            "style" : {
+		}, {
+			"path": "pages/packages/buyRecords",
+			"style": {
+				// "navigationBarTitleText": "购买记录",
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#ffffff"
+				// "enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/shoppingMall/makeGroup/groupInfoSuccess",
+			"style": {
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		}, {
+			"path": "pages/shoppingMall/makeGroup/leagueList",
+			"style": {}
+		}, {
+			"path": "pages/shoppingMall/makeGroup/groupPlay",
+			"style": {}
+		}, {
+			"path": "pages/vip/signIn/signIn",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#59aaec",
+				"navigationBarTitleText": "每日签到"
+			}
+		}
+        ,{
+            "path" : "pages/vip/signIn/signRule",
+            "style" : {
+				"navigationBarTitleText": "签到规则"
+			}
         }
         ,{
-            "path" : "pages/shoppingMall/makeGroup/leagueList",
+            "path" : "WxGrant",
+            "style" : {
+				"navigationBarTitleText": "授权页面"
+			}
+        }
+        ,{
+            "path" : "pages/shoppingMall/autoLinkIndex/autoLinkIndex",
             "style" : {}
         }
         ,{
-            "path" : "pages/shoppingMall/makeGroup/groupPlay",
-            "style" : {}
+            "path" : "pages/scanCoupons/scanCoupons",
+            "style" : {
+            	"navigationBarTitleText": "扫码领券"
+            }
+        }
+        ,{
+            "path" : "pages/vip/markPromotion/markPromotion",
+            "style" : {
+            	"navigationBarTitleText": "我的推广中心"
+            }
+        }
+        ,{
+            "path" : "pages/vip/markPromotion/returnRecord",
+            "style" : {
+            	"navigationBarTitleText": "返佣记录"
+            }
         }
     ],
 	"globalStyle": {

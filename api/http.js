@@ -1,65 +1,81 @@
 import Cookies from '@/config/cookie-my/index.js';
 import store from '../store/store.js'
 import router from '../router/index.js'
+import Router from 'uni-simple-router'
 import dataConfig from '@/config/index'
-import Vue from 'vue' 
-import {GetBaseUrl} from '../util/publicFunction'    
+import Vue from 'vue'
+import {
+	GetBaseUrl,GetAppNo
+} from '../util/publicFunction'
 export const vipCard = (data, ViewKay, AppNo) => {
+	// console.log(data, ViewKay, AppNo, 'http.js文件')
 	return new Promise((resolve, reject) => {
 		uni.getProvider({
 			service: 'oauth',
 			success: async function(res) {
 				let providerNew = res.provider[0]
-				if (providerNew) {
-					// 小程序
+				if (providerNew) { //小程序
 					return reject();
-				} else {
-					// h5
-					// let UserMACPhone = sessionStorage.getItem('UserMACPhone')
-					let UserMACPhone = Cookies.get("UserMACPhone")
-					// let UserMACPhone = '8247569c1631da6216cd72a2b4a8c33au'
-					let AppNo = sessionStorage.getItem('AppNo')
-					
-					let urlaspx = 'RenderMobile.aspx'
-					let url = dataConfig.url + urlaspx + '?AppNo=' + AppNo + '&ViewKay=' + ViewKay + '&UserMAC=' +
-						UserMACPhone
-
-					// uni.showLoading({
-					// 	title: '加载中'
-					// });
+				} else { //h5
+					let UserMACPhone = Cookies.get('UserMACPhone'); //先获取后台返回的token
+					let AppNo = Cookies.get('AppNo') ? Cookies.get('AppNo') : AppNo;
+					let urlaspx = 'RenderMobile.aspx';
+					// 请求地址
+					let url = dataConfig.url + urlaspx + '?AppNo=' + AppNo + '&ViewKay=' + ViewKay + '&UserMAC=' + UserMACPhone										
+					uni.showLoading({
+						title: '加载中'
+					});
 					uni.request({
 						url: url,
 						data: data,
 						method: 'POST',
 						success: function(response) {
-							if (response.data.Message === '请登录') {
-								let appid = response.data.Data.AppID;
-								// console.log("11111")
-								// return
-								NOMAC(appid)//这个地方要跳转重新授权
-								// response.data.Message
+							if (response.data.Message == "请登录" || response.data.Message == "未授权") {
+								// let AppID = response.data.Data.AppID;
+								// let ComponentID = response.data.Data.ComponentID;
+								NOMAC()//这个地方要跳转重新授权
 							}
 							let success = response.data.Success
-							let isTip = response.data.hasOwnProperty('Success')
+							let isTip = response.data.hasOwnProperty('Success')							
 							if (isTip) {
 								if (success) {
 									uni.hideLoading();
 									return resolve(response.data)
-								} else {									
-									sessionStorage.setItem("IsCoupon","1")
+								} else {
+									if(response.data.Message!=''){
+										uni.showToast({
+											title: response.data.Message,
+											icon: 'none'
+										});
+									}									
+									sessionStorage.setItem("IsCoupon","1") //是否有进店送券
 									uni.hideLoading();
 									return reject(response.data.Message || '操作失败')
 								}
-							} else {
+							} else {								
+								let htmlconten = document.createElement('p');
+								htmlconten.innerHTML = response.data;
+								let text = htmlconten.innerText;
+								if(text.length>30){
+								  text = text.substring(0,30)
+								}
+								if(response.statusCode=='500'){
+									uni.showToast({
+										title: text,
+										icon: 'none'
+									});
+								}
+								// console.log(text)
 								uni.hideLoading();
 								return resolve(response.data)
 							}
 						},
 						fail: function(error) {
-							// console.log(error, '-----error-----')
+							// console.log(error, 'http.js文件中fail--error')
 							let errors = ''
 							if (error.toString().search('TypeError') || error.toString().search('500')) {
 								errors = '获取请求失败'
+							
 							} else if (typeof(error) == 'string') {
 								errors = error
 							} else if (error.toString() === '请登录') {
@@ -67,16 +83,16 @@ export const vipCard = (data, ViewKay, AppNo) => {
 							} else {
 								errors = '获取请求失败'
 							}
+							
 							uni.showToast({
 								title: errors,
-								icon: 'none' 
+								icon: 'none'
 							});
 							uni.hideLoading();
-							// console.log(errors,'errors------')
 							return reject(errors);
 						},
 						complete: function() {
-							uni.hideLoading();
+							// uni.hideLoading();
 						}
 					})
 				}
@@ -86,12 +102,12 @@ export const vipCard = (data, ViewKay, AppNo) => {
 	})
 }
 
-function NOMAC(appId) {	
+
+function NOMAC() {//清除所有缓存 ----> 获取url地址 ----> 删除地址上的code
 	uni.clearStorageSync();
 	var url = document.location.toString();
 	var arrUrl = url.split("?");
-	console.log('222222',arrUrl)
-	if(arrUrl.length>1){
+	if (arrUrl.length > 1) {
 		var para = arrUrl[1];
 		para = para.split("&"); //获取url的参数
 		para.forEach((D, index) => { //删除原本url上的code
@@ -99,48 +115,13 @@ function NOMAC(appId) {
 				para.splice(index, 1)
 			}
 		})
-		
 		para = para.join(',')
 		let currentUrl = arrUrl[0] + '?' + para
 		Cookies.set('currentUrl', currentUrl)
 	}
 	let newAppUrl = GetBaseUrl();
-	console.log(newAppUrl,'-----newAppUrl-----')
-	// let headUrl = window.location.protocol + "//" + window.location.host + '/#/GrantMiddle?AppNo=' + Cookies.get('AppNo')
-	// let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:8080/' : dataConfig.BASE_URL_OnLine) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
-	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : newAppUrl) +'#/GrantMiddle?AppNo=' + sessionStorage.getItem('AppNo')
-	console.log(appId,'appId')
-	if (appId) {
-			router.push({
-				path: '/Grant',
-				query: {
-					appId: appId,
-					redirect_uri: headUrl
-				}
-			})
-		} else {
-			uni.showToast({
-				title: '获取appId失败!',
-				icon: 'none'
-			});
-		}
-	// store.dispatch('get_user', {
-	// 	AppNo: sessionStorage.getItem('AppNo')
-	// }).then(appId => {
-	// 	// console.log(appId,'---appId---')
-	// 	if (appId) {
-	// 		router.push({
-	// 			path: '/Grant',
-	// 			query: {
-	// 				appId: appId,
-	// 				redirect_uri: headUrl
-	// 			}
-	// 		})
-	// 	} else {
-	// 		uni.showToast({
-	// 			title: '获取appId失败!',
-	// 			icon: 'none'
-	// 		});
-	// 	}
-	// })
+	let headUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:9000/' : newAppUrl) +'#/WxGrant' ;//重定向页面
+	let redirect_uri = "http://manage.bak365.cn/TokenInter/Notify.ashx?Type=WeixinSignToken&AppNo="+ GetAppNo() + '&redirect_uri=' + encodeURIComponent(headUrl)
+	console.log('请登录并跳转')
+	window.location.href = redirect_uri;
 }

@@ -397,6 +397,7 @@
 				}else{
 					this.addressName = JSON.parse(sessionStorage.getItem('takeOutAddress'))
 				}
+				
 				// await this.getWxShare()
 			},
 			async getShopList() {// 获取门店
@@ -734,8 +735,8 @@
 			// 点击自取和外卖时状态改变
 			toziqu() {
 				this.$store.commit("SET_ORDER_TYPE", 'takein');	
-				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))
-				
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)////存自取状态
+				let currentStore = JSON.parse(localStorage.getItem('currentStoreInfo'))				
 				this.currentStoreInfo = {
 					Name: currentStore.data.Name,
 					Address: currentStore.data.Address,
@@ -755,6 +756,7 @@
 			toAddress() {
 				// if(this.$store.state.orderType == 'takeout') return
 				this.$store.commit("SET_ORDER_TYPE", 'takeout');
+				sessionStorage.setItem('mealMode',this.$store.state.orderType)////存外卖状态
 				this.$Router.push({
 					path: '/pages/myAddress/myAddress',
 					query: {

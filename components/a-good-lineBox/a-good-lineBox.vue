@@ -7,10 +7,10 @@
 			<div class="rightBox" style="width:50%">
 				<!-- 商品名称 -->
 				<div class="rightBoxTitle">{{itemData.Name}}
-				<p>
-					<span style="vertical-align: middle;">x</span>
-					<span style="vertical-align: middle">{{itemData.BuyCnt}}</span>
-				</p>
+					<p>
+						<span style="vertical-align: middle;">x</span>
+						<span style="vertical-align: middle">{{itemData.BuyCnt}}</span>
+					</p>
 				</div>
 				<!-- 商品口味：-->
 				<!-- <div class="rightBox_tastName" v-if="itemData.ParamInfo">{{itemData.ParamInfo}}</div> -->
@@ -25,13 +25,9 @@
 					<span v-else>¥{{itemData.SalePrice}}</span>
 				</div>
 				<div class="rightBoxBottomBuyCnt" v-if="isOrder">
-
 					<span v-if="!isIntegral" style="float: right;color:#000;font-size: 14px;">
 						<span v-if="itemData.OrderType==='3'">¥{{itemData.ProdAmt}}</span>
-						<span v-else>¥{{Number(itemData.SalePrice)*Number(itemData.BuyCnt) | numSet}}</span>
-					
-						<!-- <span style="vertical-align: middle;">x</span>
-						<span style="vertical-align: middle">{{itemData.BuyCnt}}</span> -->
+						<span v-else>¥{{Number(itemData.SalePrice)*Number(itemData.BuyCnt) | numSet}}</span>					
 					</span>
 					<span style="float: right;color:#000;font-size: 14px;" v-else>
 						<span v-if="itemData.Score">{{itemData.Score|spliceNum}}积分</span>
@@ -45,7 +41,7 @@
 					 @overlimit="stepperOverlimit" :value="itemData.BuyCnt"></uni-number-box>
 				</div>
 				<uni-icons v-if="!isShoppingCard&&!isOrder" type="plus" class="addIcon" @click.stop="addCart" />
-			</div>
+			</div>		
 		</div>
 		<div class="goodsBox-parts" style="margin-top: 10px;">
 			<div class="parts-norms-style" v-if="itemData.ParamInfo">属性：</div>
@@ -70,7 +66,13 @@
 				</div>
 			</div>
 		</div>
-		<!-- {{itemData}} -->
+		<!-- &&(itemData.State=='2'||itemData.State=='3')" -->
+		<div v-if="isOrder&&OrderInfo.OrderType=='2'&&(OrderInfo.State=='2'||OrderInfo.State=='3') && itemData.IsEvaluate!='1'"  class="pingjia" >
+			<view class="isorder" @click.stop="evaluate(itemData,OrderInfo)">评价</view>
+		</div>
+		<div v-if="isOrder&&OrderInfo.OrderType=='2'&&(OrderInfo.State=='2'||OrderInfo.State=='3') && itemData.IsEvaluate =='1'"  class="pingjia" >
+			<view class="isorder" @click.stop="comments(itemData,OrderInfo)">查看评价</view>
+		</div>
 		<div class="parts-norms-style" v-if="itemData.IsBuy === '0'" style="font-size:10px">
 			可购买时间：
 			<span style="color:red;font-size:14px">{{itemData.BuyTime|setBuyTime}}</span>
@@ -94,6 +96,7 @@
 				kouweiPrice: 0, //多口味
 			};
 		},
+		
 		created() {
 			this.stepperNumOld = this.itemData.BuyCnt;
 			if(this.itemData.ParamInfo){
@@ -150,6 +153,38 @@
 			},
 			changePartsNum(list) {
 				this.$emit("changePartsNum", list);
+			},
+			evaluate(info,order){//点击评价跳转评价页面			
+				let publishComments = {
+					Img:info.Img,
+					Name:info.Name,
+					GoodsSID:info.ProdSID,
+					CommentSID:info.SID,
+					Type:order.OrderType,
+					OrderSID:info.OrderSID
+				}
+				sessionStorage.setItem('publishComments',JSON.stringify(publishComments))
+				this.$router.push({
+					path:'/pages/shoppingMall/evaluation/publishComments'
+				})
+			},
+			comments(info,order){//查看评价
+				let publishComments = {
+					Img:info.Img,
+					Name:info.Name,
+					GoodsSID:info.ProdSID,
+					CommentSID:info.SID,
+					Type:order.OrderType,
+					OrderSID:info.OrderSID
+				}
+				sessionStorage.setItem('publishComments',JSON.stringify(publishComments))
+				this.$Router.push({
+					path: "/pages/shoppingMall/evaluation/goodEvaluationList",
+					query: {
+						id: info.ProdSID,
+						eva:'true'
+					}
+				});
 			}
 		}
 	};
@@ -158,9 +193,24 @@
 <style scoped lang="less">
 	.goodsBoxLine {
 		background: #fff;
-		margin-bottom: 6px;
+		margin: 6px !important;
 		padding: 5px;
-
+		.pingjia{
+			text-align: right;
+			margin: 5px;
+			box-sizing: border-box;
+			.isorder{
+				display: inline-block;
+				background-color: #fff;
+				// width: 30px;
+				padding: 5px 15px;
+				color: #f60;
+				border: 1px solid #f60;
+				border-radius: 20px;
+				text-align: center;
+			}
+		}
+		
 		.goodsBox-parts {
 			display: flex;
 			// margin: 6px 0;
@@ -276,6 +326,6 @@
 				font-size: 20px;
 				cursor: pointer;
 			}
-		}
+		}		
 	}
 </style>

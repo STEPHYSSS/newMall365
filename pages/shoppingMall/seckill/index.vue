@@ -9,7 +9,7 @@
 				</div>
 			</div>
 			<!-- 拼团列表 -->
-			<div style="padding: 8px;" v-if="queryType==='5'">
+			<div style="padding: 8px;" v-if="queryType==='5' || grourSID">
 				<div v-for="(item,index) in list" :key="index" class="seckill-goodsBox">
 					<a-good-box :itemData="item" :imgHeight="imgHeight" @goodBox="goodBox" :isGroup="true"></a-good-box>
 				</div>
@@ -39,15 +39,18 @@
 			};
 		},
 		created() {
-			let url = sessionStorage.getItem('searchUrl');
+			// let url = sessionStorage.getItem('searchUrl');	
+			let url = Cookies.get('searchUrl')
 			if(url!=null&&url.indexOf('Flag')>-1){
+				console.log('Flag0000')
 				if(url!=null&&url.lastIndexOf("?")){
 					let index = url.lastIndexOf("?");
 			        url = url.slice(index);
 			        this.seckillSID = getQueryString2("SID", url);
 				}
 			}
-			if(url!=null&&url.indexOf('FlagGroup')>-1){
+			if(url!=null&&url.indexOf('Group')>-1){
+				console.log('FlagGroup')
 				if(url!=null&&url.lastIndexOf("?")){
 					let index = url.lastIndexOf("?");
 			        url = url.slice(index);
@@ -107,7 +110,7 @@
 				} catch (e) {}
 			},
 			goodBox(val) {
-				if(this.$Route.query.Type === '1'){
+				if(this.$Route.query.Type === '1'|| this.seckillSID){
 					this.$Router.push({
 						path: "/pages/shoppingMall/list/infoGood",
 						query: {
@@ -115,7 +118,7 @@
 							seckill: "true"
 						}
 					});
-				}else {
+				}else if(this.$Route.query.Type === '5' ||this.grourSID){
 					this.$Router.push({
 						path: "/pages/shoppingMall/list/infoGood",
 						query: {

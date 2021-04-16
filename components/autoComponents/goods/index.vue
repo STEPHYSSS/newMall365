@@ -35,7 +35,7 @@
 						<div class="has-title-1 has-subtitle-1 cap-goods-layout__info-title" :class="[currentObj.listStyle]" goods-index="0"
 						 :style="{'text-align': currentObj.textCenter,'margin-top':'0'}">
 							<h3 class="title" :style="{'font-weight': currentObj.fontWeight,'margin-top':'10px'}" v-if="currentObj.showContent.indexOf('1')>-1">{{item.Name}}</h3>
-							<p v-if="currentObj.showContent.indexOf('2')>-1&&item.Describe" class="sub-title" style="margin-top:10px;">{{item.Describe}}</p>
+							<p v-if="currentObj.showContent.indexOf('2')>-1" class="sub-title" style="margin-top:10px;">{{item.Describe}}</p>
 							<!-- <p v-if="currentObj.showContent.indexOf('2')>-1&&item.Describe" class="sub-title" style="margin-top:-16px;">{{item.Describe}}</p> -->
 						</div>
 						<div v-if="currentObj.showContent&&currentObj.showContent.length!==0

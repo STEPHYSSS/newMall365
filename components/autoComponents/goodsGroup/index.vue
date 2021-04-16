@@ -7,11 +7,11 @@
 					<div class="van-tabs__nav van-tabs__nav--line">
 						<div class="van-tabs__line" :style="{'width': lineWidth+'px','transform':'translateX('+translateXline+'px)'}"
 						 style="transition-duration: 0.3s;"></div>
-						<div @click="clickMenu('0')" :class="['van-tab',currentMenuIndex === '0'?'van-tab--active':'']" :style="{'flex-basis': basisWidth}"
+						<div @click="clickMenu(0)" :class="['van-tab',currentMenuIndex === '0'?'van-tab--active':'']" :style="{'flex-basis': basisWidth}"
 						 v-if="currentObj.showAll === '1'">
 							<span class="van-ellipsis">全部</span>
 						</div>
-						<div @click="clickMenu(index,item)" class="van-tab" :class="['van-tab',currentMenuIndex === index?'van-tab--active':'']"
+						<div @click="clickMenu(index+1,item)" class="van-tab" :class="['van-tab',currentMenuIndex === index+1?'van-tab--active':'']"
 						 :style="{'flex-basis': basisWidth}" v-for="(item,index) in groupList" :key="index">
 							<span class="van-ellipsis">{{item.Name}}</span>
 						</div>
@@ -65,7 +65,7 @@
 										<h3 class="title" :style="{'font-weight': currentObj.fontWeight,
 				              'margin-top':currentObj.followBoard === '2'?'':'10px'}"
 										 v-if="currentObj.showContent.indexOf('1')>-1">{{item.Name}}</h3>
-										<p v-if="currentObj.showContent.indexOf('2')>-1&&item.Describe" class="sub-title" :style="{'margin-top':currentObj.followBoard === '2'?'':'10px'}">{{item.Describe}}</p>
+										<p v-if="currentObj.showContent.indexOf('2')>-1" class="sub-title" :style="{'margin-top':currentObj.followBoard === '2'?'':'10px'}">{{item.Describe}}</p>
 									</div>
 									<div v-if="currentObj.showContent&&currentObj.showContent.length!==0
 				     &&(currentObj.showContent.indexOf('4')>-1||currentObj.showContent.indexOf('3')>-1)"
@@ -233,9 +233,10 @@
 				}
 			},
 			clickMenu(index,item) {
+				console.log(index,item)
 				this.currentMenuIndex = index;
 				// let Cate_Data = this.currentObj._Cate_Data[index]
-				if (index === "0") {//全部
+				if (index === 0) {//全部
 					this.translateXline = ((this.menuWidth - this.lineWidth) / 2).toFixed(2);
 					this.goodList = this.currentObj._Cate_Data;
 					this.prodInfo = this.currentObj._Prod_Data;
